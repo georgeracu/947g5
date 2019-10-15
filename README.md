@@ -15,6 +15,16 @@
 - Comfortable learning JavaScript for front and backend development
 - Helping present iterations to the client
 
+### George Racu
+
+#### Experience
+
+[LinkedIn](https://www.linkedin.com/in/george-racu-70670443/)
+
+#### Responsibilities
+
+- Developer
+
 ## Tools
 
 ### Delivery method and framework

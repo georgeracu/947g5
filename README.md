@@ -8,6 +8,8 @@
   * [GitHub help on creating GPG keys for all platforms](https://help.github.com/en/articles/generating-a-new-gpg-key)
   * [Git book](https://git-scm.com/book/en/v2)
 * [Setup a development machine](#setup-a-development-machine)
+  * [Mac version](#mac-version)
+  * [Windows version](#windows-version)
 
 ## Team composition
 
@@ -67,7 +69,7 @@ source $(brew --prefix nvm)/nvm.sh
 
 ### Install NodeJS
 
-At the moment of this writing, NodeJS v.10 was the latest LTS version so we will install and use that one. 
+At the moment of this writing, NodeJS v.10 was the latest LTS version so we will install and use that one.
 
 ```bash
 nvm install 10
@@ -102,7 +104,7 @@ brew tap AdoptOpenJDK/openjdk
 brew cask install adoptopenjdk8
 ```
 
-#### Install the React Native CLI (finnaly to what we care about)
+#### Install the React Native CLI (finally what we care about)
 
 `npm install -g react-native-cli`
 
@@ -135,4 +137,72 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 Now source your config file `source $HOME/.bash_profile`
 
-#### And finnaly you can checkout the project
+## Windows version
+
+Aside from Chocolatey, the process is identical to a Mac environment. Refer to Mac instructions for details on each section, as this will just replicate the steps in a Windows environment.
+
+### Install [Chocolatey](https://chocolatey.org) for Windows package management
+
+In an elevated PowerShell run:
+
+```bash
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+```
+
+#### Install NodeJS
+
+```bash
+choco install -y nodejs.install
+```
+
+#### Install python 2 (and 3 for good measure, not sure how old my guide is!)
+
+```bash
+choco install -y python2
+choco install -y python3
+```
+
+#### Install Java8
+
+```bash
+choco install -y jdk8
+```
+
+### Install React-native
+
+Restart PowerShell to make sure everything went through. Then run:
+
+```bash
+npm install -g react-native-cli
+```
+
+#### Install Yarn
+
+```bash
+choco install yarn
+```
+
+### Install Android Studio
+
+* Android SDK
+* Android SDK Platform
+* Performance (Intel HAXM)
+* Android Virtual Device
+* Android version 9 (Pie)
+* Android SDK Platform 28
+* Google APIs Intel x86 Atom System Image
+* Android SDK Build-Tools v. 28.0.3
+
+#### Download and run the Android Studio Installer
+
+* Choose 'custom' install type
+  * Select a theme
+  
+#### SDK Component Setup
+
+* Android SDK
+* Android SDK Platform
+  * API 29: Android 10.0 (Q)
+  * (It may not be possible to select 28 here - you can downgrade the API post-install via: AS Launcher/Configure/SDK Manager-Show Package Details and select 28.0.3)
+* Performance (Intel HAXM)
+* Android Virtual Device

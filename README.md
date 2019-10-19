@@ -203,7 +203,6 @@ choco install yarn
 * Android SDK
 * Android SDK Platform
   * API 29: Android 10.0 (Q)
+  * (It may not be possible to select 28 here - you can downgrade the API post-install via: AS Launcher/Configure/SDK Manager-Show Package Details and select 28.0.3)
 * Performance (Intel HAXM)
 * Android Virtual Device
-
-Sit back and wait for it to install

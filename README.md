@@ -8,6 +8,8 @@
   * [GitHub help on creating GPG keys for all platforms](https://help.github.com/en/articles/generating-a-new-gpg-key)
   * [Git book](https://git-scm.com/book/en/v2)
 * [Setup a development machine](#setup-a-development-machine)
+  * [Mac version](#mac-version)
+  * [Windows version](#windows-version)
 
 ## Team composition
 
@@ -182,4 +184,26 @@ choco install yarn
 
 ### Install Android Studio
 
-Will update presently, waiting for it to download
+* Android SDK
+* Android SDK Platform
+* Performance (Intel HAXM)
+* Android Virtual Device
+* Android version 9 (Pie)
+* Android SDK Platform 28
+* Google APIs Intel x86 Atom System Image
+* Android SDK Build-Tools v. 28.0.3
+
+#### Download and run the Android Studio Installer
+
+* Choose 'custom' install type
+  * Select a theme
+  
+#### SDK Component Setup
+
+* Android SDK
+* Android SDK Platform
+  * API 29: Android 10.0 (Q)
+* Performance (Intel HAXM)
+* Android Virtual Device
+
+Sit back and wait for it to install

@@ -47,4 +47,16 @@ We considered in using other Agile frameworks, like Scrum and XP. Unfortunatelly
 
 ## Conflict Resolution Plan
 
+Considering the size of the team and liklihood that we will be required to be produce deliverables to the customer on a regular basis with minimal buffer to extend deadlines, we have chosen to adopt a hybrid of an accomadative and compromising style for conflict resolution. The aim is maintain a good working relationship between all members during the entire duration of the project and hence a mix of these styles we believe will allow us to work together to achieve the end goals. 
+
+Reasons to choose a hybrid style:
+* The team have deliverable deadlines which need to be met to satisfy the customer
+* Addditionally the final deadline can not to be extended, which means we need to be able to be flexible with our commitments when it come closer to the deadline in order to deliver a finsihed product. 
+* We need to maintain a postive work ethic within the team, as without this the efficiency at which tasks are completed will reduce considerably.
+* Helps to understand a common goal for all the memebers, with the understanding that nothing will be achieved if people are not able to comprise. 
+
+**Section explaining how we will deal with people that drop out (illness etc) or not meeting deadlines (sorry not sure what to put)**
+
+In the event that people do not believe the score they get in the peer assessment, members will be allowed to defend their case and suggest why their score should be changed. After which a sutable compromise will be attempted to be reached. However, in the worst case that no compromise is reached we would have to accept the original decision as the orginal score would have been unanimously decided by everyone in the group with certain justification. 
+
 ## Peer Assessment Plan

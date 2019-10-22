@@ -10,6 +10,7 @@
 * [Setup a development machine](#setup-a-development-machine)
   * [Mac version](#mac-version)
   * [Windows version](#windows-version)
+  * [Running the app locally](#running-locally)
 
 ## Team composition
 
@@ -138,7 +139,20 @@ export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 ```
 
-Now source your config file `source $HOME/.bash_profile`
+Now source your config file `source $HOME/.bash_profile`.
+
+##### Extra settings for Android Studio SDK
+
+Open `Preferences` menu with `cmd + ,` and go to `Android SDK` and here make sure that you have installed:
+
+* SDK Platforms
+  * Android 9.0 (Pie)
+* SDK Tools
+  * NDK (Side bys side)
+  * Android Emulator 29.2.1
+  * Android SDK Platform-Tools 29.0.4
+  * Android SDK Tools 26.1.1, In
+  * Intel x86 Emulator Accelerator (HAXM installer)
 
 ## Windows version
 
@@ -209,3 +223,29 @@ choco install yarn
   * (It may not be possible to select 28 here - you can downgrade the API post-install via: AS Launcher/Configure/SDK Manager-Show Package Details and select 28.0.3)
 * Performance (Intel HAXM)
 * Android Virtual Device
+
+## Running Locally
+
+After a successful installation of the tools, just go to GitHub and clone the repository:
+
+```bash
+git clone git@github.com:georgeracu/947g5.git
+```
+
+After clonning the repository, do an npm install
+
+```bash
+cd 947g5
+npm install
+```
+
+Useful commands for npm:
+
+* Run the tests `npm run test`
+* Install the packages `npm clean`
+* Run the linter `npm run lint`
+* Run the linter and fix the problems `npm run lint-fix`
+
+Build the apk for Android:
+
+In directory `android` run `./gradlew assembleRelease -x bundleReleaseJsAndAssets`. The apk file should reside in `947g5/android/app/build/outputs/apk/release`.

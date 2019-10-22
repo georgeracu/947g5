@@ -80,6 +80,12 @@ nvm install 10
 nvm use 10
 ```
 
+### NPM version
+
+```bash
+npm 6.4.1
+```
+
 If you do `node --version` you should see `v10.16.3` or whatever is the latest. If you get an error to delete prefix, then you might need to run the command suggested by Brew, something like: `nvm use --delete-prefix v10.16.3`.
 
 ### Install [React-native](https://facebook.github.io/react-native/)

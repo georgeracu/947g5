@@ -6,108 +6,89 @@
  * @flow
  */
 
-import React from 'react';
+import React, {Component} from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
-  View,
   Text,
-  StatusBar,
+  View,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+class App extends Component {
+  render() {
+    return (
+      <View style={styles.root}>
 
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
+        <View style={styles.coordinatesContainer}>
+          <Text style={styles.coordinatesTextTitle}>Longitude</Text>
+          <Text style={styles.coordinatesTextValue}>20</Text>
+        </View>
+
+        <View style={styles.coordinatesContainer}>
+          <Text style={styles.coordinatesTextTitle}>Latitude</Text>
+          <Text style={styles.coordinatesTextValue}>40</Text>
+        </View>
+
+        <View style={styles.informationContainer}>
+          <Text>This is a dummy text for the GPS function . . .</Text>
+        </View>
+
+        <View style={styles.button}>
+          <Text style={styles.buttonText}>Turn on GPS</Text>
+        </View>
+        
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  root: {
+    padding: 10,
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  coordinatesContainer: {
+    alignItems: 'center',
+    backgroundColor: '#349beb',
+    borderRadius: 5,
+    elevation: 10,
+    flexDirection: 'row',
+    height: 120,
+    justifyContent: 'space-between',
+    margin: 10,
+    padding: 20,
   },
-  body: {
-    backgroundColor: Colors.white,
+  coordinatesTextTitle: {
+    color: '#FFFFFF',
+    fontSize: 25,
+    fontWeight: 'bold',
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  coordinatesTextValue: {
+    color: '#FFFFFF',
+    fontSize: 25,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
+  informationContainer: {
+    backgroundColor: '#f5f4f2',
+    height: 120,
+    borderColor: '#000000',
+    borderWidth: 1,
+    borderRadius: 5,
+    margin: 10,
+    padding: 20,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
+  button: {
+    backgroundColor: '#349beb',
+    borderRadius: 5,
+    elevation: 10,
+    height: 50,
+    padding: 20,
+    margin: 10,
+    width: 150,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  buttonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
   },
 });
 

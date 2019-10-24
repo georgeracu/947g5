@@ -21,6 +21,11 @@ import moment from 'moment';
 export default class App extends Component {
   constructor(props) {
     super(props);
+
+    /**
+     * This state object holds the response from the Geolocation API
+     * @type {{timeStamp: string, altitude: number, latitude: number, errorMessage: string, accuracy: number, speed: number, longitude: number}}
+     */
     this.state = {
       latitude: 0,
       longitude: 0,
@@ -32,6 +37,10 @@ export default class App extends Component {
     };
   }
 
+  /**
+   * This method updates the state object with the response from the Geolocation API
+   * @param response
+   */
   handleGeolocationSuccess = response => {
     this.setState({
       latitude: response.coords.latitude,
@@ -44,12 +53,28 @@ export default class App extends Component {
     });
   };
 
+  /**
+   * This method updates the state with the Geolocation error message
+   * @param error
+   */
   handleGeolocationError = error => {
     this.setState({
       latitude: 0,
       longitude: 0,
       errorMessage: error.message,
+      speed: 0,
+      accuracy: 0,
+      altitude: 0,
+      timeStamp: 0,
     });
+  };
+
+  /**
+   * This method is used to explicitly turn on the Phones GPS
+   * @private
+   */
+  _onPressButton = () => {
+    this.getCurrentGeolocation();
   };
 
   /**
@@ -131,9 +156,7 @@ export default class App extends Component {
             </Text>
           </ScrollView>
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={this.getCurrentGeolocation}>
+          <TouchableOpacity style={styles.button} onPress={this._onPressButton}>
             <Text style={styles.buttonText}>Turn on GPS</Text>
           </TouchableOpacity>
         </View>

@@ -24,7 +24,7 @@ Emmanuel Biose | Java, Javascript, Kotlin, HTML, CSS, Jquery, Bootstrap, SQL | N
 Mark Andrade | Java, Python, JavaScript, HTML/CSS | NA | I do not mind undertaking various roles may that be some coding (as I am not proficient with web development but I am willing to learn to improve my skillset) or even more of the project management roles. I am looking to develop skills in management and coding.  
 Jie Dai (Andy) | Python, Java, JavaScript, C++, HTML/CSS | NA | I am willing to learn new language and new technologies as well. And I am looking forward to enhancing my programming skills as the most important part.
 Assaad Salameh | python, java, javascript, html/css, php, C# | NA | I am looking forward to take part in the coding task but it doesn't necessarily have to do with the specific skillset that i possess as i would be very intrested in learning new things especially when it comes to the framework react and cloud computing. As a team role besides that i would love to present our project to our clients through out the stages (when the delivery dates arrive) as i am very proficient in public speaking. I wpuldn't mind taking any management role in the team, that being said my main focus is in coding as i am mainly looking forward to sharpen my coding skill and get more experience in coding practices.
-|
+Labaran Iben | Java, C#, HTML | NA | Basically I am here to learn. I am willing to learn new languages through you guys and new technologies as well so that I can compete in the disruptive technological era. I a certain that the team members would do there best to enhancing my programming skills.
 
 ## The Agile manifesto
 

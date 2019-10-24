@@ -245,13 +245,27 @@ cd 947g5
 npm install
 ```
 
-Useful commands for npm:
+### Git config
+
+We have our git hooks versioned with our code in `infra/.githooks`. To enable them, you need to git >v2.9.0 and you need to run this command to tell git where to find its hooks:
+
+```bash
+git config core.hooksPath infra/.githooks
+```
+
+#### Git hooks
+
+Git hooks will run when a git command will match it.
+
+* __pre-push__ will run test and lint before push.
+
+### Useful commands for npm:
 
 * Run the tests `npm run test`
 * Install the packages `npm clean`
 * Run the linter `npm run lint`
 * Run the linter and fix the problems `npm run lint-fix`
 
-Build the apk for Android:
+### Build the apk for Android:
 
 In directory `android` run `./gradlew assembleRelease -x bundleReleaseJsAndAssets`. The apk file should reside in `947g5/android/app/build/outputs/apk/release`.

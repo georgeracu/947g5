@@ -7,9 +7,41 @@
  */
 
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, PermissionsAndroid} from 'react-native';
+
+/**
+ * This function checks for Geolocation permission on Android devices from API 21 and above and request it in case it
+ * isn't already granted
+ * @returns {Promise<void>}
+ */
+async function checkGeolocationPermission() {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      {
+        title: 'Location Permission',
+        message: 'App needs permission to access your location',
+        buttonNeutral: 'Ask me later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'Ok',
+      },
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('Location permission has been granted');
+    } else {
+      console.log('Location permission waS denied');
+    }
+  } catch (ex) {
+    console.log(ex);
+  }
+}
 
 class App extends Component {
+  async componentDidMount() {
+    // Check for Geolocation permission and request if not already granted
+    await checkGeolocationPermission();
+  }
+
   render() {
     return (
       <View style={styles.root}>

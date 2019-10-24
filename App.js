@@ -8,6 +8,7 @@
 
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, PermissionsAndroid} from 'react-native';
+import Geolocation from 'react-native-geolocation-service';
 
 /**
  * This function checks for Geolocation permission on Android devices from API 21 and above and request it in case it
@@ -36,10 +37,36 @@ async function checkGeolocationPermission() {
   }
 }
 
+/**
+ * This function uses the Geolocation API to retrieve the coordinates of the Phone's current location
+ * @returns {Promise<void>}
+ */
+async function getCurrentGeolocation() {
+  const isLocationGranted = await PermissionsAndroid.check(
+    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  );
+  console.log(isLocationGranted);
+  if (isLocationGranted) {
+    await Geolocation.getCurrentPosition(
+      position => {
+        console.log(position);
+      },
+      error => {
+        console.log(error.code, error.message);
+      },
+      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+    );
+  } else {
+    console.log("Couldn't get location");
+  }
+}
+
 class App extends Component {
   async componentDidMount() {
     // Check for Geolocation permission and request if not already granted
     await checkGeolocationPermission();
+    // Get current Geolocation
+    await getCurrentGeolocation();
   }
 
   render() {

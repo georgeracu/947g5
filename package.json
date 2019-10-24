@@ -12,9 +12,11 @@
     "lint-fix": "eslint '**/*.js' --fix"
   },
   "dependencies": {
+    "moment": "^2.24.0",
     "react": "16.9.0",
     "react-native": "0.61.2",
-    "react-native-geolocation-service": "^3.1.0"
+    "react-native-geolocation-service": "^3.1.0",
+    "redux": "^4.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.5.0",

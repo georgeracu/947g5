@@ -7,87 +7,135 @@
  */
 
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, PermissionsAndroid} from 'react-native';
+import {
+  PermissionsAndroid,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
+import moment from 'moment';
 
-/**
- * This function checks for Geolocation permission on Android devices from API 21 and above and request it in case it
- * isn't already granted
- * @returns {Promise<void>}
- */
-async function checkGeolocationPermission() {
-  try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      {
-        title: 'Location Permission',
-        message: 'App needs permission to access your location',
-        buttonNeutral: 'Ask me later',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'Ok',
-      },
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      console.log('Location permission has been granted');
-    } else {
-      console.log('Location permission waS denied');
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      latitude: 0,
+      longitude: 0,
+      errorMessage: '',
+      speed: 0,
+      accuracy: 0,
+      altitude: 0,
+      timeStamp: '',
+    };
+  }
+
+  handleGeolocationSuccess = response => {
+    this.setState({
+      latitude: response.coords.latitude,
+      longitude: response.coords.longitude,
+      errorMessage: '',
+      speed: response.coords.speed,
+      accuracy: response.coords.accuracy,
+      altitude: response.coords.altitude,
+      timeStamp: response.timestamp,
+    });
+  };
+
+  handleGeolocationError = error => {
+    this.setState({
+      latitude: 0,
+      longitude: 0,
+      errorMessage: error.message,
+    });
+  };
+
+  /**
+   * This function checks for Geolocation permission on Android devices from API 21 and above and request it in case it
+   * isn't already granted
+   * @returns {Promise<void>}
+   */
+  async checkGeolocationPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Location Permission',
+          message: 'App needs permission to access your location',
+          buttonNeutral: 'Ask me later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'Ok',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Location permission has been granted');
+      } else {
+        console.log('Location permission was denied');
+      }
+    } catch (ex) {
+      console.log(ex);
     }
-  } catch (ex) {
-    console.log(ex);
   }
-}
 
-/**
- * This function uses the Geolocation API to retrieve the coordinates of the Phone's current location
- * @returns {Promise<void>}
- */
-async function getCurrentGeolocation() {
-  const isLocationGranted = await PermissionsAndroid.check(
-    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-  );
-  console.log(isLocationGranted);
-  if (isLocationGranted) {
-    await Geolocation.getCurrentPosition(
-      position => {
-        console.log(position);
-      },
-      error => {
-        console.log(error.code, error.message);
-      },
-      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+  /**
+   * This function uses the Geolocation API to retrieve the coordinates of the Phone's current location
+   * @returns An object containing the coords if successful or the error code and message if there was an error
+   * If Location can't be accessed, return a string.
+   */
+  async getCurrentGeolocation() {
+    const isLocationGranted = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
     );
-  } else {
-    console.log("Couldn't get location");
+    if (isLocationGranted) {
+      await Geolocation.getCurrentPosition(
+        this.handleGeolocationSuccess,
+        this.handleGeolocationError,
+        {enableHighAccuracy: true, timeout: 1000, maximumAge: 0},
+      );
+    } else {
+      return "Couldn't get location";
+    }
   }
-}
 
-class App extends Component {
   async componentDidMount() {
-    // Check for Geolocation permission and request if not already granted
-    await checkGeolocationPermission();
-    // Get current Geolocation
-    await getCurrentGeolocation();
+    await this.checkGeolocationPermission();
+    await this.getCurrentGeolocation();
+    setInterval(() => this.getCurrentGeolocation(), 1000);
   }
 
   render() {
     return (
       <View style={styles.root}>
-        <View style={styles.coordinatesContainer}>
-          <Text style={styles.coordinatesTextTitle}>Longitude</Text>
-          <Text style={styles.coordinatesTextValue}>20</Text>
-        </View>
+        <View>
+          <View style={styles.coordinatesContainer}>
+            <Text style={styles.coordinatesTextTitle}>Latitude</Text>
+            <Text style={styles.coordinatesTextValue}>
+              {this.state.latitude}
+            </Text>
+          </View>
+          <View style={styles.coordinatesContainer}>
+            <Text style={styles.coordinatesTextTitle}>Longitude</Text>
+            <Text style={styles.coordinatesTextValue}>
+              {this.state.longitude}
+            </Text>
+          </View>
+          <ScrollView style={styles.informationContainer}>
+            <Text>Error Message: {this.state.message}</Text>
+            <Text>Speed: {this.state.speed}</Text>
+            <Text>Accuracy: {this.state.accuracy}</Text>
+            <Text>Altitude: {this.state.altitude}</Text>
+            <Text>
+              {moment(this.state.timestamp).format('DD MMM YYYY hh:mm a')}
+            </Text>
+          </ScrollView>
 
-        <View style={styles.coordinatesContainer}>
-          <Text style={styles.coordinatesTextTitle}>Latitude</Text>
-          <Text style={styles.coordinatesTextValue}>40</Text>
-        </View>
-
-        <View style={styles.informationContainer}>
-          <Text>This is a dummy text for the GPS function . . .</Text>
-        </View>
-
-        <View style={styles.button}>
-          <Text style={styles.buttonText}>Turn on GPS</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={this.getCurrentGeolocation}>
+            <Text style={styles.buttonText}>Turn on GPS</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -104,19 +152,19 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     elevation: 10,
     flexDirection: 'row',
-    height: 120,
+    height: 70,
     justifyContent: 'space-between',
-    margin: 10,
+    margin: 8,
     padding: 20,
   },
   coordinatesTextTitle: {
     color: '#FFFFFF',
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   coordinatesTextValue: {
     color: '#FFFFFF',
-    fontSize: 25,
+    fontSize: 20,
   },
   informationContainer: {
     backgroundColor: '#f5f4f2',
@@ -124,8 +172,8 @@ const styles = StyleSheet.create({
     borderColor: '#000000',
     borderWidth: 1,
     borderRadius: 5,
-    margin: 10,
-    padding: 20,
+    margin: 5,
+    padding: 15,
   },
   button: {
     backgroundColor: '#349beb',
@@ -144,5 +192,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-export default App;

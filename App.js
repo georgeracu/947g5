@@ -29,11 +29,11 @@ export default class App extends Component {
     this.state = {
       latitude: 0,
       longitude: 0,
-      errorMessage: '',
+      errorMessage: 'No location data',
       speed: 0,
       accuracy: 0,
       altitude: 0,
-      timeStamp: '',
+      timestamp: Date.now(),
     };
   }
 
@@ -49,7 +49,7 @@ export default class App extends Component {
       speed: response.coords.speed,
       accuracy: response.coords.accuracy,
       altitude: response.coords.altitude,
-      timeStamp: response.timestamp,
+      timestamp: response.timestamp,
     });
   };
 
@@ -65,7 +65,7 @@ export default class App extends Component {
       speed: 0,
       accuracy: 0,
       altitude: 0,
-      timeStamp: 0,
+      timestamp: Date.now(),
     });
   };
 
@@ -73,8 +73,8 @@ export default class App extends Component {
    * This method is used to explicitly turn on the Phones GPS
    * @private
    */
-  _onPressButton = () => {
-    this.getCurrentGeolocation();
+  _onPressButton = async () => {
+    await this.checkGeolocationPermission();
   };
 
   /**
@@ -94,13 +94,15 @@ export default class App extends Component {
           buttonPositive: 'Ok',
         },
       );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('Location permission has been granted');
+      if (granted) {
+        this.getCurrentGeolocation();
       } else {
-        console.log('Location permission was denied');
+        this.handleGeolocationError({
+          message: 'There was an error enabling location services',
+        });
       }
     } catch (ex) {
-      console.log(ex);
+      console.error(ex);
     }
   }
 
@@ -117,17 +119,16 @@ export default class App extends Component {
       await Geolocation.getCurrentPosition(
         this.handleGeolocationSuccess,
         this.handleGeolocationError,
-        {enableHighAccuracy: true, timeout: 1000, maximumAge: 0},
+        {enableHighAccuracy: true, timeout: 1000, maximumAge: 100},
       );
     } else {
-      return "Couldn't get location";
+      this.handleGeolocationError({message: 'Missing location permissions'});
     }
   }
 
-  async componentDidMount() {
-    await this.checkGeolocationPermission();
-    await this.getCurrentGeolocation();
-    setInterval(() => this.getCurrentGeolocation(), 1000);
+  componentDidMount() {
+    this.checkGeolocationPermission();
+    this.getCurrentGeolocation();
   }
 
   render() {
@@ -147,18 +148,24 @@ export default class App extends Component {
             </Text>
           </View>
           <ScrollView style={styles.informationContainer}>
-            <Text>Error Message: {this.state.message}</Text>
+            {this.state.errorMessage ? (
+              <Text>Error Message: {this.state.errorMessage}</Text>
+            ) : null}
             <Text>Speed: {this.state.speed}</Text>
             <Text>Accuracy: {this.state.accuracy}</Text>
             <Text>Altitude: {this.state.altitude}</Text>
             <Text>
+              Timestamp:{' '}
               {moment(this.state.timestamp).format('DD MMM YYYY hh:mm a')}
             </Text>
           </ScrollView>
-
-          <TouchableOpacity style={styles.button} onPress={this._onPressButton}>
-            <Text style={styles.buttonText}>Turn on GPS</Text>
-          </TouchableOpacity>
+          {this.state.errorMessage ? (
+            <TouchableOpacity
+              style={styles.button}
+              onPress={this._onPressButton}>
+              <Text style={styles.buttonText}>Turn on GPS</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       </View>
     );
@@ -191,7 +198,6 @@ const styles = StyleSheet.create({
   },
   informationContainer: {
     backgroundColor: '#f5f4f2',
-    height: 120,
     borderColor: '#000000',
     borderWidth: 1,
     borderRadius: 5,

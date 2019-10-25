@@ -1,0 +1,323 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The main page component Matches the snapshot when has permissions 1`] = `
+<View
+  style={
+    Object {
+      "padding": 10,
+    }
+  }
+>
+  <View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#349beb",
+          "borderRadius": 5,
+          "elevation": 10,
+          "flexDirection": "row",
+          "height": 70,
+          "justifyContent": "space-between",
+          "margin": 8,
+          "padding": 20,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#FFFFFF",
+            "fontSize": 20,
+            "fontWeight": "bold",
+          }
+        }
+      >
+        Latitude
+      </Text>
+      <Text
+        style={
+          Object {
+            "color": "#FFFFFF",
+            "fontSize": 20,
+          }
+        }
+      >
+        0
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#349beb",
+          "borderRadius": 5,
+          "elevation": 10,
+          "flexDirection": "row",
+          "height": 70,
+          "justifyContent": "space-between",
+          "margin": 8,
+          "padding": 20,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#FFFFFF",
+            "fontSize": 20,
+            "fontWeight": "bold",
+          }
+        }
+      >
+        Longitude
+      </Text>
+      <Text
+        style={
+          Object {
+            "color": "#FFFFFF",
+            "fontSize": 20,
+          }
+        }
+      >
+        0
+      </Text>
+    </View>
+    <RCTScrollView
+      style={
+        Object {
+          "backgroundColor": "#f5f4f2",
+          "borderColor": "#000000",
+          "borderRadius": 5,
+          "borderWidth": 1,
+          "margin": 5,
+          "padding": 15,
+        }
+      }
+    >
+      <View>
+        <Text>
+          Error Message: 
+          No location data
+        </Text>
+        <Text>
+          Speed: 
+          0
+        </Text>
+        <Text>
+          Accuracy: 
+          0
+        </Text>
+        <Text>
+          Altitude: 
+          0
+        </Text>
+        <Text>
+          Timestamp:
+           
+          25 Oct 2019 03:41 am
+        </Text>
+      </View>
+    </RCTScrollView>
+    <View
+      accessible={true}
+      focusable={true}
+      isTVSelectable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#349beb",
+          "borderRadius": 5,
+          "elevation": 10,
+          "flex": 1,
+          "height": 50,
+          "justifyContent": "center",
+          "margin": 10,
+          "opacity": 1,
+          "padding": 20,
+          "width": 150,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#FFFFFF",
+            "fontWeight": "bold",
+          }
+        }
+      >
+        Turn on GPS
+      </Text>
+    </View>
+  </View>
+</View>
+`;
+
+exports[`The main page component Matches the snapshot when is missing permissions 1`] = `
+<View
+  style={
+    Object {
+      "padding": 10,
+    }
+  }
+>
+  <View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#349beb",
+          "borderRadius": 5,
+          "elevation": 10,
+          "flexDirection": "row",
+          "height": 70,
+          "justifyContent": "space-between",
+          "margin": 8,
+          "padding": 20,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#FFFFFF",
+            "fontSize": 20,
+            "fontWeight": "bold",
+          }
+        }
+      >
+        Latitude
+      </Text>
+      <Text
+        style={
+          Object {
+            "color": "#FFFFFF",
+            "fontSize": 20,
+          }
+        }
+      >
+        0
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#349beb",
+          "borderRadius": 5,
+          "elevation": 10,
+          "flexDirection": "row",
+          "height": 70,
+          "justifyContent": "space-between",
+          "margin": 8,
+          "padding": 20,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#FFFFFF",
+            "fontSize": 20,
+            "fontWeight": "bold",
+          }
+        }
+      >
+        Longitude
+      </Text>
+      <Text
+        style={
+          Object {
+            "color": "#FFFFFF",
+            "fontSize": 20,
+          }
+        }
+      >
+        0
+      </Text>
+    </View>
+    <RCTScrollView
+      style={
+        Object {
+          "backgroundColor": "#f5f4f2",
+          "borderColor": "#000000",
+          "borderRadius": 5,
+          "borderWidth": 1,
+          "margin": 5,
+          "padding": 15,
+        }
+      }
+    >
+      <View>
+        <Text>
+          Error Message: 
+          No location data
+        </Text>
+        <Text>
+          Speed: 
+          0
+        </Text>
+        <Text>
+          Accuracy: 
+          0
+        </Text>
+        <Text>
+          Altitude: 
+          0
+        </Text>
+        <Text>
+          Timestamp:
+           
+          25 Oct 2019 03:41 am
+        </Text>
+      </View>
+    </RCTScrollView>
+    <View
+      accessible={true}
+      focusable={true}
+      isTVSelectable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#349beb",
+          "borderRadius": 5,
+          "elevation": 10,
+          "flex": 1,
+          "height": 50,
+          "justifyContent": "center",
+          "margin": 10,
+          "opacity": 1,
+          "padding": 20,
+          "width": 150,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#FFFFFF",
+            "fontWeight": "bold",
+          }
+        }
+      >
+        Turn on GPS
+      </Text>
+    </View>
+  </View>
+</View>
+`;

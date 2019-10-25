@@ -281,3 +281,12 @@ Git hooks will run when a git command will match it.
 ### Build the apk for Android:
 
 In directory `android` run `./gradlew assembleRelease -x bundleReleaseJsAndAssets`. The apk file should reside in `947g5/android/app/build/outputs/apk/release`.
+
+## Testing
+
+### Frameworks
+
+#### [Jest v24.1.0](https://jestjs.io/)
+
+* With preset `react-native`
+* Mocked data in directory `__mocks__`

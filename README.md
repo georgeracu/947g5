@@ -245,6 +245,11 @@ cd 947g5
 npm install
 ```
 
+### Running the application in Android emulator
+
+`react-native start` - will start the Metro server
+`react-native run-android` - will start the application on Android. You need the Android emulator running first
+
 ### Git config
 
 We have our git hooks versioned with our code in `infra/.githooks`. To enable them, you need to git >v2.9.0 and you need to run this command to tell git where to find its hooks:
@@ -266,6 +271,22 @@ Git hooks will run when a git command will match it.
 * Run the linter `npm run lint`
 * Run the linter and fix the problems `npm run lint-fix`
 
+### Android commands
+
+#### Android Emulators
+
+* `emulator -list-avds` - will show all installed AVDs
+* `emulator -avd Pixel_3_API_28 -netdelay none -netspeed full` - will run the AVD `Pixel_3_API_28`
+
 ### Build the apk for Android:
 
 In directory `android` run `./gradlew assembleRelease -x bundleReleaseJsAndAssets`. The apk file should reside in `947g5/android/app/build/outputs/apk/release`.
+
+## Testing
+
+### Frameworks
+
+#### [Jest v24.1.0](https://jestjs.io/)
+
+* With preset `react-native`
+* Mocked data in directory `__mocks__`

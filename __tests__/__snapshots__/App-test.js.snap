@@ -115,7 +115,7 @@ exports[`The main page component Matches the snapshot when has permissions 1`] =
         <Text>
           Timestamp:
            
-          25 Oct 2019 03:41 am
+          Invalid date
         </Text>
       </View>
     </RCTScrollView>
@@ -276,7 +276,7 @@ exports[`The main page component Matches the snapshot when is missing permission
         <Text>
           Timestamp:
            
-          25 Oct 2019 03:41 am
+          Invalid date
         </Text>
       </View>
     </RCTScrollView>

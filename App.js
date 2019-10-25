@@ -33,7 +33,7 @@ export default class App extends Component {
       speed: 0,
       accuracy: 0,
       altitude: 0,
-      timestamp: Date.now(),
+      timestamp: '',
     };
   }
 

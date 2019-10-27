@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import moment from 'moment';
+import firestore from '@react-native-firebase/firestore';
 
 export default class App extends Component {
   constructor(props) {
@@ -41,7 +42,7 @@ export default class App extends Component {
    * This method updates the state object with the response from the Geolocation API
    * @param response
    */
-  handleGeolocationSuccess = response => {
+  handleGeolocationSuccess = async response => {
     this.setState({
       latitude: response.coords.latitude,
       longitude: response.coords.longitude,
@@ -51,6 +52,21 @@ export default class App extends Component {
       altitude: response.coords.altitude,
       timestamp: response.timestamp,
     });
+
+    // //  Send Geolocation details to firebase firestore
+    await firestore()
+      .collection('coordinates')
+      .add({
+        latitude: this.state.latitude,
+        longitude: this.state.longitude,
+        timestamp: Date.now(),
+      })
+      .then(function(docRef) {
+        console.log('Document written with ID: ', docRef.id);
+      })
+      .catch(function(error) {
+        console.error('Error adding document: ', error);
+      });
   };
 
   /**
@@ -129,6 +145,7 @@ export default class App extends Component {
   componentDidMount() {
     this.checkGeolocationPermission();
     this.getCurrentGeolocation();
+    setInterval(() => this.getCurrentGeolocation(), 1000);
   }
 
   render() {

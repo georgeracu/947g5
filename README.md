@@ -300,6 +300,9 @@ Note: an Emulator will have to be set up in Android Studio first - this is for a
   * `%ANDROID_HOME%/emulator/emulator -avd Pixel_3_API_28 -netdelay none -netspeed full` - will run the AVD `Pixel_3_API_28`
 
 ### Build the apk for Android
+=======
+* `emulator -list-avds` - will show all installed AVDs
+* `emulator -avd Pixel_3_API_28 -netdelay none -netspeed full` - will run the AVD `Pixel_3_API_28`
 
 In directory `android` run `./gradlew assembleRelease -x bundleReleaseJsAndAssets`. The apk file should reside in `947g5/android/app/build/outputs/apk/release`.
 

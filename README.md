@@ -275,10 +275,34 @@ Git hooks will run when a git command will match it.
 
 #### Android Emulators
 
+##### Windows setup
+
+* Add `ANDROID_HOME` path to your environment variables.
+  * Open Settings (`WINDOWS+I`)
+  * Type "environment" an click "Edit the system environment variables"
+  * Click "Environment Variables"
+  * Under System Variables, click `NEW`
+    * Variable_name: `ANDROID_HOME`
+    * Variable_value: `C:\Users\YOUR_ACCOUNT\AppData\Local\Android\Sdk`
+    * Click OK
+  * Under System Variables again, find `Path` and double click on it to edit, and at the bottom add:
+    * `%ANDROID_HOME%\platform-tools`
+    * `%ANDROID_HOME%\tools`
+    * `%ANDROID_HOME%\tools\bin`
+
+##### Starting the Emulator without Android Studio
+
+Note: an Emulator will have to be set up in Android Studio first - this is for all successive launches.
+
 * `emulator -list-avds` - will show all installed AVDs
 * `emulator -avd Pixel_3_API_28 -netdelay none -netspeed full` - will run the AVD `Pixel_3_API_28`
+* On Windows, specifiying the emulator path is necessary:
+  * `%ANDROID_HOME%/emulator/emulator -avd Pixel_3_API_28 -netdelay none -netspeed full` - will run the AVD `Pixel_3_API_28`
 
-### Build the apk for Android:
+### Build the apk for Android
+=======
+* `emulator -list-avds` - will show all installed AVDs
+* `emulator -avd Pixel_3_API_28 -netdelay none -netspeed full` - will run the AVD `Pixel_3_API_28`
 
 In directory `android` run `./gradlew assembleRelease -x bundleReleaseJsAndAssets`. The apk file should reside in `947g5/android/app/build/outputs/apk/release`.
 

@@ -12,6 +12,8 @@
     "lint-fix": "eslint '**/*.js' --fix"
   },
   "dependencies": {
+    "@react-native-community/cli-platform-android": "^2.9.0",
+    "jetifier": "^1.6.4",
     "moment": "^2.24.0",
     "react": "16.9.0",
     "react-native": "0.61.2",

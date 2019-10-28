@@ -1,0 +1,32 @@
+matrix:
+  include:
+    - language: node_js
+      node_js:
+        - "10.13.0"
+      script: .Travis/node_v10.sh
+    - os: linux
+      language: android
+      jdk: oraclejdk8
+      sudo: required
+      env:
+        - JOB_NAME=ANDROID
+      android:
+        licenses:
+          - 'android-sdk-preview-license-.+'
+          - 'android-sdk-license-.+'
+          - 'google-gdk-license-.+'
+          components:
+            - tools
+            - platform-tools
+            - extra-google-google_play_services
+            - extra-google-m2repository
+            - extra-android-m2repository
+            - build-tools-28.0.3
+            - android-29
+            - sys-img-armeabi-v7a-android-29
+      before_install:
+        - yes | sdkmanager "platforms;android-28"
+        - yes | sdkmanager "ndk-bundle"
+      before_script:
+        - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
+      script: .Travis/android_v26.sh

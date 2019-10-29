@@ -18,6 +18,9 @@ import {
 import Geolocation from 'react-native-geolocation-service';
 import moment from 'moment';
 import firestore from '@react-native-firebase/firestore';
+import '@react-native-firebase/functions';
+import firebase from '@react-native-firebase/app';
+import '@react-native-firebase/auth';
 
 export default class App extends Component {
   constructor(props) {
@@ -36,7 +39,26 @@ export default class App extends Component {
       altitude: 0,
       timestamp: '',
     };
+
+    this.COORDS_ENDPOINT =
+      'https://us-central1-test-947g5.cloudfunctions.net/coords/coords';
   }
+
+  getAcknowledgement = () => {
+    fetch(this.COORDS_ENDPOINT)
+      .then(response => {
+        console.log("sdf");
+        console.log(response);
+        // response.json.coords.forEach(coord => {
+        //   console.log(coord);
+      })
+      //})
+      .catch(error => {
+        console.error(error);
+      });
+
+
+  };
 
   /**
    * This method updates the state object with the response from the Geolocation API
@@ -146,6 +168,7 @@ export default class App extends Component {
     this.checkGeolocationPermission();
     this.getCurrentGeolocation();
     setInterval(() => this.getCurrentGeolocation(), 1000);
+    this.getAcknowledgement();
   }
 
   render() {

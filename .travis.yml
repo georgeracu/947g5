@@ -1,0 +1,57 @@
+jobs:
+  include:
+    - os: linux
+      language: node_js
+      env:
+        - JOB_NAME=NODE
+      node_js: "10.13.0"
+      install:
+        - npm install
+      script:
+        - npm test
+    - os: linux
+      language: android
+      jdk: oraclejdk8
+      env:
+        - JOB_NAME=ANDROID
+      before_cache:
+        - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+        - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+      cache:
+        npm: true
+        directories:
+          - $HOME/.gradle/caches/
+          - $HOME/.gradle/wrapper/
+          - node_modules
+      android:
+        components:
+          - tools
+          - platform-tools
+          - extra-google-google_play_services
+          - extra-google-m2repository
+          - extra-android-m2repository
+          - build-tools-28.0.3
+          - android-29
+          - sys-img-armeabi-v7a-android-29
+        licenses:
+          - 'android-sdk-preview-license-.+'
+          - 'android-sdk-license-.+'
+          - 'google-gdk-license-.+'
+      before_install:
+        - nvm install 10.13.0
+        - node --version
+        - chmod +x ./android/gradlew
+        - yes | sdkmanager "platforms;android-28"
+        - yes | sdkmanager "ndk-bundle"
+      install:
+        - npm install
+      before_script:
+        - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
+      script:
+        - npx jetify
+        - cd android
+        - ./gradlew clean
+        - bundle install
+        - bundle exec fastlane beta
+      after_script:
+        - ./gradlew assembleRelease

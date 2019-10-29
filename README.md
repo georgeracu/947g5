@@ -1,5 +1,9 @@
 # Advanced Software Engineering 947G5 project
 
+[![Build Status](https://travis-ci.com/georgeracu/947g5.svg?branch=master)](https://travis-ci.com/georgeracu/947g5)
+
+Table of Contents
+
 * [Team Composition](#team-composition)
 * [We are Agile](#agile-manifesto)
 * [Learning Resources](#a-curated-list-of-learning-resources)
@@ -314,3 +318,8 @@ In directory `android` run `./gradlew assembleRelease -x bundleReleaseJsAndAsset
 
 * With preset `react-native`
 * Mocked data in directory `__mocks__`
+
+## Continuous Integration and Delivery
+
+* CI Server is [Travis CI](https://travis-ci.com)
+* Deployment using [fastlane](https://fastlane.tools/)

@@ -13,6 +13,9 @@
 # Update this, if you use features of a newer version
 fastlane_version "2.134.0"
 
+# Enable Travis when Crashlytics and Google Play store are all working
+# setup_travis
+
 default_platform :android
 
 platform :android do
@@ -27,7 +30,19 @@ platform :android do
 
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do
-    gradle(task: "assembleRelease")
+    increment_version_number
+    commit_version_bump
+    push_to_git_remote
+
+    # Build and sign
+    match
+    gym
+
+    # Upload and notify
+    crashlytics
+    slack
+    
+    # gradle(task: "assembleRelease")
 
     # sh "your_script.sh"
     # You can also use other beta testing services here

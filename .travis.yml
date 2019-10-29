@@ -52,6 +52,6 @@ jobs:
         - cd android
         - ./gradlew clean
         - bundle install
-        - bundle exec fastlane beta
+        - bundle exec fastlane test
       after_script:
         - ./gradlew assembleRelease

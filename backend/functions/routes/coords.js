@@ -19,46 +19,55 @@ const READ_COORD = '/read';
 const UPDATE_COORD = '/update';
 const DELETE_COORD = '/delete';
 
+/**
+ * This endpoint returns all coordinates
+ */
 app.get(READ_COORD, (req, res) => {
   db.collection(COLLECTION)
     .get()
     // eslint-disable-next-line promise/always-return
     .then(snapshot => {
-      let listOfCoords = [];
+      let coords = [];
       snapshot.forEach(doc => {
-        listOfCoords.push({
+        coords.push({
           id: doc.id,
           data: doc.data(),
         });
       });
-      res.send(JSON.stringify(listOfCoords));
+      res.send(coords);
     })
     .catch(err => {
-      console.log('Error getting documents', err);
+      res.send({
+        code: -1,
+        message: err.message,
+      });
     });
 });
 
+/**
+ * This endpoint inserts a coordinate into the collection
+ */
 app.post(CREATE_COORD, (req, res) => {
   let coordsObj = req.body;
-  let response = db
-    .collection(COLLECTION)
+  db.collection(COLLECTION)
     .add({
       latitude: coordsObj.latitude,
       longitude: coordsObj.longitude,
       timestamp: coordsObj.timestamp,
     })
     .then(docRef => {
-      return {
+      res.send({
+        code: 1,
         message: docRef.id,
-      };
+      });
+      return '';
     })
     .catch(error => {
-      console.log(error.message);
-      return {
+      res.send({
+        code: -1,
         message: error.message,
-      };
+      });
     });
-  res.send(JSON.stringify(response));
 });
 
 module.exports = {

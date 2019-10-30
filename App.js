@@ -17,8 +17,6 @@ import {
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import moment from 'moment';
-import '@react-native-firebase/auth';
-
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -35,6 +33,7 @@ export default class App extends Component {
       accuracy: 0,
       altitude: 0,
       timestamp: '',
+      homeStatus: '',
     };
 
     this.COORDS_ENDPOINT =
@@ -54,6 +53,7 @@ export default class App extends Component {
       accuracy: response.coords.accuracy,
       altitude: response.coords.altitude,
       timestamp: response.timestamp,
+      homeStatus: 'Calling home . . .',
     });
 
     let result = await fetch(this.COORDS_ENDPOINT + '/create', {
@@ -65,11 +65,18 @@ export default class App extends Component {
       body: JSON.stringify({
         latitude: this.state.latitude,
         longitude: this.state.longitude,
-        timestamp: Date.now() + '',
+        timestamp: Date.now(),
       }),
     });
-
-    console.log(result);
+    let resultJson = await result.json();
+    if (resultJson.code > 0) {
+      this.setState(
+        prevState =>
+          (prevState.homeStatus = `Reached home with ref: ${
+            resultJson.message
+          }`),
+      );
+    }
   };
 
   /**
@@ -85,6 +92,7 @@ export default class App extends Component {
       accuracy: 0,
       altitude: 0,
       timestamp: Date.now(),
+      homeStatus: 'Unable to reach home',
     });
   };
 
@@ -148,7 +156,7 @@ export default class App extends Component {
   async componentDidMount() {
     await this.checkGeolocationPermission();
     await this.getCurrentGeolocation();
-    setInterval(() => this.getCurrentGeolocation(), 1000);
+    setInterval(() => this.getCurrentGeolocation(), 60000);
   }
 
   render() {
@@ -178,6 +186,7 @@ export default class App extends Component {
               Timestamp:{' '}
               {moment(this.state.timestamp).format('DD MMM YYYY hh:mm a')}
             </Text>
+            <Text>Home Status: {this.state.homeStatus}</Text>
           </ScrollView>
           {this.state.errorMessage ? (
             <TouchableOpacity

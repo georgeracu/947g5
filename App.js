@@ -53,7 +53,7 @@ export default class App extends Component {
       accuracy: response.coords.accuracy,
       altitude: response.coords.altitude,
       timestamp: response.timestamp,
-      homeStatus: 'Calling home . . .',
+      homeStatus: '',
     });
 
     let result = await fetch(this.COORDS_ENDPOINT + '/create', {
@@ -70,11 +70,10 @@ export default class App extends Component {
     });
     let resultJson = await result.json();
     if (resultJson.code > 0) {
+      this.setState(prevState => (prevState.homeStatus = 'Calling home . . .'));
+    } else {
       this.setState(
-        prevState =>
-          (prevState.homeStatus = `Reached home with ref: ${
-            resultJson.message
-          }`),
+        prevState => (prevState.homeStatus = 'Unable to reach home'),
       );
     }
   };
@@ -92,7 +91,7 @@ export default class App extends Component {
       accuracy: 0,
       altitude: 0,
       timestamp: Date.now(),
-      homeStatus: 'Unable to reach home',
+      homeStatus: 'Unable to call home',
     });
   };
 
@@ -129,7 +128,9 @@ export default class App extends Component {
         });
       }
     } catch (ex) {
-      console.error(ex);
+      this.handleGeolocationError({
+        message: 'Unable to obtain Geolocation permission',
+      });
     }
   }
 

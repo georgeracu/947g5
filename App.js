@@ -15,6 +15,8 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+import {getUniqueId} from 'react-native-device-info';
 import Geolocation from 'react-native-geolocation-service';
 import moment from 'moment';
 export default class App extends Component {
@@ -38,6 +40,7 @@ export default class App extends Component {
 
     this.COORDS_ENDPOINT =
       'https://us-central1-test-947g5.cloudfunctions.net/coords';
+    this.deviceId = DeviceInfo.getUniqueId();
   }
 
   /**
@@ -65,6 +68,7 @@ export default class App extends Component {
       body: JSON.stringify({
         latitude: this.state.latitude,
         longitude: this.state.longitude,
+        deviceId: this.deviceId,
         timestamp: Date.now(),
       }),
     });

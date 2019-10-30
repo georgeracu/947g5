@@ -53,6 +53,7 @@ app.post(CREATE_COORD, (req, res) => {
     .add({
       latitude: coordsObj.latitude,
       longitude: coordsObj.longitude,
+      deviceId: coordsObj.deviceId,
       timestamp: coordsObj.timestamp,
     })
     .then(docRef => {

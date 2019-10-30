@@ -175,7 +175,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.We
 #### Install NodeJS
 
 ```bash
-choco install -y nodejs.install
+choco install nodejs-lts --version=10.16.3
 ```
 
 #### Install python 2 (and 3 for good measure, not sure how old my guide is!)

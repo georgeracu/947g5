@@ -40,7 +40,7 @@
   "jest": {
     "preset": "react-native",
     "setupFiles": [
-      "./App-test.js"
+      "./__tests__/App-test.js"
     ]
   }
 }

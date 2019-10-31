@@ -13,7 +13,7 @@ const cors = require('cors');
 app.use(cors({origin: true})); // Automatically allow cross-origin requests
 
 // Coordinates paths
-const COLLECTION = 'coordinates';
+const COORDINATES = 'coordinates';
 const CREATE_COORD = '/create';
 const READ_COORD = '/read';
 const UPDATE_COORD = '/update';
@@ -23,7 +23,7 @@ const DELETE_COORD = '/delete';
  * This endpoint returns all coordinates
  */
 app.get(READ_COORD, (req, res) => {
-  db.collection(COLLECTION)
+  db.collection(COORDINATES)
     .get()
     // eslint-disable-next-line promise/always-return
     .then(snapshot => {
@@ -48,14 +48,9 @@ app.get(READ_COORD, (req, res) => {
  * This endpoint inserts a coordinate into the collection
  */
 app.post(CREATE_COORD, (req, res) => {
-  let coordsObj = req.body;
-  db.collection(COLLECTION)
-    .add({
-      latitude: coordsObj.latitude,
-      longitude: coordsObj.longitude,
-      deviceId: coordsObj.deviceId,
-      timestamp: coordsObj.timestamp,
-    })
+  let coords = req.body;
+  db.collection(COORDINATES)
+    .add(coords)
     .then(docRef => {
       res.send({
         code: 1,

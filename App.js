@@ -15,7 +15,6 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
 import {getUniqueId} from 'react-native-device-info';
 import Geolocation from 'react-native-geolocation-service';
 import analytics from '@react-native-firebase/analytics';
@@ -41,7 +40,7 @@ export default class App extends Component {
 
     this.COORDS_ENDPOINT =
       'https://us-central1-test-947g5.cloudfunctions.net/coords';
-    this.deviceId = DeviceInfo.getUniqueId();
+    this.deviceId = getUniqueId();
   }
 
   /**
@@ -68,7 +67,7 @@ export default class App extends Component {
     });
 
     // Log this response when we attempt to call home
-    let onCallHomeTime = Date.now();
+    const onCallHomeTime = Date.now();
     await analytics().logEvent('onCallHome', {
       deviceId: this.deviceId,
       timestamp: onCallHomeTime,
@@ -82,10 +81,8 @@ export default class App extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        latitude: this.state.latitude,
-        longitude: this.state.longitude,
         deviceId: this.deviceId,
-        timestamp: Date.now(),
+        coords: response.coords,
       }),
     });
 

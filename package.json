@@ -14,6 +14,8 @@
   "dependencies": {
     "@react-native-firebase/analytics": "^6.0.3",
     "@react-native-firebase/app": "^6.0.3",
+    "@react-native-community/cli-platform-android": "^2.9.0",
+    "jetifier": "^1.6.4",
     "moment": "^2.24.0",
     "react": "16.9.0",
     "react-native": "0.61.2",

@@ -21,4 +21,11 @@ describe('The main page component', () => {
     const tree = renderer.create(<App />).toJSON();
     expect(tree).toMatchSnapshot();
   });
+  test('Can run the react-native-device-info test', () => {
+    jest.mock('react-native-device-info', () => {
+      return {
+        getModel: jest.fn(),
+      };
+    });
+  });
 });

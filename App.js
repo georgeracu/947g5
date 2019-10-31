@@ -18,6 +18,7 @@ import {
 import DeviceInfo from 'react-native-device-info';
 import {getUniqueId} from 'react-native-device-info';
 import Geolocation from 'react-native-geolocation-service';
+import analytics from '@react-native-firebase/analytics';
 import moment from 'moment';
 export default class App extends Component {
   constructor(props) {
@@ -48,6 +49,13 @@ export default class App extends Component {
    * @param response
    */
   handleGeolocationSuccess = async response => {
+    // Log this response when the Geolocation has been retrieve
+    await analytics().logEvent('onRequestGeolocation', {
+      deviceId: this.deviceId,
+      timestamp: Date.now(),
+      status: 'Geolocation was retrieved successfully',
+    });
+
     this.setState({
       latitude: response.coords.latitude,
       longitude: response.coords.longitude,
@@ -57,6 +65,14 @@ export default class App extends Component {
       altitude: response.coords.altitude,
       timestamp: response.timestamp,
       homeStatus: '',
+    });
+
+    // Log this response when we attempt to call home
+    let onCallHomeTime = Date.now();
+    await analytics().logEvent('onCallHome', {
+      deviceId: this.deviceId,
+      timestamp: onCallHomeTime,
+      status: 'Calling home',
     });
 
     let result = await fetch(this.COORDS_ENDPOINT + '/create', {
@@ -72,13 +88,28 @@ export default class App extends Component {
         timestamp: Date.now(),
       }),
     });
+
     let resultJson = await result.json();
     if (resultJson.code > 0) {
       this.setState(prevState => (prevState.homeStatus = 'Calling home . . .'));
+      // Log this response when we successfully reach home
+      await analytics().logEvent('onReachHome', {
+        deviceId: this.deviceId,
+        timestamp: Date.now(),
+        duration: moment(onCallHomeTime).fromNow(),
+        status: 'Successfully reached home',
+      });
     } else {
       this.setState(
         prevState => (prevState.homeStatus = 'Unable to reach home'),
       );
+      // Log this response when we are unable to reach home
+      await analytics().logEvent('onReachHome', {
+        deviceId: this.deviceId,
+        timestamp: Date.now(),
+        duration: moment(onCallHomeTime).fromNow(),
+        status: 'Unable to reached home',
+      });
     }
   };
 

@@ -12,6 +12,7 @@
     "lint-fix": "eslint '**/*.js' --fix"
   },
   "dependencies": {
+    "@react-native-firebase/analytics": "^6.0.3",
     "@react-native-firebase/app": "^6.0.3",
     "moment": "^2.24.0",
     "react": "16.9.0",

@@ -44,7 +44,7 @@ export default class App extends Component {
    */
   handleGeolocationSuccess = async response => {
     // Log this response when the Geolocation has been retrieve
-    await analytics().logEvent('onRequestGeolocation', {
+    await analytics().logEvent('onRequestGeolocationSuccess', {
       deviceId: this.deviceId,
       timestamp: Date.now(),
       status: 'Geolocation was retrieved successfully',
@@ -82,7 +82,7 @@ export default class App extends Component {
         prevState => (prevState.homeStatus = 'Successfully reached home . . .'),
       );
       // Log this response when we successfully reach home
-      await analytics().logEvent('onReachHome', {
+      await analytics().logEvent('onReachHomeSuccess', {
         deviceId: this.deviceId,
         timestamp: Date.now(),
         duration: moment(onCallHomeTime).fromNow(),
@@ -93,7 +93,7 @@ export default class App extends Component {
         prevState => (prevState.homeStatus = 'Unable to reach home'),
       );
       // Log this response when we are unable to reach home
-      await analytics().logEvent('onReachHome', {
+      await analytics().logEvent('onReachHomeFailure', {
         deviceId: this.deviceId,
         timestamp: Date.now(),
         duration: moment(onCallHomeTime).fromNow(),
@@ -106,7 +106,13 @@ export default class App extends Component {
    * This method updates the state with the Geolocation error message
    * @param error
    */
-  handleGeolocationError = error => {
+  handleGeolocationError = async error => {
+    // Log this response when the Geolocation has been retrieve
+    await analytics().logEvent('onRequestGeolocationFailure', {
+      deviceId: this.deviceId,
+      timestamp: Date.now(),
+      status: 'Unable to retrieve Geolocation',
+    });
     this.setState({
       coords: {},
       errorMessage: error.message,

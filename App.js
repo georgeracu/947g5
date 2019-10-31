@@ -28,13 +28,8 @@ export default class App extends Component {
      * @type {{timeStamp: string, altitude: number, latitude: number, errorMessage: string, accuracy: number, speed: number, longitude: number}}
      */
     this.state = {
-      latitude: 0,
-      longitude: 0,
+      coords: {},
       errorMessage: 'No location data',
-      speed: 0,
-      accuracy: 0,
-      altitude: 0,
-      timestamp: '',
       homeStatus: '',
     };
 
@@ -56,14 +51,9 @@ export default class App extends Component {
     });
 
     this.setState({
-      latitude: response.coords.latitude,
-      longitude: response.coords.longitude,
+      coords: response.coords,
       errorMessage: '',
-      speed: response.coords.speed,
-      accuracy: response.coords.accuracy,
-      altitude: response.coords.altitude,
-      timestamp: response.timestamp,
-      homeStatus: '',
+      homeStatus: 'Calling home . . .',
     });
 
     // Log this response when we attempt to call home
@@ -88,7 +78,9 @@ export default class App extends Component {
 
     let resultJson = await result.json();
     if (resultJson.code > 0) {
-      this.setState(prevState => (prevState.homeStatus = 'Calling home . . .'));
+      this.setState(
+        prevState => (prevState.homeStatus = 'Successfully reached home . . .'),
+      );
       // Log this response when we successfully reach home
       await analytics().logEvent('onReachHome', {
         deviceId: this.deviceId,
@@ -116,13 +108,8 @@ export default class App extends Component {
    */
   handleGeolocationError = error => {
     this.setState({
-      latitude: 0,
-      longitude: 0,
+      coords: {},
       errorMessage: error.message,
-      speed: 0,
-      accuracy: 0,
-      altitude: 0,
-      timestamp: Date.now(),
       homeStatus: 'Unable to call home',
     });
   };
@@ -199,25 +186,27 @@ export default class App extends Component {
           <View style={styles.coordinatesContainer}>
             <Text style={styles.coordinatesTextTitle}>Latitude</Text>
             <Text style={styles.coordinatesTextValue}>
-              {this.state.latitude}
+              {this.state.coords.latitude}
             </Text>
           </View>
           <View style={styles.coordinatesContainer}>
             <Text style={styles.coordinatesTextTitle}>Longitude</Text>
             <Text style={styles.coordinatesTextValue}>
-              {this.state.longitude}
+              {this.state.coords.longitude}
             </Text>
           </View>
           <ScrollView style={styles.informationContainer}>
             {this.state.errorMessage ? (
               <Text>Error Message: {this.state.errorMessage}</Text>
             ) : null}
-            <Text>Speed: {this.state.speed}</Text>
-            <Text>Accuracy: {this.state.accuracy}</Text>
-            <Text>Altitude: {this.state.altitude}</Text>
+            <Text>Speed: {this.state.coords.speed}</Text>
+            <Text>Accuracy: {this.state.coords.accuracy}</Text>
+            <Text>Altitude: {this.state.coords.altitude}</Text>
             <Text>
               Timestamp:{' '}
-              {moment(this.state.timestamp).format('DD MMM YYYY hh:mm a')}
+              {moment(this.state.coords.timestamp).format(
+                'DD MMM YYYY hh:mm a',
+              )}
             </Text>
             <Text>Home Status: {this.state.homeStatus}</Text>
           </ScrollView>

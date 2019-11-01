@@ -14,12 +14,11 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  absoluteFillObject,
 } from 'react-native';
 import {getUniqueId} from 'react-native-device-info';
 import Geolocation from 'react-native-geolocation-service';
 import analytics from '@react-native-firebase/analytics';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import moment from 'moment';
 export default class App extends Component {
   constructor(props) {
@@ -181,10 +180,11 @@ export default class App extends Component {
     }
   }
 
+
   async componentDidMount() {
     await this.checkGeolocationPermission();
     await this.getCurrentGeolocation();
-    //setInterval(() => this.getCurrentGeolocation(), 60000);
+    //setInterval(() => this.getCurrentGeolocation(), 1000);
   }
 
   render() {
@@ -225,12 +225,26 @@ export default class App extends Component {
             provider={PROVIDER_GOOGLE}
             style={styles.map}
             region={{
-              latitude: 37.78825,
-              longitude: -122.4324,
-              latitudeDelta: 0.015,
-              longitudeDelta: 0.0121,
-            }}
-          />
+              latitude: this.state.coords.latitude
+                ? this.state.coords.latitude
+                : 0,
+              longitude: this.state.coords.longitude
+                ? this.state.coords.longitude
+                : 0,
+              latitudeDelta: 0.55,
+              longitudeDelta: 0.55,
+            }}>
+            <Marker
+              coordinate={{
+                latitude: this.state.coords.latitude
+                  ? this.state.coords.latitude
+                  : 0,
+                longitude: this.state.coords.longitude
+                  ? this.state.coords.longitude
+                  : 0,
+              }}
+            />
+          </MapView>
         </View>
       </View>
     );

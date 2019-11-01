@@ -6,6 +6,8 @@ The table of contents for the project plan is:
   - [Organisation Plan](#organisation-plan)
     - [Team Structure and Organisation](#team-structure-and-organisation)
       - [Team Members](#team-members)
+        - [Communication Tools](#communication-tools)
+          - [Remote Working](#remote-working)
   - [Conflict Resolution Plan](#conflict-resolution-plan)
     - [Maintaining project flow](#maintaining-project-flow)
   - [Peer Assessment Plan](#peer-assessment-plan)
@@ -49,6 +51,38 @@ We considered in using other Agile frameworks, like Scrum and XP. they were not 
 - Iben, Labaran Rogers
 - Racu, Ion-Georgica
 - Carter, Benjamin
+
+##### Communication Tools
+Majority of the team are located in a local geographical area, however a lot of work is still done remotely as each member of the team works from on their own machine from home. In order to maintain clear communication between all of the members we chose to use a cloud-based instant messaging application called Slack.
+
+Advantages of Slack:
+* Simplicity: Slack is simple to use as it requires minimal setup time. The UI is intuitive that will not require any technical experience.
+* Channeling: Slack allows a each sub-team to have their own channel within the slack workspace. Making communication more simple and less cluttered. We have set up different channels: 'announcements', a main chat, as well as general chat. 
+* Integration: Connected with GitHub, which uses a SlackBot that auto generates a message into a channel letting people know if a pull request is called.
+
+Disadvantages: 
+* Even though sustaining a conversation can be difficult as multiple people may be messaging in the same channel. However, as we are only a small team of 7 member this is not that much of an issue and can be worked around. 
+
+##### Trello
+To ensure all of the member in the team know what tasks need to be completed we used a third party app called Trello. It is a web-based Kanban-style application that allows you to create list in the form of cards. The cards can be organised into 'To-Do', 'In Progress' and 'Done' giving updates on the progress of various tasks that need completion.
+
+Advantages of Trello:
+* Simple intuitive way of organising tasks as each task has its own 'card', within which you are able to write notes so that the member performing that task knows exactly what needs to be done. 
+* Automated changes, that informs users of any changes that have been made
+* Can set deadlines for a task. Members are notified when a deadline is close, as a prompt to finish a task on time or announce it as 'Done'.
+###### Meetings
+As well as communicating through online, the team arranges regular meetings (once or twice a week). The goals of the meetings vary, e.g. discussing particular issues that team members are currently experiencing, or potentially how new requirements from the client are dealt with.
+
+Advantages of meetings:
+* They help to prioritise issues as well as put forward issues that are easier to discuss in person.
+
+#### Remote Working
+
+Currently all of the members of the group are working remotely i.e. from their own individual machines rather than all working from one machine. This was the best way of organising how the group completes tasks as it meant that different people are able to work on different areas of the project. Diving the work load allows members to work on tasks that they are either confident in completing or tasks they would like to learn something new.
+
+In order to make sure we synchronise all of the files from our remote machines on GitHub, we regularly call Pull Requests when a file has been edited. That request can not directly be committed to the master, a new branch is created which on approval gets merged with the master. This is to stop the master from being edited falsely and acts as a security mechanism to make sure we do not lose committed data that has been reviewed.
+
+The team currently have someone that lives and works from a completely location (different city) than the rest of the team. However, this has not been an issue as constant communication through Slack is maintained. During meetings this is also not an issue as we are able to have the member of the team on video call present and hence they are able to input into meetings. 
 
 ## Conflict Resolution Plan
 

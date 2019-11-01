@@ -14,10 +14,12 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  absoluteFillObject,
 } from 'react-native';
 import {getUniqueId} from 'react-native-device-info';
 import Geolocation from 'react-native-geolocation-service';
 import analytics from '@react-native-firebase/analytics';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import moment from 'moment';
 export default class App extends Component {
   constructor(props) {
@@ -182,47 +184,53 @@ export default class App extends Component {
   async componentDidMount() {
     await this.checkGeolocationPermission();
     await this.getCurrentGeolocation();
-    setInterval(() => this.getCurrentGeolocation(), 60000);
+    //setInterval(() => this.getCurrentGeolocation(), 60000);
   }
 
   render() {
     return (
       <View style={styles.root}>
-        <View>
-          <View style={styles.coordinatesContainer}>
-            <Text style={styles.coordinatesTextTitle}>Latitude</Text>
-            <Text style={styles.coordinatesTextValue}>
-              {this.state.coords.latitude}
-            </Text>
-          </View>
-          <View style={styles.coordinatesContainer}>
-            <Text style={styles.coordinatesTextTitle}>Longitude</Text>
-            <Text style={styles.coordinatesTextValue}>
-              {this.state.coords.longitude}
-            </Text>
-          </View>
-          <ScrollView style={styles.informationContainer}>
-            {this.state.errorMessage ? (
-              <Text>Error Message: {this.state.errorMessage}</Text>
-            ) : null}
-            <Text>Speed: {this.state.coords.speed}</Text>
-            <Text>Accuracy: {this.state.coords.accuracy}</Text>
-            <Text>Altitude: {this.state.coords.altitude}</Text>
-            <Text>
-              Timestamp:{' '}
-              {moment(this.state.coords.timestamp).format(
-                'DD MMM YYYY hh:mm a',
-              )}
-            </Text>
-            <Text>Home Status: {this.state.homeStatus}</Text>
-          </ScrollView>
+        <View style={styles.coordinatesContainer}>
+          <Text style={styles.coordinatesTextTitle}>Latitude</Text>
+          <Text style={styles.coordinatesTextValue}>
+            {this.state.coords.latitude}
+          </Text>
+        </View>
+        <View style={styles.coordinatesContainer}>
+          <Text style={styles.coordinatesTextTitle}>Longitude</Text>
+          <Text style={styles.coordinatesTextValue}>
+            {this.state.coords.longitude}
+          </Text>
+        </View>
+        <ScrollView style={styles.informationContainer}>
           {this.state.errorMessage ? (
-            <TouchableOpacity
-              style={styles.button}
-              onPress={this._onPressButton}>
-              <Text style={styles.buttonText}>Turn on GPS</Text>
-            </TouchableOpacity>
+            <Text>Error Message: {this.state.errorMessage}</Text>
           ) : null}
+          <Text>Speed: {this.state.coords.speed}</Text>
+          <Text>Accuracy: {this.state.coords.accuracy}</Text>
+          <Text>Altitude: {this.state.coords.altitude}</Text>
+          <Text>
+            Timestamp:{' '}
+            {moment(this.state.coords.timestamp).format('DD MMM YYYY hh:mm a')}
+          </Text>
+          <Text>Home Status: {this.state.homeStatus}</Text>
+        </ScrollView>
+        {this.state.errorMessage ? (
+          <TouchableOpacity style={styles.button} onPress={this._onPressButton}>
+            <Text style={styles.buttonText}>Turn on GPS</Text>
+          </TouchableOpacity>
+        ) : null}
+        <View style={styles.mapContainer}>
+          <MapView
+            provider={PROVIDER_GOOGLE}
+            style={styles.map}
+            region={{
+              latitude: 37.78825,
+              longitude: -122.4324,
+              latitudeDelta: 0.015,
+              longitudeDelta: 0.0121,
+            }}
+          />
         </View>
       </View>
     );
@@ -232,34 +240,39 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   root: {
     padding: 10,
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
   coordinatesContainer: {
     alignItems: 'center',
     backgroundColor: '#349beb',
     borderRadius: 5,
     elevation: 10,
+    flex: 0.25,
     flexDirection: 'row',
-    height: 70,
     justifyContent: 'space-between',
-    margin: 8,
-    padding: 20,
+    marginBottom: 5,
+    padding: 10,
   },
   coordinatesTextTitle: {
     color: '#FFFFFF',
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: 'bold',
   },
   coordinatesTextValue: {
     color: '#FFFFFF',
-    fontSize: 20,
+    fontSize: 15,
   },
   informationContainer: {
     backgroundColor: '#f5f4f2',
     borderColor: '#000000',
     borderWidth: 1,
     borderRadius: 5,
-    margin: 5,
-    padding: 15,
+    flex: 0.25,
+    marginTop: 5,
+    marginBottom: 5,
+    padding: 5,
   },
   button: {
     backgroundColor: '#349beb',
@@ -267,14 +280,22 @@ const styles = StyleSheet.create({
     elevation: 10,
     height: 50,
     padding: 20,
-    margin: 10,
     width: 150,
-    flex: 1,
+    flex: 0.25,
+    marginTop: 5,
+    marginBottom: 5,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonText: {
     color: '#FFFFFF',
     fontWeight: 'bold',
+  },
+  mapContainer: {
+    flex: 4,
+    marginTop: 5,
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
   },
 });

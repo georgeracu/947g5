@@ -12,7 +12,6 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
   ScrollView,
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
@@ -30,7 +29,6 @@ export default class App extends Component {
      */
     this.state = {
       coords: {},
-      coordsTimestamp: '',
       errorMessage: 'No location data',
       homeStatus: '',
     };
@@ -54,7 +52,6 @@ export default class App extends Component {
 
     this.setState({
       coords: response.coords,
-      coordsTimestamp: response.timestamp,
       errorMessage: '',
       homeStatus: 'Calling home . . .',
     });
@@ -100,7 +97,7 @@ export default class App extends Component {
         deviceId: this.deviceId,
         timestamp: Date.now(),
         duration: moment(onCallHomeTime).fromNow(),
-        status: 'Unable to reached home',
+        status: 'Unable to reach home',
       });
     }
   };
@@ -118,18 +115,9 @@ export default class App extends Component {
     });
     this.setState({
       coords: {},
-      coordsTimestamp: '',
       errorMessage: error.message,
       homeStatus: 'Unable to call home',
     });
-  };
-
-  /**
-   * This method is used to explicitly turn on the Phones GPS
-   * @private
-   */
-  _onPressButton = async () => {
-    await this.checkGeolocationPermission();
   };
 
   /**
@@ -186,38 +174,12 @@ export default class App extends Component {
   async componentDidMount() {
     await this.checkGeolocationPermission();
     await this.getCurrentGeolocation();
-    //setInterval(() => this.getCurrentGeolocation(), 1000);
+    setInterval(() => this.getCurrentGeolocation(), 30000);
   }
 
   render() {
     return (
       <View style={styles.root}>
-        <View style={styles.coordinatesContainer}>
-          <Text style={styles.coordinatesTextTitle}>Latitude</Text>
-          <Text style={styles.coordinatesTextValue}>
-            {this.state.coords.latitude}
-          </Text>
-        </View>
-        <View style={styles.coordinatesContainer}>
-          <Text style={styles.coordinatesTextTitle}>Longitude</Text>
-          <Text style={styles.coordinatesTextValue}>
-            {this.state.coords.longitude}
-          </Text>
-        </View>
-        <ScrollView style={styles.informationContainer}>
-          {this.state.errorMessage ? (
-            <Text>Error Message: {this.state.errorMessage}</Text>
-          ) : null}
-          <Text>Speed: {this.state.coords.speed}</Text>
-          <Text>Accuracy: {this.state.coords.accuracy}</Text>
-          <Text>Altitude: {this.state.coords.altitude}</Text>
-          <Text>Home Status: {this.state.homeStatus}</Text>
-        </ScrollView>
-        {this.state.errorMessage ? (
-          <TouchableOpacity style={styles.button} onPress={this._onPressButton}>
-            <Text style={styles.buttonText}>Turn on GPS</Text>
-          </TouchableOpacity>
-        ) : null}
         <View style={styles.mapContainer}>
           {this.state.coords.latitude ? (
             <MapView
@@ -229,12 +191,6 @@ export default class App extends Component {
                 latitudeDelta: 0.01,
                 longitudeDelta: 0.01,
               }}
-              initialRegion={{
-                latitude: 0,
-                longitude: 0,
-                latitudeDelta: 0.1,
-                longitudeDelta: 0.1,
-              }}
               loadingEnabled={true}>
               <Marker
                 coordinate={{
@@ -245,6 +201,14 @@ export default class App extends Component {
             </MapView>
           ) : null}
         </View>
+        <View style={styles.informationInvisibleContainer}>
+          <ScrollView style={styles.informationContainer}>
+            {this.state.errorMessage ? (
+              <Text>Error Message: {this.state.errorMessage}</Text>
+            ) : null}
+            <Text>Home Status: {this.state.homeStatus}</Text>
+          </ScrollView>
+        </View>
       </View>
     );
   }
@@ -252,61 +216,25 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   root: {
-    padding: 10,
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  coordinatesContainer: {
     alignItems: 'center',
-    backgroundColor: '#349beb',
-    borderRadius: 5,
-    elevation: 10,
-    flex: 0.25,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 5,
-    padding: 10,
+    justifyContent: 'center',
+    flex: 1,
   },
-  coordinatesTextTitle: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontWeight: 'bold',
-  },
-  coordinatesTextValue: {
-    color: '#FFFFFF',
-    fontSize: 15,
-  },
-  informationContainer: {
-    backgroundColor: '#f5f4f2',
-    borderColor: '#000000',
-    borderWidth: 1,
-    borderRadius: 5,
-    flex: 0.2,
-    marginTop: 5,
-    marginBottom: 5,
-    padding: 5,
-  },
-  button: {
-    backgroundColor: '#349beb',
-    borderRadius: 5,
-    elevation: 10,
-    height: 50,
-    padding: 20,
-    width: 150,
-    flex: 0.1,
-    marginTop: 5,
-    marginBottom: 5,
+  informationInvisibleContainer: {
+    position: 'absolute',
+    bottom: 20,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
+  informationContainer: {
+    backgroundColor: '#f5f4f2',
+    borderRadius: 5,
+    elevation: 10,
+    padding: 20,
   },
   mapContainer: {
-    flex: 4.2,
-    marginTop: 5,
+    ...StyleSheet.absoluteFillObject,
   },
   map: {
     ...StyleSheet.absoluteFillObject,

@@ -219,30 +219,31 @@ export default class App extends Component {
           </TouchableOpacity>
         ) : null}
         <View style={styles.mapContainer}>
-          <MapView
-            provider={PROVIDER_GOOGLE}
-            style={styles.map}
-            region={{
-              latitude: this.state.coords.latitude
-                ? this.state.coords.latitude
-                : 0,
-              longitude: this.state.coords.longitude
-                ? this.state.coords.longitude
-                : 0,
-              latitudeDelta: 0.55,
-              longitudeDelta: 0.55,
-            }}>
-            <Marker
-              coordinate={{
-                latitude: this.state.coords.latitude
-                  ? this.state.coords.latitude
-                  : 0,
-                longitude: this.state.coords.longitude
-                  ? this.state.coords.longitude
-                  : 0,
+          {this.state.coords.latitude ? (
+            <MapView
+              provider={PROVIDER_GOOGLE}
+              style={styles.map}
+              region={{
+                latitude: this.state.coords.latitude,
+                longitude: this.state.coords.longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
               }}
-            />
-          </MapView>
+              initialRegion={{
+                latitude: 0,
+                longitude: 0,
+                latitudeDelta: 0.1,
+                longitudeDelta: 0.1,
+              }}
+              loadingEnabled={true}>
+              <Marker
+                coordinate={{
+                  latitude: this.state.coords.latitude,
+                  longitude: this.state.coords.longitude,
+                }}
+              />
+            </MapView>
+          ) : null}
         </View>
       </View>
     );
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
     borderColor: '#000000',
     borderWidth: 1,
     borderRadius: 5,
-    flex: 0.25,
+    flex: 0.2,
     marginTop: 5,
     marginBottom: 5,
     padding: 5,
@@ -293,7 +294,7 @@ const styles = StyleSheet.create({
     height: 50,
     padding: 20,
     width: 150,
-    flex: 0.25,
+    flex: 0.1,
     marginTop: 5,
     marginBottom: 5,
     alignItems: 'center',
@@ -304,7 +305,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   mapContainer: {
-    flex: 4,
+    flex: 4.2,
     marginTop: 5,
   },
   map: {

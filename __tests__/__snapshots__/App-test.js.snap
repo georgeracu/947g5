@@ -21,39 +21,6 @@ exports[`The main page component Matches the snapshot when has permissions 1`] =
       }
     }
   />
-  <View
-    style={
-      Object {
-        "alignItems": "center",
-        "bottom": 20,
-        "flex": 1,
-        "justifyContent": "center",
-        "position": "absolute",
-      }
-    }
-  >
-    <RCTScrollView
-      style={
-        Object {
-          "backgroundColor": "#f5f4f2",
-          "borderRadius": 5,
-          "elevation": 10,
-          "padding": 20,
-        }
-      }
-    >
-      <View>
-        <Text>
-          Error Message: 
-          No location data
-        </Text>
-        <Text>
-          Home Status: 
-          
-        </Text>
-      </View>
-    </RCTScrollView>
-  </View>
 </View>
 `;
 
@@ -78,38 +45,5 @@ exports[`The main page component Matches the snapshot when is missing permission
       }
     }
   />
-  <View
-    style={
-      Object {
-        "alignItems": "center",
-        "bottom": 20,
-        "flex": 1,
-        "justifyContent": "center",
-        "position": "absolute",
-      }
-    }
-  >
-    <RCTScrollView
-      style={
-        Object {
-          "backgroundColor": "#f5f4f2",
-          "borderRadius": 5,
-          "elevation": 10,
-          "padding": 20,
-        }
-      }
-    >
-      <View>
-        <Text>
-          Error Message: 
-          No location data
-        </Text>
-        <Text>
-          Home Status: 
-          
-        </Text>
-      </View>
-    </RCTScrollView>
-  </View>
 </View>
 `;

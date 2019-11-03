@@ -1,3 +1,3 @@
 'use strict';
 
-export default {analytics: jest.fn(0)};
+export default {analytics: jest.fn()};

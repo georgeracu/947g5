@@ -20,5 +20,8 @@ module.exports = {
     'react-native'
   ],
   rules: {
+    'indent': ['error', 2],
+    'quotes': ['error', 'single'],
+    'no-set-state': 'off',
   },
 };

@@ -7,19 +7,14 @@
  */
 
 import React, {Component} from 'react';
-import {
-  PermissionsAndroid,
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-} from 'react-native';
-import {getUniqueId} from 'react-native-device-info';
+import {PermissionsAndroid, StyleSheet, View} from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import Geolocation from 'react-native-geolocation-service';
 import analytics from '@react-native-firebase/analytics';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import moment from 'moment';
 import ms from 'milliseconds';
+import NotificationPopup from 'react-native-push-notification-popup';
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -30,14 +25,12 @@ export default class App extends Component {
      */
     this.state = {
       coords: {},
-      errorMessage: 'No location data',
-      homeStatus: '',
     };
 
     this.COORDS_ENDPOINT =
       'https://us-central1-test-947g5.cloudfunctions.net/coords';
     this.CONFIGS = 'https://us-central1-test-947g5.cloudfunctions.net/configs';
-    this.deviceId = getUniqueId();
+    this.deviceId = DeviceInfo.getUniqueId();
   }
 
   /**
@@ -64,7 +57,7 @@ export default class App extends Component {
    * @param response
    */
   handleGeolocationSuccess = async response => {
-    // Log this response when the Geolocation has been retrieve
+    // Log this response when the Geolocation has been retrieved
     await analytics().logEvent('onRequestGeolocationSuccess', {
       deviceId: this.deviceId,
       timestamp: Date.now(),
@@ -73,8 +66,13 @@ export default class App extends Component {
 
     this.setState({
       coords: response.coords,
-      errorMessage: '',
-      homeStatus: 'Calling home . . .',
+    });
+
+    // Display notification when we start Calling home
+    this.popup.show({
+      title: 'Home Status',
+      body: 'Calling home . . .',
+      slideOutTime: 5000,
     });
 
     // Log this response when we attempt to call home
@@ -92,15 +90,19 @@ export default class App extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        timestamp: Date.now(),
         deviceId: this.deviceId,
         coords: response.coords,
       }),
     });
     let resultJson = await result.json();
     if (resultJson.code > 0) {
-      this.setState(
-        prevState => (prevState.homeStatus = 'Successfully reached home . . .'),
-      );
+      // Display notification when wew successfully reach home
+      this.popup.show({
+        title: 'Home Status',
+        body: 'Successfully reached home . . .',
+        slideOutTime: 5000,
+      });
       // Log this response when we successfully reach home
       await analytics().logEvent('onReachHomeSuccess', {
         deviceId: this.deviceId,
@@ -109,9 +111,12 @@ export default class App extends Component {
         status: 'Successfully reached home',
       });
     } else {
-      this.setState(
-        prevState => (prevState.homeStatus = 'Unable to reach home'),
-      );
+      // Display notification when we are unable to reach home
+      this.popup.show({
+        title: 'Home Status',
+        body: 'Unable to reach home',
+        slideOutTime: 5000,
+      });
       // Log this response when we are unable to reach home
       await analytics().logEvent('onReachHomeFailure', {
         deviceId: this.deviceId,
@@ -133,7 +138,13 @@ export default class App extends Component {
       timestamp: Date.now(),
       status: 'Unable to retrieve Geolocation',
     });
-    this.setState(prevState => (prevState.errorMessage: error.message));
+
+    // Display notification when unable to get current location home
+    this.popup.show({
+      title: 'Geolocation Status',
+      body: 'Unable to detect location . . . re-trying location',
+      slideOutTime: 5000,
+    });
   };
 
   /**
@@ -191,7 +202,6 @@ export default class App extends Component {
     await this.checkGeolocationPermission();
     await this.getCurrentGeolocation();
     let geolocationFrequency = await this.getGeolocationConfigFrequency();
-    console.log(geolocationFrequency);
     setInterval(() => this.getCurrentGeolocation(), geolocationFrequency);
   }
 
@@ -219,14 +229,7 @@ export default class App extends Component {
             </MapView>
           ) : null}
         </View>
-        <View style={styles.informationInvisibleContainer}>
-          <ScrollView style={styles.informationContainer}>
-            {this.state.errorMessage ? (
-              <Text>Error Message: {this.state.errorMessage}</Text>
-            ) : null}
-            <Text>Home Status: {this.state.homeStatus}</Text>
-          </ScrollView>
-        </View>
+        <NotificationPopup ref={ref => (this.popup = ref)} />
       </View>
     );
   }
@@ -237,19 +240,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-  },
-  informationInvisibleContainer: {
-    position: 'absolute',
-    bottom: 20,
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  informationContainer: {
-    backgroundColor: '#f5f4f2',
-    borderRadius: 5,
-    elevation: 10,
-    padding: 20,
   },
   mapContainer: {
     ...StyleSheet.absoluteFillObject,

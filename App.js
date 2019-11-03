@@ -113,11 +113,7 @@ export default class App extends Component {
       timestamp: Date.now(),
       status: 'Unable to retrieve Geolocation',
     });
-    this.setState({
-      coords: {},
-      errorMessage: error.message,
-      homeStatus: 'Unable to call home',
-    });
+    this.setState(prevState => (prevState.errorMessage: error.message));
   };
 
   /**

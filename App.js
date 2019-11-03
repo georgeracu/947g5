@@ -19,6 +19,7 @@ import Geolocation from 'react-native-geolocation-service';
 import analytics from '@react-native-firebase/analytics';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import moment from 'moment';
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -64,7 +65,7 @@ export default class App extends Component {
       status: 'Calling home',
     });
 
-    let result = await fetch(this.COORDS_ENDPOINT + '/create', {
+    const result = await fetch(this.COORDS_ENDPOINT + '/create', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -76,7 +77,7 @@ export default class App extends Component {
       }),
     });
 
-    let resultJson = await result.json();
+    const resultJson = await result.json();
     if (resultJson.code > 0) {
       this.setState(
         prevState => (prevState.homeStatus = 'Successfully reached home . . .'),
@@ -170,7 +171,7 @@ export default class App extends Component {
   async componentDidMount() {
     await this.checkGeolocationPermission();
     await this.getCurrentGeolocation();
-    setInterval(() => this.getCurrentGeolocation(), 30000);
+    // setInterval(() => this.getCurrentGeolocation(), 30000);
   }
 
   render() {

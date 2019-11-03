@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {getUniqueId} from 'react-native-device-info';
+import DeviceInfo from 'react-native-device-info';
 import Geolocation from 'react-native-geolocation-service';
 import analytics from '@react-native-firebase/analytics';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
@@ -30,13 +30,14 @@ export default class App extends Component {
      */
     this.state = {
       coords: {},
+      coordsTimestamp: '',
       errorMessage: 'No location data',
       homeStatus: '',
     };
 
     this.COORDS_ENDPOINT =
       'https://us-central1-test-947g5.cloudfunctions.net/coords';
-    this.deviceId = getUniqueId();
+    this.deviceId = DeviceInfo.getUniqueId();
   }
 
   /**
@@ -44,7 +45,7 @@ export default class App extends Component {
    * @param response
    */
   handleGeolocationSuccess = async response => {
-    // Log this response when the Geolocation has been retrieve
+    // Log this response when the Geolocation has been retrieved
     await analytics().logEvent('onRequestGeolocationSuccess', {
       deviceId: this.deviceId,
       timestamp: Date.now(),
@@ -53,6 +54,7 @@ export default class App extends Component {
 
     this.setState({
       coords: response.coords,
+      coordsTimestamp: response.timestamp,
       errorMessage: '',
       homeStatus: 'Calling home . . .',
     });
@@ -116,6 +118,7 @@ export default class App extends Component {
     });
     this.setState({
       coords: {},
+      coordsTimestamp: '',
       errorMessage: error.message,
       homeStatus: 'Unable to call home',
     });
@@ -180,7 +183,6 @@ export default class App extends Component {
     }
   }
 
-
   async componentDidMount() {
     await this.checkGeolocationPermission();
     await this.getCurrentGeolocation();
@@ -209,10 +211,6 @@ export default class App extends Component {
           <Text>Speed: {this.state.coords.speed}</Text>
           <Text>Accuracy: {this.state.coords.accuracy}</Text>
           <Text>Altitude: {this.state.coords.altitude}</Text>
-          <Text>
-            Timestamp:{' '}
-            {moment(this.state.coords.timestamp).format('DD MMM YYYY hh:mm a')}
-          </Text>
           <Text>Home Status: {this.state.homeStatus}</Text>
         </ScrollView>
         {this.state.errorMessage ? (

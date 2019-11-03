@@ -7,17 +7,14 @@
  */
 
 import React, {Component} from 'react';
-import {
-  PermissionsAndroid,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import {PermissionsAndroid, StyleSheet, View} from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import Geolocation from 'react-native-geolocation-service';
+import analytics from '@react-native-firebase/analytics';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import moment from 'moment';
-
+import ms from 'milliseconds';
+import NotificationPopup from 'react-native-push-notification-popup';
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -27,54 +24,127 @@ export default class App extends Component {
      * @type {{timeStamp: string, altitude: number, latitude: number, errorMessage: string, accuracy: number, speed: number, longitude: number}}
      */
     this.state = {
-      latitude: 0,
-      longitude: 0,
-      errorMessage: 'No location data',
-      speed: 0,
-      accuracy: 0,
-      altitude: 0,
-      timestamp: '',
+      coords: {},
     };
+
+    this.COORDS_ENDPOINT =
+      'https://us-central1-test-947g5.cloudfunctions.net/coords';
+    this.CONFIGS = 'https://us-central1-test-947g5.cloudfunctions.net/configs';
+    this.deviceId = DeviceInfo.getUniqueId();
   }
+
+  /**
+   * Get geolocation configurations
+   * @returns {Promise<void>}
+   */
+  getGeolocationConfigFrequency = async () => {
+    let result = await fetch(this.CONFIGS + '/geoConfig');
+    let resultJson = await result.json();
+    const DEFAULT_FREQUENCY = 30000;
+    const geolocationFrequency = resultJson.geolocationFrequency;
+    const geolocationFrequencyType = resultJson.geolocationFrequencyType;
+    return geolocationFrequencyType[0] === 'seconds'
+      ? ms.seconds(geolocationFrequency)
+      : geolocationFrequencyType[1] === 'minutes'
+      ? ms.minutes(geolocationFrequency)
+      : geolocationFrequencyType[2] === 'hours'
+      ? ms.hours(geolocationFrequency)
+      : DEFAULT_FREQUENCY;
+  };
 
   /**
    * This method updates the state object with the response from the Geolocation API
    * @param response
    */
-  handleGeolocationSuccess = response => {
-    this.setState({
-      latitude: response.coords.latitude,
-      longitude: response.coords.longitude,
-      errorMessage: '',
-      speed: response.coords.speed,
-      accuracy: response.coords.accuracy,
-      altitude: response.coords.altitude,
-      timestamp: response.timestamp,
+  handleGeolocationSuccess = async response => {
+    // Log this response when the Geolocation has been retrieved
+    await analytics().logEvent('onRequestGeolocationSuccess', {
+      deviceId: this.deviceId,
+      timestamp: Date.now(),
+      status: 'Geolocation was retrieved successfully',
     });
+
+    this.setState({
+      coords: response.coords,
+    });
+
+    // Display notification when we start Calling home
+    this.popup.show({
+      title: 'Home Status',
+      body: 'Calling home . . .',
+      slideOutTime: 5000,
+    });
+
+    // Log this response when we attempt to call home
+    const onCallHomeTime = Date.now();
+    await analytics().logEvent('onCallHome', {
+      deviceId: this.deviceId,
+      timestamp: onCallHomeTime,
+      status: 'Calling home',
+    });
+
+    let result = await fetch(this.COORDS_ENDPOINT + '/create', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        timestamp: Date.now(),
+        deviceId: this.deviceId,
+        coords: response.coords,
+      }),
+    });
+    let resultJson = await result.json();
+    if (resultJson.code > 0) {
+      // Display notification when wew successfully reach home
+      this.popup.show({
+        title: 'Home Status',
+        body: 'Successfully reached home . . .',
+        slideOutTime: 5000,
+      });
+      // Log this response when we successfully reach home
+      await analytics().logEvent('onReachHomeSuccess', {
+        deviceId: this.deviceId,
+        timestamp: Date.now(),
+        duration: moment(onCallHomeTime).fromNow(),
+        status: 'Successfully reached home',
+      });
+    } else {
+      // Display notification when we are unable to reach home
+      this.popup.show({
+        title: 'Home Status',
+        body: 'Unable to reach home',
+        slideOutTime: 5000,
+      });
+      // Log this response when we are unable to reach home
+      await analytics().logEvent('onReachHomeFailure', {
+        deviceId: this.deviceId,
+        timestamp: Date.now(),
+        duration: moment(onCallHomeTime).fromNow(),
+        status: 'Unable to reach home',
+      });
+    }
   };
 
   /**
    * This method updates the state with the Geolocation error message
    * @param error
    */
-  handleGeolocationError = error => {
-    this.setState({
-      latitude: 0,
-      longitude: 0,
-      errorMessage: error.message,
-      speed: 0,
-      accuracy: 0,
-      altitude: 0,
+  handleGeolocationError = async error => {
+    // Log this response when the Geolocation has been retrieve
+    await analytics().logEvent('onRequestGeolocationFailure', {
+      deviceId: this.deviceId,
       timestamp: Date.now(),
+      status: 'Unable to retrieve Geolocation',
     });
-  };
 
-  /**
-   * This method is used to explicitly turn on the Phones GPS
-   * @private
-   */
-  _onPressButton = async () => {
-    await this.checkGeolocationPermission();
+    // Display notification when unable to get current location home
+    this.popup.show({
+      title: 'Geolocation Status',
+      body: 'Unable to detect location . . . re-trying location',
+      slideOutTime: 5000,
+    });
   };
 
   /**
@@ -102,7 +172,9 @@ export default class App extends Component {
         });
       }
     } catch (ex) {
-      console.error(ex);
+      this.handleGeolocationError({
+        message: 'Unable to obtain Geolocation permission',
+      });
     }
   }
 
@@ -126,47 +198,38 @@ export default class App extends Component {
     }
   }
 
-  componentDidMount() {
-    this.checkGeolocationPermission();
-    this.getCurrentGeolocation();
+  async componentDidMount() {
+    await this.checkGeolocationPermission();
+    await this.getCurrentGeolocation();
+    let geolocationFrequency = await this.getGeolocationConfigFrequency();
+    setInterval(() => this.getCurrentGeolocation(), geolocationFrequency);
   }
 
   render() {
     return (
       <View style={styles.root}>
-        <View>
-          <View style={styles.coordinatesContainer}>
-            <Text style={styles.coordinatesTextTitle}>Latitude</Text>
-            <Text style={styles.coordinatesTextValue}>
-              {this.state.latitude}
-            </Text>
-          </View>
-          <View style={styles.coordinatesContainer}>
-            <Text style={styles.coordinatesTextTitle}>Longitude</Text>
-            <Text style={styles.coordinatesTextValue}>
-              {this.state.longitude}
-            </Text>
-          </View>
-          <ScrollView style={styles.informationContainer}>
-            {this.state.errorMessage ? (
-              <Text>Error Message: {this.state.errorMessage}</Text>
-            ) : null}
-            <Text>Speed: {this.state.speed}</Text>
-            <Text>Accuracy: {this.state.accuracy}</Text>
-            <Text>Altitude: {this.state.altitude}</Text>
-            <Text>
-              Timestamp:{' '}
-              {moment(this.state.timestamp).format('DD MMM YYYY hh:mm a')}
-            </Text>
-          </ScrollView>
-          {this.state.errorMessage ? (
-            <TouchableOpacity
-              style={styles.button}
-              onPress={this._onPressButton}>
-              <Text style={styles.buttonText}>Turn on GPS</Text>
-            </TouchableOpacity>
+        <View style={styles.mapContainer}>
+          {this.state.coords.latitude ? (
+            <MapView
+              provider={PROVIDER_GOOGLE}
+              style={styles.map}
+              region={{
+                latitude: this.state.coords.latitude,
+                longitude: this.state.coords.longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              }}
+              loadingEnabled={true}>
+              <Marker
+                coordinate={{
+                  latitude: this.state.coords.latitude,
+                  longitude: this.state.coords.longitude,
+                }}
+              />
+            </MapView>
           ) : null}
         </View>
+        <NotificationPopup ref={ref => (this.popup = ref)} />
       </View>
     );
   }
@@ -174,50 +237,14 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   root: {
-    padding: 10,
-  },
-  coordinatesContainer: {
-    alignItems: 'center',
-    backgroundColor: '#349beb',
-    borderRadius: 5,
-    elevation: 10,
-    flexDirection: 'row',
-    height: 70,
-    justifyContent: 'space-between',
-    margin: 8,
-    padding: 20,
-  },
-  coordinatesTextTitle: {
-    color: '#FFFFFF',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  coordinatesTextValue: {
-    color: '#FFFFFF',
-    fontSize: 20,
-  },
-  informationContainer: {
-    backgroundColor: '#f5f4f2',
-    borderColor: '#000000',
-    borderWidth: 1,
-    borderRadius: 5,
-    margin: 5,
-    padding: 15,
-  },
-  button: {
-    backgroundColor: '#349beb',
-    borderRadius: 5,
-    elevation: 10,
-    height: 50,
-    padding: 20,
-    margin: 10,
-    width: 150,
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    flex: 1,
   },
-  buttonText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
+  mapContainer: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
   },
 });

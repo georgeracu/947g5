@@ -2,6 +2,7 @@
   package="com.myawesomeapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COURSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -22,6 +23,11 @@
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyBBR38w7hOzGN3a3oC4RqDKOvb4s1Z6Pns"/>
+
     </application>
 
 </manifest>

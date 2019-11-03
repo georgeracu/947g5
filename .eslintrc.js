@@ -1,6 +1,7 @@
 module.exports = {
   env: {
-    "react-native/react-native": true
+    'react-native/react-native': true,
+    'jest': true
   },
   extends: [
     '@react-native-community',

@@ -19,6 +19,7 @@ import Geolocation from 'react-native-geolocation-service';
 import analytics from '@react-native-firebase/analytics';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import moment from 'moment';
+import ms from 'milliseconds';
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -35,8 +36,28 @@ export default class App extends Component {
 
     this.COORDS_ENDPOINT =
       'https://us-central1-test-947g5.cloudfunctions.net/coords';
+    this.CONFIGS = 'https://us-central1-test-947g5.cloudfunctions.net/configs';
     this.deviceId = getUniqueId();
   }
+
+  /**
+   * Get geolocation configurations
+   * @returns {Promise<void>}
+   */
+  getGeolocationConfigFrequency = async () => {
+    let result = await fetch(this.CONFIGS + '/geoConfig');
+    let resultJson = await result.json();
+    const DEFAULT_FREQUENCY = 30000;
+    const geolocationFrequency = resultJson.geolocationFrequency;
+    const geolocationFrequencyType = resultJson.geolocationFrequencyType;
+    return geolocationFrequencyType[0] === 'seconds'
+      ? ms.seconds(geolocationFrequency)
+      : geolocationFrequencyType[1] === 'minutes'
+      ? ms.minutes(geolocationFrequency)
+      : geolocationFrequencyType[2] === 'hours'
+      ? ms.hours(geolocationFrequency)
+      : DEFAULT_FREQUENCY;
+  };
 
   /**
    * This method updates the state object with the response from the Geolocation API
@@ -169,7 +190,9 @@ export default class App extends Component {
   async componentDidMount() {
     await this.checkGeolocationPermission();
     await this.getCurrentGeolocation();
-    setInterval(() => this.getCurrentGeolocation(), 30000);
+    let geolocationFrequency = await this.getGeolocationConfigFrequency();
+    console.log(geolocationFrequency);
+    setInterval(() => this.getCurrentGeolocation(), geolocationFrequency);
   }
 
   render() {

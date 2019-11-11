@@ -30,28 +30,14 @@ platform :android do
 
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do
-    increment_version_number
-    commit_version_bump
-    push_to_git_remote
+    # TODO: only for branch master
 
     # Build and sign
-    match
-    gym
+    gradle(
+        task: 'clean assembleRelease appDistributionUploadRelease' # bundle for AAB or assemble for APK
+    )
 
-    # Upload and notify
-    crashlytics
-    slack
-    
-    # gradle(task: "assembleRelease")
-
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
-  end
-
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "assembleRelease")
-    supply
+    slack(message: "Beta lane ran successfully")
   end
 
   # You can define as many lanes as you want

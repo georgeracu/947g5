@@ -52,17 +52,25 @@ export default class App extends Component {
       : DEFAULT_FREQUENCY;
   };
 
+  logEvent = (event, timestamp, status) => {
+    analytics().logEvent(event, {
+      deviceId: this.deviceId,
+      timestamp: timestamp,
+      status: status,
+    });
+  };
+
   /**
    * This method updates the state object with the response from the Geolocation API
    * @param response
    */
   handleGeolocationSuccess = async response => {
     // Log this response when the Geolocation has been retrieved
-    await analytics().logEvent('onRequestGeolocationSuccess', {
-      deviceId: this.deviceId,
-      timestamp: Date.now(),
-      status: 'Geolocation was retrieved successfully',
-    });
+    await this.logEvent(
+      'onRequestGeolocationSuccess',
+      Date.now(),
+      'Geolocation was retrieved successfully',
+    );
 
     this.setState({
       coords: response.coords,
@@ -77,11 +85,7 @@ export default class App extends Component {
 
     // Log this response when we attempt to call home
     const onCallHomeTime = Date.now();
-    await analytics().logEvent('onCallHome', {
-      deviceId: this.deviceId,
-      timestamp: onCallHomeTime,
-      status: 'Calling home',
-    });
+    await this.logEvent('onCallHome', onCallHomeTime, 'Calling');
 
     let result = await fetch(this.COORDS_ENDPOINT + '/create', {
       method: 'POST',
@@ -132,12 +136,12 @@ export default class App extends Component {
    * @param error
    */
   handleGeolocationError = async error => {
-    // Log this response when the Geolocation has been retrieve
-    await analytics().logEvent('onRequestGeolocationFailure', {
-      deviceId: this.deviceId,
-      timestamp: Date.now(),
-      status: 'Unable to retrieve Geolocation',
-    });
+    // Log this response when the Geolocation has been retrieved
+    await this.logEvent(
+      'onRequestGeolocationFailure',
+      Date.now(),
+      'Unable to retrieve Geolocation',
+    );
 
     // Display notification when unable to get current location home
     this.popup.show({

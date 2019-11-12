@@ -333,6 +333,8 @@ How to start the app for iOS:
 
 * With preset `react-native`
 * Mocked data in directory `__mocks__`
+* Running tests with `npm test`
+* Recreating the snapshots when the UI changes with `npm test -- -u`
 
 ## Continuous Integration and Delivery
 

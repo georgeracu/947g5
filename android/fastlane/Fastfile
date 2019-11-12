@@ -28,16 +28,12 @@ platform :android do
     gradle(task: "test")
   end
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
+  desc "Publish a Beta Build"
   lane :beta do
-    # TODO: only for branch master
-
     # Build and sign
     gradle(
         task: 'clean assembleRelease appDistributionUploadRelease' # bundle for AAB or assemble for APK
     )
-
-    slack(message: "Beta lane ran successfully")
   end
 
   # You can define as many lanes as you want
@@ -45,16 +41,14 @@ platform :android do
   after_all do |lane|
     # This block is called, only if the executed lane was successful
 
-    # slack(
-    #   message: "Successfully deployed new App Update."
-    # )
+    slack(message: "Lane #{lane} ran successfully")
   end
 
   error do |lane, exception|
-    # slack(
-    #   message: exception.message,
-    #   success: false
-    # )
+    slack(
+      message: "There was an exception on lane #{lane} with message #{exception.message}",
+      success: false
+    )
   end
 end
 

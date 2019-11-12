@@ -60,7 +60,6 @@ jobs:
     - npx jetify
     - cd android
     - bundle install
-    - bundle exec fastlane action firebase_app_distribution
     - bundle exec fastlane install_plugins
     - bundle exec fastlane beta
 notifications:

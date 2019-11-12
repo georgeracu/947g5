@@ -44,6 +44,8 @@ jobs:
     - openssl aes-256-cbc -K $encrypted_b5811d19e6fa_key -iv $encrypted_b5811d19e6fa_iv
       -in secrets.tar.enc -out secrets.tar -d
     - tar xvf secrets.tar
+    - cp infra/secrets/beta/google-services.json android/app
+    - cp infra/secrets/beta/newagent-55cc5-063ad922bb70.json android
     - nvm install 10.13.0
     - node --version
     - chmod +x ./android/gradlew

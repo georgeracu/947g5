@@ -1,57 +1,70 @@
+dist: xenial
 jobs:
   include:
-    - os: linux
-      language: node_js
-      env:
-        - JOB_NAME=NODE
-      node_js: "10.13.0"
-      install:
-        - npm install
-      script:
-        - npm test
-    - os: linux
-      language: android
-      jdk: oraclejdk8
-      env:
-        - JOB_NAME=ANDROID
-      before_cache:
-        - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-        - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-      cache:
-        npm: true
-        directories:
-          - $HOME/.gradle/caches/
-          - $HOME/.gradle/wrapper/
-          - node_modules
-      android:
-        components:
-          - tools
-          - platform-tools
-          - extra-google-google_play_services
-          - extra-google-m2repository
-          - extra-android-m2repository
-          - build-tools-28.0.3
-          - android-29
-          - sys-img-armeabi-v7a-android-29
-        licenses:
-          - 'android-sdk-preview-license-.+'
-          - 'android-sdk-license-.+'
-          - 'google-gdk-license-.+'
-      before_install:
-        - nvm install 10.13.0
-        - node --version
-        - chmod +x ./android/gradlew
-        - yes | sdkmanager "platforms;android-28"
-        - yes | sdkmanager "ndk-bundle"
-      install:
-        - npm install
-      before_script:
-        - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
-      script:
-        - npx jetify
-        - cd android
-        - ./gradlew clean
-        - bundle install
-        - bundle exec fastlane test
-      after_script:
-        - ./gradlew assembleRelease
+  - os: linux
+    language: node_js
+    env:
+    - JOB_NAME=NODE
+    node_js: 10.13.0
+    install:
+    - npm install
+    script:
+    - npm test
+  - os: linux
+    language: android
+    jdk: oraclejdk8
+    env:
+    - JOB_NAME=ANDROID
+    before_cache:
+    - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+    - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+    cache:
+      npm: true
+      directories:
+      - "$HOME/.gradle/caches/"
+      - "$HOME/.gradle/wrapper/"
+      - node_modules
+    android:
+      components:
+      - tools
+      - platform-tools
+      - extra-google-google_play_services
+      - extra-google-m2repository
+      - extra-android-m2repository
+      - build-tools-28.0.3
+      - android-29
+      - sys-img-armeabi-v7a-android-29
+      licenses:
+      - android-sdk-preview-license-.+
+      - android-sdk-license-.+
+      - google-gdk-license-.+
+    before_install:
+    - sudo apt-get update
+    - sudo apt-get autoremove
+    - openssl aes-256-cbc -K $encrypted_b5811d19e6fa_key -iv $encrypted_b5811d19e6fa_iv
+      -in secrets.tar.enc -out secrets.tar -d
+    - tar xvf secrets.tar
+    - nvm install 10.13.0
+    - node --version
+    - chmod +x ./android/gradlew
+    - yes | sdkmanager "platforms;android-28"
+    - yes | sdkmanager "ndk-bundle"
+    install:
+    - npm install
+    - npm install -g firebase-tools@7.7.0
+    before_script:
+    - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
+    script:
+    - npx jetify
+    - cd android
+    - bundle install
+    - bundle exec fastlane action firebase_app_distribution
+    - bundle exec fastlane install_plugins
+    - bundle exec fastlane beta
+notifications:
+  slack:
+    secure: 0fDfBrmylLgwFZ1Sj0Unpr/7Pe4EdfK8OFgI7AOIQ27kmPjLFrr7BpPpt3m1noI5eG5Iw+PAAqtCgLZ56l7V8ii6MJtDvb2witPiqYMl+Iq7wSVJGnLpcxGARJYCQtFSckH9EZ6x8wwZp6XASXJ/drN+IMv9OVIr4x1yHqZ5Q8w+xQJzoaFs7QodZbriyhzfF5graaUFQ2Neu2cGHcVTdi8sEzIdRMpo6nrynwSUTvPlJJSdPo4v/j7n1LZQYMCg5RGaMNvA0sekVeKJXRRtQkUM+V6/qb7Iosp4xyhqjTnGEvfMfE2RWIDucsv8oC7gv1wrtzZnOZVIxXw7yjrailHa1ikH8xHx6q1cnpF7c4ljZQrfGLkT6Cr56iZ8u7ccv861zOWkNQs6y0VMwR3k0glM2ZbkF2+/fPjxeQ2YgnyGFW89s44q+ddTJUxxQBmoEFUboBFtdVvYQFmT64KL3pIfqWdh7n9xhnrUbEWna5SE240mNn/SFqsGbqWGdwgrg5E2K+5VAh9fGsrCjuXOV55CDQeBdzQOLLB3mzS/khQFh735I7TWxe3kgZ3lltkxJsjYC5yVgcDQUaoRsOc1LQLHIen0oBWb+vdp/E2Ez6HkK6/U5lr14KsoGWb9ZD2GOLBEfAKBM6R/HrJ8asRZGHgg1Aagjd8XPZAX3JP9+3w=
+deploy:
+  provider: firebase
+  token:
+    secure: JH0+eQ6R5C0MNTsB6NttIk4gtJi8Vvd+/98b3gUrHf7XFLN31ZLh9uCt0k8Uqwkj0VOrQrDaAGo4eZTLt3DAhVqbeorcXpWI6BRIbUSlxTmc502x/koe+Nlz/yVmtl/NB8tQ9aLUXmfh3cITweaLyDDfQmJkvhXDfWpb9rFH8aG27XIx0Ombxu8OKF2qT1MdPtzsm98RAXfJp2xzkIUvxVVYOZtgAvX3ssC5FT7aXFcD+nrsJ3eNO5J9dsAAEvb0KegLDCmcql6Y6nVT+jt40BuqmJ+ocwiSq7BZMcXcBDr61LY2uhmcCrHiiIVMNctOEvxgJt4gLHFG4hl1pRIXnIosmTy/4E7tN7TJYaYTOG5kfR3ISe41MYbvZq6qiBUhCcy9EayoFMfe2XYOawN1hynlYeMyjax8bAs5wxTuuIYB/PSsew1Ygmwe0yC//31OSBNs2EgHZGMsQOREN7rycJWHN7So2BpNcczNpt1jwQaKA+7v8ziYAFpzPonU5+MHZZyL7iGcqZhudfpdTjO87/ww2WC6DO0FnHdXfMwGve0LhxCCB+YOMwDYH3UcZxmwkOZSQEvk+LCqksaN4jMn6TJwQB/Dc2ZWN8ew2dRSIEZlDEg/IwD6UOd5NqBtGWMpGoL9FS1Vj1lcY/3xs9zp5XVwHqVkDeWl+wCS2MS3CXw=

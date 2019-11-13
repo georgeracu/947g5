@@ -340,3 +340,54 @@ How to start the app for iOS:
 
 * CI Server is [Travis CI](https://travis-ci.com)
 * Deployment using [fastlane](https://fastlane.tools/)
+
+### Secrets per environment
+
+Secrets are encrypted locally before being uploaded to Travis CI. Travis is able to decrypt them when needed in the
+pipeline. Travis CI is using private/public key cryptography to encrypt/decrypt secrets.
+
+Separating environments between `test`, `beta` and `production` is crucial due to several reasons:
+* Avoid exposing access credentials for any of the environments
+* Keep data separated between testing and production
+* Allow integration to break in test and beta but not in production.
+
+Secrets are kept in `./infra/secrets` and are organized in directories, per environment: `/dev, /beta, /prod`.
+When the CI pipeline runs, based on who triggered the pipeline, secrets from one of the directories are copied
+into the right location for the pipeline to run. For push and PR builds, the environment is considered to be in
+development and `dev` secrets are used. After merging to `master`, the commit has promoted to `beta` and the 
+corresponding secrets are used to trigger a build and distribution of a beta build. For release triggers (manually)
+the pipeline is in `production`. 
+
+#### How to add new secrets
+
+First make sure that you are logged in to Travis CI `travis login --com --github-token <token_here>`
+
+##### For environment variables
+
+* Using Travis CI web UI you can add the secrets.
+* Using the Travis CI cli to encrypt and upload your value: `travis encrypt <your value here> --add`. Then just commit
+the change to the `.travis.yml` file.
+
+##### For files
+
+* For one file is just `travis encrypt-file <file_name_here> --add`. Then commit the `file_name_here.enc` and the
+changes to the `.travis.yml` file.
+* For encrypting multiple files:
+
+```shell script
+tar cvf secrets.tar <directory_with_files>
+travis encrypt-file secrets.tar --com --add # --com is for travis.com vs travis.org 
+```
+
+Then commit the `secrets.tar.enc` and the changes to the `.travis.yml` file.
+
+#### How to use them
+
+Travis CI will make sure that the files are decrypted in the `before_install` stage. You will need to extract the
+archive from secrets.tar and then copy the files where you need them.
+
+```shell script
+tar zxvf secrets.tar
+cp infra/secrets/beta/google-services.json android/app
+cp infra/secrets/beta/newagent.json android
+```

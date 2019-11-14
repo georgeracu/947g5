@@ -61,7 +61,3 @@ jobs:
     - bundle install
     - bundle exec fastlane install_plugins
     - bundle exec fastlane beta
-deploy:
-  provider: firebase
-  token:
-    secure: JH0+eQ6R5C0MNTsB6NttIk4gtJi8Vvd+/98b3gUrHf7XFLN31ZLh9uCt0k8Uqwkj0VOrQrDaAGo4eZTLt3DAhVqbeorcXpWI6BRIbUSlxTmc502x/koe+Nlz/yVmtl/NB8tQ9aLUXmfh3cITweaLyDDfQmJkvhXDfWpb9rFH8aG27XIx0Ombxu8OKF2qT1MdPtzsm98RAXfJp2xzkIUvxVVYOZtgAvX3ssC5FT7aXFcD+nrsJ3eNO5J9dsAAEvb0KegLDCmcql6Y6nVT+jt40BuqmJ+ocwiSq7BZMcXcBDr61LY2uhmcCrHiiIVMNctOEvxgJt4gLHFG4hl1pRIXnIosmTy/4E7tN7TJYaYTOG5kfR3ISe41MYbvZq6qiBUhCcy9EayoFMfe2XYOawN1hynlYeMyjax8bAs5wxTuuIYB/PSsew1Ygmwe0yC//31OSBNs2EgHZGMsQOREN7rycJWHN7So2BpNcczNpt1jwQaKA+7v8ziYAFpzPonU5+MHZZyL7iGcqZhudfpdTjO87/ww2WC6DO0FnHdXfMwGve0LhxCCB+YOMwDYH3UcZxmwkOZSQEvk+LCqksaN4jMn6TJwQB/Dc2ZWN8ew2dRSIEZlDEg/IwD6UOd5NqBtGWMpGoL9FS1Vj1lcY/3xs9zp5XVwHqVkDeWl+wCS2MS3CXw=

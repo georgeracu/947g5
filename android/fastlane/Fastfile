@@ -28,30 +28,20 @@ platform :android do
     gradle(task: "test")
   end
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
+  desc "Publish a Beta Release"
   lane :beta do
-    increment_version_number
-    commit_version_bump
-    push_to_git_remote
-
     # Build and sign
-    match
-    gym
-
-    # Upload and notify
-    crashlytics
-    slack
-    
-    # gradle(task: "assembleRelease")
-
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
+    gradle(
+        task: 'clean assembleRelease appDistributionUploadRelease' # bundle for AAB or assemble for APK
+    )
   end
 
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "assembleRelease")
-    supply
+  desc "Publish a Master Release"
+  lane :release do
+    # Build and sign
+    gradle(
+        task: 'clean assembleRelease appDistributionUploadRelease' # bundle for AAB or assemble for APK
+    )
   end
 
   # You can define as many lanes as you want
@@ -59,16 +49,14 @@ platform :android do
   after_all do |lane|
     # This block is called, only if the executed lane was successful
 
-    # slack(
-    #   message: "Successfully deployed new App Update."
-    # )
+    slack(message: "Lane #{lane} ran successfully")
   end
 
   error do |lane, exception|
-    # slack(
-    #   message: exception.message,
-    #   success: false
-    # )
+    slack(
+      message: "There was an exception on lane #{lane} with message #{exception.message}",
+      success: false
+    )
   end
 end
 

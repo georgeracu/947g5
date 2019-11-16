@@ -18,7 +18,7 @@ default_platform(:ios)
 platform :ios do
   desc "Run all tests"
   lane :test do
-
+    run_tests(scheme: "MyAwesomeApp")
   end
 
   desc "Do Beta deployment to Firebase App Distribution"

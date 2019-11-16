@@ -2,18 +2,22 @@ version: ~> 1.0
 dist: xenial
 jobs:
   include:
-    - stage: Node Test
+    - stage: Test Node
       if: type = pull_request
       language: node_js
       node_js: 10.13.0
+      env:
+        - JOB_NAME=TEST_NODEJS
       install:
       - npm install
       script:
       - npm test
-    - stage: Android Test
+    - stage: Test Android
       if: type = pull_request
       language: android
       jdk: oraclejdk8
+      env:
+        - JOB_NAME=TEST_ANDROID
       before_cache:
       - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
       - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -59,10 +63,30 @@ jobs:
       - bundle install
       - bundle exec fastlane install_plugins
       - bundle exec fastlane test
-    - stage: Android Beta release
+    - stage: Test iOS
+      if: type = pull_request
+      language: objective-c
+      osx_image: xcode10.3
+      env:
+        - JOB_NAME=TEST_iOS
+      before_install:
+        - nvm install 10.13.0
+        - node --version
+      install:
+        - npm install
+      script:
+        - npx jetify
+        - cd ios
+        - bundle install
+        - pod install
+        - bundle exec fastlane install_plugins
+        - bundle exec fastlane test
+    - stage: Beta Release Android
       if: (branch = master) AND (type = merge)
       language: android
       jdk: oraclejdk8
+      env:
+        - JOB_NAME=BETA_RELEASE_ANDROID
       before_cache:
         - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
         - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -108,11 +132,11 @@ jobs:
         - bundle install
         - bundle exec fastlane install_plugins
         - bundle exec fastlane beta
-    - stage: Android Master Release
+    - stage: Master Release Android
       if: (branch = master) AND (type != merge) AND (env(RELEASE_MASTER) = true)
       language: android
       env:
-        - CI_STAGE=BETA_DEPLOY
+        - JOB_NAME=MASTER_RELEASE_ANDROID
       jdk: oraclejdk8
       before_cache:
         - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock

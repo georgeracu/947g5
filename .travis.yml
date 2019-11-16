@@ -2,62 +2,160 @@ version: ~> 1.0
 dist: xenial
 jobs:
   include:
-  - os: linux
-    language: node_js
-    env:
-    - JOB_NAME=NODE
-    node_js: 10.13.0
-    install:
-    - npm install
-    script:
-    - npm test
-  - os: linux
-    language: android
-    jdk: oraclejdk8
-    env:
-    - JOB_NAME=ANDROID
-    before_cache:
-    - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-    - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-    cache:
-      npm: true
-      directories:
-      - "$HOME/.gradle/caches/"
-      - "$HOME/.gradle/wrapper/"
-      - node_modules
-    android:
-      components:
-      - tools
-      - platform-tools
-      - extra-google-google_play_services
-      - extra-google-m2repository
-      - extra-android-m2repository
-      - build-tools-28.0.3
-      - android-29
-      - sys-img-armeabi-v7a-android-29
-      licenses:
-      - android-sdk-preview-license-.+
-      - android-sdk-license-.+
-      - google-gdk-license-.+
-    before_install:
-    - openssl aes-256-cbc -K $encrypted_b5811d19e6fa_key -iv $encrypted_b5811d19e6fa_iv
-      -in secrets.tar.enc -out secrets.tar -d
-    - tar xvf secrets.tar
-    - cp infra/secrets/beta/google-services.json android/app
-    - cp infra/secrets/beta/newagent-55cc5-063ad922bb70.json android
-    - nvm install 10.13.0
-    - node --version
-    - chmod +x ./android/gradlew
-    - yes | sdkmanager "platforms;android-28"
-    - yes | sdkmanager "ndk-bundle"
-    install:
-    - npm install
-    - npm install -g firebase-tools@7.7.0
-    before_script:
-    - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
-    script:
-    - npx jetify
-    - cd android
-    - bundle install
-    - bundle exec fastlane install_plugins
-    - bundle exec fastlane beta
+    - stage: Node Test
+      if: type = pull_request
+      language: node_js
+      node_js: 10.13.0
+      install:
+      - npm install
+      script:
+      - npm test
+    - stage: Android Test
+      if: type = pull_request
+      language: android
+      jdk: oraclejdk8
+      before_cache:
+      - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+      - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+      cache:
+        npm: true
+        directories:
+        - "$HOME/.gradle/caches/"
+        - "$HOME/.gradle/wrapper/"
+        - node_modules
+      android:
+        components:
+        - tools
+        - platform-tools
+        - extra-google-google_play_services
+        - extra-google-m2repository
+        - extra-android-m2repository
+        - build-tools-28.0.3
+        - android-29
+        - sys-img-armeabi-v7a-android-29
+        licenses:
+        - android-sdk-preview-license-.+
+        - android-sdk-license-.+
+        - google-gdk-license-.+
+      before_install:
+      - openssl aes-256-cbc -K $encrypted_b5811d19e6fa_key -iv $encrypted_b5811d19e6fa_iv
+        -in secrets.tar.enc -out secrets.tar -d
+      - tar xvf secrets.tar
+      - cp infra/secrets/beta/google-services.json android/app
+      - cp infra/secrets/beta/newagent-55cc5-063ad922bb70.json android
+      - nvm install 10.13.0
+      - node --version
+      - chmod +x ./android/gradlew
+      - yes | sdkmanager "platforms;android-28"
+      - yes | sdkmanager "ndk-bundle"
+      install:
+      - npm install
+      - npm install -g firebase-tools@7.7.0
+      before_script:
+      - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
+      script:
+      - npx jetify
+      - cd android
+      - bundle install
+      - bundle exec fastlane install_plugins
+      - bundle exec fastlane test
+    - stage: Android Beta release
+      if: (branch = master) AND (type = merge)
+      language: android
+      jdk: oraclejdk8
+      before_cache:
+        - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+        - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+      cache:
+        npm: true
+        directories:
+          - "$HOME/.gradle/caches/"
+          - "$HOME/.gradle/wrapper/"
+          - node_modules
+      android:
+        components:
+          - tools
+          - platform-tools
+          - extra-google-google_play_services
+          - extra-google-m2repository
+          - extra-android-m2repository
+          - build-tools-28.0.3
+          - android-29
+          - sys-img-armeabi-v7a-android-29
+        licenses:
+          - android-sdk-preview-license-.+
+          - android-sdk-license-.+
+          - google-gdk-license-.+
+      before_install:
+        - openssl aes-256-cbc -K $encrypted_b5811d19e6fa_key -iv $encrypted_b5811d19e6fa_iv
+          -in secrets.tar.enc -out secrets.tar -d
+        - tar xvf secrets.tar
+        - cp infra/secrets/beta/google-services.json android/app
+        - cp infra/secrets/beta/newagent-55cc5-063ad922bb70.json android
+        - nvm install 10.13.0
+        - node --version
+        - chmod +x ./android/gradlew
+        - yes | sdkmanager "platforms;android-28"
+        - yes | sdkmanager "ndk-bundle"
+      install:
+        - npm install
+        - npm install -g firebase-tools@7.7.0
+      before_script:
+        - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
+      script:
+        - npx jetify
+        - cd android
+        - bundle install
+        - bundle exec fastlane install_plugins
+        - bundle exec fastlane beta
+    - stage: Android Master Release
+      if: (branch = master) AND (type != merge) AND (env(RELEASE_MASTER) = true)
+      language: android
+      env:
+        - CI_STAGE=BETA_DEPLOY
+      jdk: oraclejdk8
+      before_cache:
+        - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+        - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+      cache:
+        npm: true
+        directories:
+          - "$HOME/.gradle/caches/"
+          - "$HOME/.gradle/wrapper/"
+          - node_modules
+      android:
+        components:
+          - tools
+          - platform-tools
+          - extra-google-google_play_services
+          - extra-google-m2repository
+          - extra-android-m2repository
+          - build-tools-28.0.3
+          - android-29
+          - sys-img-armeabi-v7a-android-29
+        licenses:
+          - android-sdk-preview-license-.+
+          - android-sdk-license-.+
+          - google-gdk-license-.+
+      before_install:
+        - openssl aes-256-cbc -K $encrypted_b5811d19e6fa_key -iv $encrypted_b5811d19e6fa_iv
+          -in secrets.tar.enc -out secrets.tar -d
+        - tar xvf secrets.tar
+        - cp infra/secrets/beta/google-services.json android/app
+        - cp infra/secrets/beta/newagent-55cc5-063ad922bb70.json android
+        - nvm install 10.13.0
+        - node --version
+        - chmod +x ./android/gradlew
+        - yes | sdkmanager "platforms;android-28"
+        - yes | sdkmanager "ndk-bundle"
+      install:
+        - npm install
+        - npm install -g firebase-tools@7.7.0
+      before_script:
+        - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
+      script:
+        - npx jetify
+        - cd android
+        - bundle install
+        - bundle exec fastlane install_plugins
+        - bundle exec fastlane release

@@ -14,6 +14,7 @@ import analytics from '@react-native-firebase/analytics';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import moment from 'moment';
 import ms from 'milliseconds';
+import {logEvent} from './logging';
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -58,12 +59,12 @@ export default class App extends Component {
    * @param response
    */
   handleGeolocationSuccess = async response => {
-    // Log this response when the Geolocation has been retrieved
-    // await analytics().logEvent('onRequestGeolocationSuccess', {
-    //   deviceId: this.deviceId,
-    //   timestamp: Date.now(),
-    //   status: 'Geolocation was retrieved successfully',
-    // });
+    await logEvent(
+      this.deviceId,
+      'onRequestGeolocationSuccess',
+      Date.now(),
+      'Geolocation was retrieved successfully',
+    );
 
     this.setState({
       coords: response.coords,
@@ -71,11 +72,7 @@ export default class App extends Component {
 
     // Log this response when we attempt to call home
     const onCallHomeTime = Date.now();
-    // await analytics().logEvent('onCallHome', {
-    //   deviceId: this.deviceId,
-    //   timestamp: onCallHomeTime,
-    //   status: 'Calling home',
-    // });
+    await logEvent(this.deviceId, 'onCallHome', onCallHomeTime, 'Calling home');
 
     let result = await fetch(this.COORDS_ENDPOINT + '/create', {
       method: 'POST',
@@ -91,23 +88,23 @@ export default class App extends Component {
     });
     let resultJson = await result.json();
     if (resultJson.code > 0) {
-
       // Log this response when we successfully reach home
-      // await analytics().logEvent('onReachHomeSuccess', {
-      //   deviceId: this.deviceId,
-      //   timestamp: Date.now(),
-      //   duration: moment(onCallHomeTime).fromNow(),
-      //   status: 'Successfully reached home',
-      // });
+      await logEvent(
+        this.deviceId,
+        'onReachHomeSuccess',
+        Date.now(),
+        'Successfully reached home',
+        moment(onCallHomeTime).fromNow(),
+      );
     } else {
-
       // Log this response when we are unable to reach home
-      // await analytics().logEvent('onReachHomeFailure', {
-      //   deviceId: this.deviceId,
-      //   timestamp: Date.now(),
-      //   duration: moment(onCallHomeTime).fromNow(),
-      //   status: 'Unable to reach home',
-      // });
+      await logEvent(
+        this.deviceId,
+        'onReachHomeFailure',
+        Date.now(),
+        'Unable to reach home',
+        moment(onCallHomeTime).fromNow(),
+      );
     }
   };
 
@@ -117,12 +114,12 @@ export default class App extends Component {
    */
   handleGeolocationError = async error => {
     // Log this response when the Geolocation has been retrieve
-    // await analytics().logEvent('onRequestGeolocationFailure', {
-    //   deviceId: this.deviceId,
-    //   timestamp: Date.now(),
-    //   status: 'Unable to retrieve Geolocation',
-    // });
-
+    await logEvent(
+      this.deviceId,
+      'onRequestGeolocationFailure',
+      Date.now(),
+      'Unable to retrieve Geolocation',
+    );
   };
 
   /**

@@ -16,16 +16,21 @@ or alternatively using `brew cask install fastlane`
 
 # Available Actions
 ## Android
-### android test
+### android tests
 ```
-fastlane android test
+fastlane android tests
 ```
 Runs all the tests
 ### android beta
 ```
 fastlane android beta
 ```
-Submit a new Beta Build to Crashlytics Beta
+Publish a Beta Release
+### android release
+```
+fastlane android release
+```
+Publish a Master Release
 
 ----
 

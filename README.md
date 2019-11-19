@@ -330,14 +330,14 @@ How to start the app for iOS:
 
 ## Testing
 
-### Frameworks
-
-#### [Jest v24.1.0](https://jestjs.io/)
+### [Jest v24.1.0](https://jestjs.io/)
 
 * With preset `react-native`
 * Mocked data in directory `__mocks__`
 * Running tests with `npm test`
 * Recreating the snapshots when the UI changes with `npm test -- -u`
+* Android tests from npm: `npm run android-test`
+* iOS tests from npm: `npm run ios-test`
 
 ### Fastlane
 
@@ -367,13 +367,47 @@ Fastlane can run for us `lanes` that are defined in the `Fastfile`. Make sure to
 such that they are running faster.
 
 ```shell script
-bundle exec fastlane tests
+bundle exec fastlane ios_tests
 ```
 
 #### Slack integration
 
 Fastlane is using a Slack incoming hook to post a message with the status of the lane run. This helps us have faster 
 feedback on the status of each lane, without having to check the CI servere.
+
+### Android
+
+To run Android only tests, we use Gradle wrapper and JUnit as the test runner and the testing framework.
+
+```shell script
+cd android
+./gradlew test
+```
+
+Gradle is smart enough to detect if there are no changes in tests and it will not run the tests, so it needs a push.
+
+```shell script
+cd android
+./gradlew cleanTest test
+```
+
+Gradle test tasks are defined in app level `app/build.gradle` file.
+
+### iOS
+
+iOS has a two test schemes: `MyAwesomeApp` and `MyAwesomeAppUITests`. The UI version is used for screenshots by `screengrabber`.
+
+```shell script
+cd ios
+xcodebuild \
+  -workspace MyAwesomeApp.xcworkspace \
+  -scheme "MyAwesomeApp" \
+  -sdk iphonesimulator \
+  -destination 'platform=iOS Simulator,OS=11.0,name=iPhone 8' \
+  test
+```
+
+Based on which `scheme` you try to run, you can switch it in the command above.
 
 ## Continuous Integration and Delivery
 

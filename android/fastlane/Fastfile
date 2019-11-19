@@ -24,12 +24,12 @@ platform :android do
   end
 
   desc "Runs all the tests"
-  lane :android_tests do
+  lane :tests do
     gradle(task: "test")
   end
 
   desc "Publish a Beta Release"
-  lane :android_beta do
+  lane :beta do
     # Build and sign
     gradle(
         task: 'clean assembleRelease appDistributionUploadRelease' # bundle for AAB or assemble for APK
@@ -37,7 +37,7 @@ platform :android do
   end
 
   desc "Publish a Master Release"
-  lane :android_release do
+  lane :release do
     # Build and sign
     gradle(
         task: 'clean assembleRelease appDistributionUploadRelease' # bundle for AAB or assemble for APK
@@ -49,12 +49,12 @@ platform :android do
   after_all do |lane|
     # This block is called, only if the executed lane was successful
 
-    slack(message: "Lane #{lane} ran successfully")
+    slack(message: "Lane Android #{lane} ran successfully")
   end
 
   error do |lane, exception|
     slack(
-      message: "There was an exception on lane #{lane} with message #{exception.message}",
+      message: "There was an exception on lane Android #{lane} with message #{exception.message}",
       success: false
     )
   end

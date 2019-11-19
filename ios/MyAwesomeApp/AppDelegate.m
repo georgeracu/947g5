@@ -9,7 +9,7 @@
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
-#import <React/RCTRootVizew.h>
+#import <React/RCTRootView.h>
 #import <GoogleMaps/GoogleMaps.h>
 #if RCT_DEV
 #import <React/RCTDevLoadingView.h>

@@ -9,7 +9,7 @@
 scheme("MyAwesomeApp")
 workspace("MyAwesomeApp.xcworkspace")
 sdk("iphonesimulator")
-devices(['iPhone 6s', 'iPad Air'])
+devices(['iPhone 8'])
 
 # open_report(true)
 

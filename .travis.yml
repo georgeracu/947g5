@@ -64,7 +64,7 @@ jobs:
       - cd android
       - bundle install
       - bundle exec fastlane install_plugins
-      - bundle exec fastlane test
+      - bundle exec fastlane android_tests
     - stage: Test iOS
       if: type = pull_request
       language: objective-c
@@ -91,7 +91,7 @@ jobs:
         - react-native link
         - cd ios
         - bundle install
-        - bundle exec fastlane tests
+        - bundle exec fastlane ios_tests
     - stage: Beta Release Android
       if: (branch = master) AND (type = merge)
       language: android
@@ -142,7 +142,7 @@ jobs:
         - cd android
         - bundle install
         - bundle exec fastlane install_plugins
-        - bundle exec fastlane beta
+        - bundle exec fastlane android_beta
     - stage: Master Release Android
       if: (branch = master) AND (type != merge) AND (env(RELEASE_MASTER) = true)
       language: android
@@ -193,4 +193,4 @@ jobs:
         - cd android
         - bundle install
         - bundle exec fastlane install_plugins
-        - bundle exec fastlane release
+        - bundle exec fastlane android_release

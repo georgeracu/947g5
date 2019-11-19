@@ -24,12 +24,12 @@ platform :android do
   end
 
   desc "Runs all the tests"
-  lane :test do
+  lane :android_tests do
     gradle(task: "test")
   end
 
   desc "Publish a Beta Release"
-  lane :beta do
+  lane :android_beta do
     # Build and sign
     gradle(
         task: 'clean assembleRelease appDistributionUploadRelease' # bundle for AAB or assemble for APK
@@ -37,7 +37,7 @@ platform :android do
   end
 
   desc "Publish a Master Release"
-  lane :release do
+  lane :android_release do
     # Build and sign
     gradle(
         task: 'clean assembleRelease appDistributionUploadRelease' # bundle for AAB or assemble for APK

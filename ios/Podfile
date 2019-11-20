@@ -39,6 +39,8 @@ target 'MyAwesomeApp' do
   pod 'react-native-geolocation', path: '../node_modules/@react-native-community/geolocation'
 
 
+  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+
   target 'MyAwesomeAppTests' do
     inherit! :search_paths
     # Pods for testing

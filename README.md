@@ -5,7 +5,7 @@
 Table of Contents
 
 * [Team Composition](#team-composition)
-* [We are Agile](#agile-manifesto)
+* [We are Agile](#the-agile-manifesto)
 * [Learning Resources](#a-curated-list-of-learning-resources)
   * [Java for small teams](https://ncrcoe.gitbooks.io/java-for-small-teams/content/)
   * [Create and use GPG key to sign your commits](https://georgeracu.github.io/2019/09/10/setup-gpg-and-git-sign-on-mac.html)
@@ -16,7 +16,11 @@ Table of Contents
   * [Windows version](#windows-version)
   * [Running the app locally](#running-locally)
     * [Run the iOS Simulator](#run-the-ios-simulator)
+* [Android commands](#android-commands)
 * [Testing](#testing)
+  * [Fastlane](#fastlane)
+* [Continuous Integration and Delivery](#continuous-integration-and-delivery)
+  * [Secrets per environment](#secrets-per-environment)
 
 ## Team composition
 
@@ -258,15 +262,14 @@ npm install
 
 ### Git config
 
-We have our git hooks versioned with our code in `infra/.githooks`. To enable them, you need to git >v2.9.0 and you need to run this command to tell git where to find its hooks:
+Git hooks will run when a git command will match it. We have our git hooks versioned with our code in `infra/.githooks`. 
+To enable them, you need to git >v2.9.0 and you need to run this command to tell git where to find its hooks:
 
 ```bash
 git config core.hooksPath infra/.githooks
 ```
 
 #### Git hooks
-
-Git hooks will run when a git command will match it.
 
 * __pre-push__ will run test and lint before push.
 
@@ -327,14 +330,84 @@ How to start the app for iOS:
 
 ## Testing
 
-### Frameworks
-
-#### [Jest v24.1.0](https://jestjs.io/)
+### [Jest v24.1.0](https://jestjs.io/)
 
 * With preset `react-native`
 * Mocked data in directory `__mocks__`
 * Running tests with `npm test`
 * Recreating the snapshots when the UI changes with `npm test -- -u`
+* Android tests from npm: `npm run android-test`
+* iOS tests from npm: `npm run ios-test`
+
+### Fastlane
+
+#### Why [fastlane](https://fastlane.tools/)
+
+Fastlane provides a common API for building, testing, packaging and deploying native applications for both Android and iOS.
+Having a common API that is also extensible with plugins is makes it easier to abstract the differences in tooling between
+these two platforms. We have to use only one tool (fastlane) to achieve the same goal on two different platform.
+
+Because the same tool is used for both platforms, in order to differentiate which lane ran, lanes have a prefix of `ios_`
+or `android_`. This way, when fastlane reports back to Slack, we know which lane ran.
+
+#### Installation
+
+Fastlane is installed as a Ruby gem and is working based on a `Fastfile`, which is a specification file where we define
+`lanes` and we can invoke them in the build-test pipeline.
+First of of ll you need to make sure that you are in `/android` or `/ios` directory. Then you need to install the gem bundle.
+
+```shell script
+bundle install
+bundle exec fastlane install_plugins
+```
+
+#### Usage
+
+Fastlane can run for us `lanes` that are defined in the `Fastfile`. Make sure to wrap all fastlane commands in `bundle exec`
+such that they are running faster.
+
+```shell script
+bundle exec fastlane ios_tests
+```
+
+#### Slack integration
+
+Fastlane is using a Slack incoming hook to post a message with the status of the lane run. This helps us have faster 
+feedback on the status of each lane, without having to check the CI servere.
+
+### Android
+
+To run Android only tests, we use Gradle wrapper and JUnit as the test runner and the testing framework.
+
+```shell script
+cd android
+./gradlew test
+```
+
+Gradle is smart enough to detect if there are no changes in tests and it will not run the tests, so it needs a push.
+
+```shell script
+cd android
+./gradlew cleanTest test
+```
+
+Gradle test tasks are defined in app level `app/build.gradle` file.
+
+### iOS
+
+iOS has a two test schemes: `MyAwesomeApp` and `MyAwesomeAppUITests`. The UI version is used for screenshots by `screengrabber`.
+
+```shell script
+cd ios
+xcodebuild \
+  -workspace MyAwesomeApp.xcworkspace \
+  -scheme "MyAwesomeApp" \
+  -sdk iphonesimulator \
+  -destination 'platform=iOS Simulator,OS=11.0,name=iPhone 8' \
+  test
+```
+
+Based on which `scheme` you try to run, you can switch it in the command above.
 
 ## Continuous Integration and Delivery
 

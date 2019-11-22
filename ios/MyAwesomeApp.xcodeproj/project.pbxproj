@@ -19,6 +19,8 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* MyAwesomeAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MyAwesomeAppTests.m */; };
+		9AE149642381A58E003DF176 /* MyAwesomeAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE149632381A58E003DF176 /* MyAwesomeAppUITests.swift */; };
+		9AE1496C2381A5EF003DF176 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE1496B2381A5EF003DF176 /* SnapshotHelper.swift */; };
 		B3B0C34B54483A1818208363 /* libPods-MyAwesomeApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BBB50E60B1FC65CE9CFC371 /* libPods-MyAwesomeApp.a */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +38,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "MyAwesomeApp-tvOS";
+		};
+		9AE149662381A58E003DF176 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
+			remoteInfo = MyAwesomeApp;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -62,6 +71,10 @@
 		733DF441396F472DD6458CC3 /* Pods-MyAwesomeApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyAwesomeApp.debug.xcconfig"; path = "Target Support Files/Pods-MyAwesomeApp/Pods-MyAwesomeApp.debug.xcconfig"; sourceTree = "<group>"; };
 		87BB0CD51DB1AE6E6D0CE156 /* Pods-MyAwesomeApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyAwesomeApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-MyAwesomeApp-tvOSTests/Pods-MyAwesomeApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		892BD7E0E1455DBB47C91EF1 /* libPods-MyAwesomeApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MyAwesomeApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AE149612381A58E003DF176 /* MyAwesomeAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyAwesomeAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AE149632381A58E003DF176 /* MyAwesomeAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAwesomeAppUITests.swift; sourceTree = "<group>"; };
+		9AE149652381A58E003DF176 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9AE1496B2381A5EF003DF176 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		B377EE42CED84232E1186D45 /* Pods-MyAwesomeApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyAwesomeApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-MyAwesomeApp-tvOSTests/Pods-MyAwesomeApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		C558DB1700668A0006CD6358 /* Pods-MyAwesomeAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyAwesomeAppTests.debug.xcconfig"; path = "Target Support Files/Pods-MyAwesomeAppTests/Pods-MyAwesomeAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -99,6 +112,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D27781778698AA74B5F57AC /* libPods-MyAwesomeApp-tvOSTests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AE1495E2381A58E003DF176 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,6 +197,7 @@
 				13B07FAE1A68108700A75B9A /* MyAwesomeApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* MyAwesomeAppTests */,
+				9AE149622381A58E003DF176 /* MyAwesomeAppUITests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				694935177294541E2BA09508 /* Pods */,
@@ -193,8 +214,19 @@
 				00E356EE1AD99517003FC87E /* MyAwesomeAppTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* MyAwesomeApp-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* MyAwesomeApp-tvOSTests.xctest */,
+				9AE149612381A58E003DF176 /* MyAwesomeAppUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		9AE149622381A58E003DF176 /* MyAwesomeAppUITests */ = {
+			isa = PBXGroup;
+			children = (
+				9AE1496B2381A5EF003DF176 /* SnapshotHelper.swift */,
+				9AE149632381A58E003DF176 /* MyAwesomeAppUITests.swift */,
+				9AE149652381A58E003DF176 /* Info.plist */,
+			);
+			path = MyAwesomeAppUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -280,13 +312,32 @@
 			productReference = 2D02E4901E0B4A5D006451C7 /* MyAwesomeApp-tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		9AE149602381A58E003DF176 /* MyAwesomeAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9AE1496A2381A58E003DF176 /* Build configuration list for PBXNativeTarget "MyAwesomeAppUITests" */;
+			buildPhases = (
+				9AE1495D2381A58E003DF176 /* Sources */,
+				9AE1495E2381A58E003DF176 /* Frameworks */,
+				9AE1495F2381A58E003DF176 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9AE149672381A58E003DF176 /* PBXTargetDependency */,
+			);
+			name = MyAwesomeAppUITests;
+			productName = MyAwesomeAppUITests;
+			productReference = 9AE149612381A58E003DF176 /* MyAwesomeAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0940;
+				LastSwiftUpdateCheck = 1120;
+				LastUpgradeCheck = 1120;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -302,14 +353,18 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = 2D02E47A1E0B4A5D006451C7;
 					};
+					9AE149602381A58E003DF176 = {
+						CreatedOnToolsVersion = 11.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
 				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "MyAwesomeApp" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
@@ -322,6 +377,7 @@
 				00E356ED1AD99517003FC87E /* MyAwesomeAppTests */,
 				2D02E47A1E0B4A5D006451C7 /* MyAwesomeApp-tvOS */,
 				2D02E48F1E0B4A5D006451C7 /* MyAwesomeApp-tvOSTests */,
+				9AE149602381A58E003DF176 /* MyAwesomeAppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -352,6 +408,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		2D02E48E1E0B4A5D006451C7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AE1495F2381A58E003DF176 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -580,6 +643,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9AE1495D2381A58E003DF176 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9AE149642381A58E003DF176 /* MyAwesomeAppUITests.swift in Sources */,
+				9AE1496C2381A5EF003DF176 /* SnapshotHelper.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -592,6 +664,11 @@
 			isa = PBXTargetDependency;
 			target = 2D02E47A1E0B4A5D006451C7 /* MyAwesomeApp-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
+		};
+		9AE149672381A58E003DF176 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 13B07F861A680F5B00A75B9A /* MyAwesomeApp */;
+			targetProxy = 9AE149662381A58E003DF176 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -804,6 +881,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -846,7 +924,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -857,6 +935,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -892,10 +971,64 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		9AE149682381A58E003DF176 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = MyAwesomeAppUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.georgeracu.MyAwesomeAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = MyAwesomeApp;
+			};
+			name = Debug;
+		};
+		9AE149692381A58E003DF176 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = MyAwesomeAppUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.georgeracu.MyAwesomeAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = MyAwesomeApp;
 			};
 			name = Release;
 		};
@@ -943,6 +1076,15 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9AE1496A2381A58E003DF176 /* Build configuration list for PBXNativeTarget "MyAwesomeAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9AE149682381A58E003DF176 /* Debug */,
+				9AE149692381A58E003DF176 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

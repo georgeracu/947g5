@@ -7,10 +7,11 @@
  */
 
 import React, {Component} from 'react';
-import {StyleSheet, View, Platform} from 'react-native';
-import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import {StyleSheet, View} from 'react-native';
+import MapView, {Marker, Heatmap, PROVIDER_GOOGLE} from 'react-native-maps';
 import geolocation from './geolocation/geolocation';
 import util from './utils/util';
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -21,9 +22,12 @@ export default class App extends Component {
      */
     this.state = {
       coords: {},
+      heatMapsCoordinates: [],
     };
     this.LOGS_ENDPOINT =
       'https://us-central1-test-947g5.cloudfunctions.net/logs/log';
+    this.HEATMAPS_COORDINATES_ENDPOINT =
+      'https://us-central1-test-947g5.cloudfunctions.net/heatMapsCoordinates/heatmaps-coordinates';
   }
 
   /**
@@ -31,14 +35,20 @@ export default class App extends Component {
    * @param geoCoords
    */
   onGeolocationSuccess = async geoCoords => {
-    this.setState({
-      coords: geoCoords.coords,
-    });
+    console.log('1');
     // Log this response when the Geolocation has been retrieved
     util.sendLog(
       this.LOGS_ENDPOINT,
       'onRequestGeolocationSuccess',
       geoCoords.coords,
+    );
+
+    geolocation.getHeatMapsCoordinates(
+      this.HEATMAPS_COORDINATES_ENDPOINT,
+      geoCoords,
+      newState => {
+        this.setState(newState);
+      },
     );
   };
 
@@ -56,15 +66,7 @@ export default class App extends Component {
   };
 
   async componentDidMount(): void {
-    if (Platform.OS === 'android') {
-      try {
-        geolocation.checkGeolocationPermissionGoogle();
-      } catch (e) {
-        console.error('Unable to grant Geolocation permission');
-        return;
-      }
-    }
-    geolocation.getCurrentGeolocation(
+    geolocation.getGeolocationServices(
       this.onGeolocationSuccess,
       this.onGeolocationError,
     );
@@ -90,6 +92,11 @@ export default class App extends Component {
                   latitude: this.state.coords.latitude,
                   longitude: this.state.coords.longitude,
                 }}
+              />
+              <Heatmap
+                points={this.state.heatMapsCoordinates}
+                opacity={1}
+                radius={20}
               />
             </MapView>
           ) : null}

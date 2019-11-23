@@ -325,6 +325,8 @@ PODS:
     - React-cxxreact (= 0.61.2)
     - React-jsi (= 0.61.2)
     - ReactCommon/jscallinvoker (= 0.61.2)
+  - ReactNativeAndroidLocationSwitch (1.0.0):
+    - React
   - RNDeviceInfo (5.2.1):
     - React
   - RNFBAnalytics (6.0.3):
@@ -371,6 +373,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeAndroidLocationSwitch (from `../node_modules/react-native-location-switch/ios`)
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
@@ -448,6 +451,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeAndroidLocationSwitch:
+    :path: "../node_modules/react-native-location-switch/ios"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
   RNFBAnalytics:
@@ -499,6 +504,7 @@ SPEC CHECKSUMS:
   React-RCTText: e3ef6191cdb627855ff7fe8fa0c1e14094967fb8
   React-RCTVibration: fb54c732fd20405a76598e431aa2f8c2bf527de9
   ReactCommon: 5848032ed2f274fcb40f6b9ec24067787c42d479
+  ReactNativeAndroidLocationSwitch: f79c4916216ad5670f57b60f995bc411ed938e28
   RNDeviceInfo: 223aea06c561ce99ae2045b621882bd7b7db1e59
   RNFBAnalytics: d75433ac464f0ac6e5bd1ae7015cb5fb6427e80a
   RNFBApp: 92ae594c85e82e1e68434049b2a37e1f584cf8b9

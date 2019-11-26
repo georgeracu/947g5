@@ -21,7 +21,7 @@ Table of Contents
   * [Fastlane](#fastlane)
 * [Continuous Integration and Delivery](#continuous-integration-and-delivery)
   * [Secrets per environment](#secrets-per-environment)
-* [Vulnerabilities automatic scanning](#vulnerability-scanning)
+* [Vulnerabilities automatic scanning](#security-and-vulnerability-scanning)
 * [Slack integrations](#slack-integrations)
 
 ## Team composition
@@ -470,11 +470,12 @@ cp infra/secrets/beta/google-services.json android/app
 cp infra/secrets/beta/newagent.json android
 ```
 
-## Vulnerability scanning
+## Security and Vulnerability scanning
 
 We continuously scan our repository for vulnerabilities using [Snyk](https://snyk.io/). When automatic upgrades are possible, 
 Snyk will raise PRs with the changes. At the same time it will inform us via a Slack web hook.
 We also use GitHub's internal scanner that will allow dependabot to raise PRs with fixes.
+Last but not least we use npm's `npm audit` command to generate reports of vulnerabilities and `npm audit fix` to fix them.
 
 ## Slack integrations
 

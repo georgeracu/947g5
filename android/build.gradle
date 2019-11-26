@@ -1,5 +1,27 @@
+import groovy.json.JsonSlurper
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+def getNpmVersion() {
+    def inputFile = new File("../package.json")
+    def packageJson = new JsonSlurper().parseText(inputFile.text)
+    return packageJson["version"]
+}
+def (major, minor, patch) = getNpmVersion().tokenize('.')
+
+def getNpmVersionArray() { // major [0], minor [1], patch [2]
+    def (major, minor, patch) = getNpmVersion().tokenize('.')
+    return [Integer.parseInt(major), Integer.parseInt(minor), Integer.parseInt(patch)] as int[]
+}
+
+subprojects {
+    ext {
+        def npmVersion = getNpmVersionArray()
+        versionMajor = npmVersion[0]
+        versionMinor = npmVersion[1]
+        versionPatch = npmVersion[2]
+    }
+}
 buildscript {
     ext {
         buildToolsVersion = "28.0.3"

@@ -21,6 +21,9 @@ Table of Contents
   * [Fastlane](#fastlane)
 * [Continuous Integration and Delivery](#continuous-integration-and-delivery)
   * [Secrets per environment](#secrets-per-environment)
+* [Vulnerabilities automatic scanning](#security-and-vulnerability-scanning)
+* [Slack integrations](#slack-integrations)
+* [Code Quality](#code-quality)
 
 ## Team composition
 
@@ -411,6 +414,9 @@ Based on which `scheme` you try to run, you can switch it in the command above.
 
 ## Continuous Integration and Delivery
 
+We chose to do Continuous Delivery and leave the automated deployment to be triggered manually once we are happy with our 
+testing results. 
+
 * CI Server is [Travis CI](https://travis-ci.com)
 * Deployment using [fastlane](https://fastlane.tools/)
 
@@ -464,3 +470,24 @@ tar zxvf secrets.tar
 cp infra/secrets/beta/google-services.json android/app
 cp infra/secrets/beta/newagent.json android
 ```
+
+## Security and Vulnerability scanning
+
+We continuously scan our repository for vulnerabilities using [Snyk](https://snyk.io/). When automatic upgrades are possible, 
+Snyk will raise PRs with the changes. At the same time it will inform us via a Slack web hook.
+We also use GitHub's internal scanner that will allow dependabot to raise PRs with fixes.
+Last but not least we use npm's `npm audit` command to generate reports of vulnerabilities and `npm audit fix` to fix them.
+
+## Slack integrations
+
+* GitHub for new PRs, updates on PRs and merges to master
+* Fastlane for successful or erroneous lane run
+* Travis CI for the build status
+* Trello for creating and updating cards
+* Snyk for vulnerability reporting
+* SonarCloud for quality report after each run
+
+## Code Quality
+
+We use [SonarCloud](https://sonarcloud.io) to keep our code quality to a high standard. Each pull request is analyzed and
+a report is generated. If the code quality falls bellow the setup threshold then the PR doesn't pass the CI stage.

@@ -1,211 +1,220 @@
-version: ~> 1.0
+version: "~> 1.0"
 jobs:
   include:
-    - stage: Test Node
-      if: type = pull_request
-      os: linux
-      dist: xenial
-      language: node_js
-      node_js: 10.13.0
-      env:
-        - JOB_NAME=TEST_NODEJS
-      install:
-      - npm install
-      script:
-      - npm test
-    - stage: Test Android
-      if: type = pull_request
-      language: android
-      dist: xenial
-      jdk: oraclejdk8
-      env:
-        - JOB_NAME=TEST_ANDROID
-      before_cache:
-      - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-      - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-      cache:
-        npm: true
-        directories:
-        - "$HOME/.gradle/caches/"
-        - "$HOME/.gradle/wrapper/"
-        - node_modules
-      android:
-        components:
-        - tools
-        - platform-tools
-        - extra-google-google_play_services
-        - extra-google-m2repository
-        - extra-android-m2repository
-        - build-tools-28.0.3
-        - android-29
-        - sys-img-armeabi-v7a-android-29
-        licenses:
-        - android-sdk-preview-license-.+
-        - android-sdk-license-.+
-        - google-gdk-license-.+
-      before_install:
-      - openssl aes-256-cbc -K $encrypted_b5811d19e6fa_key -iv $encrypted_b5811d19e6fa_iv
-        -in secrets.tar.enc -out secrets.tar -d
-      - tar xvf secrets.tar
-      - cp infra/secrets/beta/google-services.json android/app
-      - cp infra/secrets/beta/newagent-55cc5-063ad922bb70.json android
-      - nvm install 10.13.0
-      - node --version
-      - chmod +x ./android/gradlew
-      - yes | sdkmanager "platforms;android-28"
-      - yes | sdkmanager "ndk-bundle"
-      install:
-      - npm install
-      - npm install -g firebase-tools@7.7.0
-      before_script:
-      - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
-      script:
-      - npx jetify
-      - cd android
-      - bundle install
-      - bundle exec fastlane install_plugins
-      - bundle exec fastlane android tests
-    - stage: Test iOS
-      if: type = pull_request
-      language: objective-c
-      os: osx
-      osx_image: xcode11
-      xcode_project: MyAwesomeApp.xcodeproj
-      xcode_scheme: MyAwesomeApp
-      env:
-        - JOB_NAME=TEST_iOS
-      before_install:
-        - nvm install 10.13.0
-        - node --version
-      install:
-        - npm install
-        - npm install -g react-native-cli@2.0.1
-        - npm install -g firebase-tools@7.7.0
-        - gem install cocoapods -v 1.8.4
-      script:
-        - cd ios
-        - rm -rf Podfile.lock
-        - pod install
-        - cd ..
-        - react-native link
-        - cd ios
-        - bundle install
-        - bundle exec fastlane ios tests
-    - stage: Beta Release version patch
-      if: (branch = master) AND (type = merge)
-      language: node_js
-      os: linux
-      dist: xenial
-      node_js: 10.13.0
-      env:
-        - JOB_NAME=BETA_PATCH_VERSION
-      install:
-        - npm install
-      script:
-        - npm test
-        - ./infra/ci/beta_patch
-    - stage: Beta Release Android
-      if: (branch = master) AND (type = merge)
-      language: android
-      jdk: oraclejdk8
-      env:
-        - JOB_NAME=BETA_RELEASE_ANDROID
-      before_cache:
-        - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-        - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-      cache:
-        npm: true
-        directories:
-          - "$HOME/.gradle/caches/"
-          - "$HOME/.gradle/wrapper/"
-          - node_modules
-      android:
-        components:
-          - tools
-          - platform-tools
-          - extra-google-google_play_services
-          - extra-google-m2repository
-          - extra-android-m2repository
-          - build-tools-28.0.3
-          - android-29
-          - sys-img-armeabi-v7a-android-29
-        licenses:
-          - android-sdk-preview-license-.+
-          - android-sdk-license-.+
-          - google-gdk-license-.+
-      before_install:
-        - openssl aes-256-cbc -K $encrypted_b5811d19e6fa_key -iv $encrypted_b5811d19e6fa_iv
-          -in secrets.tar.enc -out secrets.tar -d
-        - tar xvf secrets.tar
-        - cp infra/secrets/beta/google-services.json android/app
-        - cp infra/secrets/beta/newagent-55cc5-063ad922bb70.json android
-        - nvm install 10.13.0
-        - node --version
-        - chmod +x ./android/gradlew
-        - yes | sdkmanager "platforms;android-28"
-        - yes | sdkmanager "ndk-bundle"
-      install:
-        - npm install
-        - npm install -g firebase-tools@7.7.0
-      before_script:
-        - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
-      script:
-        - npx jetify
-        - cd android
-        - bundle install
-        - bundle exec fastlane install_plugins
-        - bundle exec fastlane android beta
-    - stage: Master Release Android
-      if: (branch = master) AND (type != merge) AND (env(RELEASE_MASTER) = true)
-      language: android
-      env:
-        - JOB_NAME=MASTER_RELEASE_ANDROID
-      jdk: oraclejdk8
-      before_cache:
-        - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-        - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-      cache:
-        npm: true
-        directories:
-          - "$HOME/.gradle/caches/"
-          - "$HOME/.gradle/wrapper/"
-          - node_modules
-      android:
-        components:
-          - tools
-          - platform-tools
-          - extra-google-google_play_services
-          - extra-google-m2repository
-          - extra-android-m2repository
-          - build-tools-28.0.3
-          - android-29
-          - sys-img-armeabi-v7a-android-29
-        licenses:
-          - android-sdk-preview-license-.+
-          - android-sdk-license-.+
-          - google-gdk-license-.+
-      before_install:
-        - openssl aes-256-cbc -K $encrypted_b5811d19e6fa_key -iv $encrypted_b5811d19e6fa_iv
-          -in secrets.tar.enc -out secrets.tar -d
-        - tar xvf secrets.tar
-        - cp infra/secrets/beta/google-services.json android/app
-        - cp infra/secrets/beta/newagent-55cc5-063ad922bb70.json android
-        - nvm install 10.13.0
-        - node --version
-        - chmod +x ./android/gradlew
-        - yes | sdkmanager "platforms;android-28"
-        - yes | sdkmanager "ndk-bundle"
-      install:
-        - npm install
-        - npm install -g firebase-tools@7.7.0
-      before_script:
-        - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
-      script:
-        - npx jetify
-        - cd android
-        - bundle install
-        - bundle exec fastlane install_plugins
-        - bundle exec fastlane android release
+  - stage: Test Node
+    if: type = pull_request
+    os: linux
+    dist: xenial
+    language: node_js
+    node_js: 10.13.0
+    env:
+    - JOB_NAME=TEST_NODEJS
+    install:
+    - npm install
+    script:
+    - npm test
+  - stage: Test Android
+    if: type = pull_request
+    language: android
+    dist: xenial
+    jdk: oraclejdk8
+    env:
+    - JOB_NAME=TEST_ANDROID
+    before_cache:
+    - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+    - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+    cache:
+      npm: true
+      directories:
+      - "$HOME/.gradle/caches/"
+      - "$HOME/.gradle/wrapper/"
+      - node_modules
+    android:
+      components:
+      - tools
+      - platform-tools
+      - extra-google-google_play_services
+      - extra-google-m2repository
+      - extra-android-m2repository
+      - build-tools-28.0.3
+      - android-29
+      - sys-img-armeabi-v7a-android-29
+      licenses:
+      - android-sdk-preview-license-.+
+      - android-sdk-license-.+
+      - google-gdk-license-.+
+    before_install:
+    - openssl aes-256-cbc -K $encrypted_b5811d19e6fa_key -iv $encrypted_b5811d19e6fa_iv
+      -in secrets.tar.enc -out secrets.tar -d
+    - tar xvf secrets.tar
+    - cp infra/secrets/beta/google-services.json android/app
+    - cp infra/secrets/beta/newagent-55cc5-063ad922bb70.json android
+    - nvm install 10.13.0
+    - node --version
+    - chmod +x ./android/gradlew
+    - yes | sdkmanager "platforms;android-28"
+    - yes | sdkmanager "ndk-bundle"
+    install:
+    - npm install
+    - npm install -g firebase-tools@7.7.0
+    before_script:
+    - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
+    script:
+    - npx jetify
+    - cd android
+    - bundle install
+    - bundle exec fastlane install_plugins
+    - bundle exec fastlane android tests
+  - stage: Test iOS
+    if: type = pull_request
+    language: objective-c
+    os: osx
+    osx_image: xcode11
+    xcode_project: MyAwesomeApp.xcodeproj
+    xcode_scheme: MyAwesomeApp
+    env:
+    - JOB_NAME=TEST_iOS
+    before_install:
+    - nvm install 10.13.0
+    - node --version
+    install:
+    - npm install
+    - npm install -g react-native-cli@2.0.1
+    - npm install -g firebase-tools@7.7.0
+    - gem install cocoapods -v 1.8.4
+    script:
+    - cd ios
+    - rm -rf Podfile.lock
+    - pod install
+    - cd ..
+    - react-native link
+    - cd ios
+    - bundle install
+    - bundle exec fastlane ios tests
+  - stage: Beta Release version patch
+    if: "(branch = master) AND (type = merge)"
+    language: node_js
+    os: linux
+    dist: xenial
+    node_js: 10.13.0
+    env:
+    - JOB_NAME=BETA_PATCH_VERSION
+    install:
+    - npm install
+    script:
+    - npm test
+    - "./infra/ci/beta_patch"
+  - stage: Beta Release Android
+    if: "(branch = master) AND (type = merge)"
+    language: android
+    jdk: oraclejdk8
+    env:
+    - JOB_NAME=BETA_RELEASE_ANDROID
+    before_cache:
+    - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+    - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+    cache:
+      npm: true
+      directories:
+      - "$HOME/.gradle/caches/"
+      - "$HOME/.gradle/wrapper/"
+      - node_modules
+    android:
+      components:
+      - tools
+      - platform-tools
+      - extra-google-google_play_services
+      - extra-google-m2repository
+      - extra-android-m2repository
+      - build-tools-28.0.3
+      - android-29
+      - sys-img-armeabi-v7a-android-29
+      licenses:
+      - android-sdk-preview-license-.+
+      - android-sdk-license-.+
+      - google-gdk-license-.+
+    before_install:
+    - openssl aes-256-cbc -K $encrypted_b5811d19e6fa_key -iv $encrypted_b5811d19e6fa_iv
+      -in secrets.tar.enc -out secrets.tar -d
+    - tar xvf secrets.tar
+    - cp infra/secrets/beta/google-services.json android/app
+    - cp infra/secrets/beta/newagent-55cc5-063ad922bb70.json android
+    - nvm install 10.13.0
+    - node --version
+    - chmod +x ./android/gradlew
+    - yes | sdkmanager "platforms;android-28"
+    - yes | sdkmanager "ndk-bundle"
+    install:
+    - npm install
+    - npm install -g firebase-tools@7.7.0
+    before_script:
+    - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
+    script:
+    - npx jetify
+    - cd android
+    - bundle install
+    - bundle exec fastlane install_plugins
+    - bundle exec fastlane android beta
+  - stage: Master Release Android
+    if: "(branch = master) AND (type != merge) AND (env(RELEASE_MASTER) = true)"
+    language: android
+    env:
+    - JOB_NAME=MASTER_RELEASE_ANDROID
+    jdk: oraclejdk8
+    before_cache:
+    - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+    - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+    cache:
+      npm: true
+      directories:
+      - "$HOME/.gradle/caches/"
+      - "$HOME/.gradle/wrapper/"
+      - node_modules
+    android:
+      components:
+      - tools
+      - platform-tools
+      - extra-google-google_play_services
+      - extra-google-m2repository
+      - extra-android-m2repository
+      - build-tools-28.0.3
+      - android-29
+      - sys-img-armeabi-v7a-android-29
+      licenses:
+      - android-sdk-preview-license-.+
+      - android-sdk-license-.+
+      - google-gdk-license-.+
+    before_install:
+    - openssl aes-256-cbc -K $encrypted_b5811d19e6fa_key -iv $encrypted_b5811d19e6fa_iv
+      -in secrets.tar.enc -out secrets.tar -d
+    - tar xvf secrets.tar
+    - cp infra/secrets/beta/google-services.json android/app
+    - cp infra/secrets/beta/newagent-55cc5-063ad922bb70.json android
+    - nvm install 10.13.0
+    - node --version
+    - chmod +x ./android/gradlew
+    - yes | sdkmanager "platforms;android-28"
+    - yes | sdkmanager "ndk-bundle"
+    install:
+    - npm install
+    - npm install -g firebase-tools@7.7.0
+    before_script:
+    - export ANDROID_NDK_HOME=$ANDROID_HOME/ndk-bundle
+    script:
+    - npx jetify
+    - cd android
+    - bundle install
+    - bundle exec fastlane install_plugins
+    - bundle exec fastlane android release
+addons:
+  sonarcloud:
+    organization: "georgeracu"
+    token:
+      secure: "**************************" # encrypted value of your token
+script:
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  - sonar-scanner
 env:
   global:
-    secure: lfaUcHTRvRGVo33D0xk2t8HYUo4KGVhhY5Xz7QAqD861HoDDB5UzeNAOGbCVJAilmiq95OpYp2wiXk1ppWVuW/PorOAgxDIk/AfE3qYm2WgvxBItmjo/MtZd/fdzOLAc73ZBu3y6WL/7eiPpWXuYIh5Fnb26QH2HVvaMrxVDHPLn+Wv3Gi5vl/yEZTFQrS8f1552phOUcm828EvgaTVEIq3RPrWLi27sAVcePr1X80Aji/7I1B6AY5BfMv6NAP9svO8MR+a1/tURBJupN58QLks44sMK84+5dpDRmz+3kf9El2RZUL7Wi/tz0sX1YWkpCoSQZMcGkQq7P5jFMBteEmy1Xs/OYe+hCg75kb831OzgbCaPQr+ocEZFw69OrCMDPVg1U/XSI2XS2H0Bim9br1JXQWUEtFJ8ccMIVKjQ/3W1R7el3nZrCis5d5X7CnongwCYpuqr2rY1nNreK6hQ4DSGwOkjzjzC0fneRcz3IgnyE0gaQMQpf0swIKIO6tZFN2qtuoqTWBhAWywjnJCminYZKMcdf0FxaY4l4b0eFdLyKeAeheCkOFsZ/Vk+JuXB8g7U/TMdIgYhkBVOaQppgQNj3sIgCfdCwb0zyO8HsI8OsoqJ/gDV+5joZxhTLQO8tRJWbrdXc44ThRS0ab+sCT8I6KfWx9z/+GVy/x+uKms=
+  - secure: lfaUcHTRvRGVo33D0xk2t8HYUo4KGVhhY5Xz7QAqD861HoDDB5UzeNAOGbCVJAilmiq95OpYp2wiXk1ppWVuW/PorOAgxDIk/AfE3qYm2WgvxBItmjo/MtZd/fdzOLAc73ZBu3y6WL/7eiPpWXuYIh5Fnb26QH2HVvaMrxVDHPLn+Wv3Gi5vl/yEZTFQrS8f1552phOUcm828EvgaTVEIq3RPrWLi27sAVcePr1X80Aji/7I1B6AY5BfMv6NAP9svO8MR+a1/tURBJupN58QLks44sMK84+5dpDRmz+3kf9El2RZUL7Wi/tz0sX1YWkpCoSQZMcGkQq7P5jFMBteEmy1Xs/OYe+hCg75kb831OzgbCaPQr+ocEZFw69OrCMDPVg1U/XSI2XS2H0Bim9br1JXQWUEtFJ8ccMIVKjQ/3W1R7el3nZrCis5d5X7CnongwCYpuqr2rY1nNreK6hQ4DSGwOkjzjzC0fneRcz3IgnyE0gaQMQpf0swIKIO6tZFN2qtuoqTWBhAWywjnJCminYZKMcdf0FxaY4l4b0eFdLyKeAeheCkOFsZ/Vk+JuXB8g7U/TMdIgYhkBVOaQppgQNj3sIgCfdCwb0zyO8HsI8OsoqJ/gDV+5joZxhTLQO8tRJWbrdXc44ThRS0ab+sCT8I6KfWx9z/+GVy/x+uKms=
+  - secure: Oeeyn1sgR5WrhoiDUxNQzTtnSwVlpHqOZCHCurA52NCxFkhb9ITvd3pJG12U44ZbCtjQXavMo0/ILg31BBAcC0aegU1cvGL9QV4D7udqAlurDq/Ueur+PaKG1tO9MvtB0UzfDLnj9sXS5xeoMtlpGyZPEnXEMSzIQnojfpj13YDaGgejuKeasehGRkzKMpW70CTY6X8ixaUc7Ouyy7KYWjZNdddH6atMJPw2b60uuJlu4xejzO+0RgQzWp6U9GvjkXJUI38Ik/Uf4nCCcV8fYxNk7h9S83WKtkT9cQa5rIcsmIHRIg0ijdSVQ8UxhDl3IYnGtIbMUbTXG5OauTXvgvY/OWCDngf+6u/jsK/IrBRdnAjiQZpnOy1d534+BKQ6Jd4deulyqeKrWXsinR5X7808SQl5M8MKzo5HpeefGeez0SMYa26oAjGQx92MkVM0NEFJifGZ/y50yDlHZez+U7NA3QAHgR7G/WipsPKANgtkbZRecyaTZ0adPPIRG38h2iPmTCvgttAY+I6Lks2RXrcGBbvK7FHL6HhdmNiGReN+CPIvQ7hIVMMXWKrwDBlPlVZq8hr7pWtbZKuNkHDp5p1QvDhYDrCYGJuMbgRqy8xRw+Sr1wZs922sgCC/OD7gGqIieJSmM3x8IBzEWKeV6w2jYQV1MDQKnWLdo9rQo1s=

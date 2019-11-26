@@ -23,6 +23,7 @@ Table of Contents
   * [Secrets per environment](#secrets-per-environment)
 * [Vulnerabilities automatic scanning](#security-and-vulnerability-scanning)
 * [Slack integrations](#slack-integrations)
+* [Code Quality](#code-quality)
 
 ## Team composition
 
@@ -484,3 +485,9 @@ Last but not least we use npm's `npm audit` command to generate reports of vulne
 * Travis CI for the build status
 * Trello for creating and updating cards
 * Snyk for vulnerability reporting
+* SonarCloud for quality report after each run
+
+## Code Quality
+
+We use [SonarCloud](https://sonarcloud.io) to keep our code quality to a high standard. Each pull request is analyzed and
+a report is generated. If the code quality falls bellow the setup threshold then the PR doesn't pass the CI stage.

@@ -21,6 +21,8 @@ Table of Contents
   * [Fastlane](#fastlane)
 * [Continuous Integration and Delivery](#continuous-integration-and-delivery)
   * [Secrets per environment](#secrets-per-environment)
+* [Vulnerabilities automatic scanning](#vulnerability-scanning)
+* [Slack integrations](#slack-integrations)
 
 ## Team composition
 
@@ -411,6 +413,9 @@ Based on which `scheme` you try to run, you can switch it in the command above.
 
 ## Continuous Integration and Delivery
 
+We chose to do Continuous Delivery and leave the automated deployment to be triggered manually once we are happy with our 
+testing results. 
+
 * CI Server is [Travis CI](https://travis-ci.com)
 * Deployment using [fastlane](https://fastlane.tools/)
 
@@ -464,3 +469,17 @@ tar zxvf secrets.tar
 cp infra/secrets/beta/google-services.json android/app
 cp infra/secrets/beta/newagent.json android
 ```
+
+## Vulnerability scanning
+
+We continuously scan our repository for vulnerabilities using [Snyk](https://snyk.io/). When automatic upgrades are possible, 
+Snyk will raise PRs with the changes. At the same time it will inform us via a Slack web hook.
+We also use GitHub's internal scanner that will allow dependabot to raise PRs with fixes.
+
+## Slack integrations
+
+* GitHub for new PRs, updates on PRs and merges to master
+* Fastlane for successful or erroneous lane run
+* Travis CI for the build status
+* Trello for creating and updating cards
+* Snyk for vulnerability reporting

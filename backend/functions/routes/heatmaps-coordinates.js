@@ -1,13 +1,13 @@
 const {app} = require('../setups/setup.js');
 const MongoClient = require('mongodb').MongoClient;
 
-const DB = 'PricePaid';
-const COLLECTION = 'Addresses';
-const USERNAME = '947g5';
-const PASSWORD = 'automation';
+const DB = '947g5';
+const COLLECTION = 'addressbase';
+const USERNAME = 'react-read';
+const PASSWORD = '31vTs8wfBB9KvfIy';
 
-app.get('/heatmaps-coordinates', (req, res) => {
-  const uri = `mongodb+srv://${USERNAME}:${PASSWORD}@947g5-nx4jt.azure.mongodb.net/test?retryWrites=true&w=majority`;
+app.post('/heatmaps', (req, res) => {
+  const uri = `mongodb+srv://${USERNAME}:${PASSWORD}@cluster0-cbuck.mongodb.net/test?retryWrites=true&w=majority`;
   const client = new MongoClient(uri, {useNewUrlParser: true});
   client.connect(err => {
     if (err) {
@@ -15,10 +15,18 @@ app.get('/heatmaps-coordinates', (req, res) => {
       console.log(`Error Message: ${err.message}`);
     } else {
       console.log('Successfully connected to the DB');
-      const collection = client.db(DB).collection(COLLECTION);
-      collection
-        .find({})
-        .limit(1000)
+      const longLats = req.body;
+      const coordinatesQuery = {
+        location: {
+          $geoWithin: {
+            $centerSphere: [[longLats.longitude, longLats.latitude], 5 / 6371],
+          },
+        },
+      };
+      client
+        .db(DB)
+        .collection(COLLECTION)
+        .find(coordinatesQuery)
         .toArray((err1, coordinates) => {
           if (err1) {
             console.log('Error occurred while querying DB');
@@ -26,8 +34,8 @@ app.get('/heatmaps-coordinates', (req, res) => {
           } else {
             const modifiedResults = coordinates.map(coordinate => {
               return {
-                latitude: coordinate.LATITUDE,
-                longitude: coordinate.LONGITUDE,
+                latitude: coordinate.location.coordinates[1],
+                longitude: coordinate.location.coordinates[0],
                 weight: 1,
               };
             });

@@ -12,10 +12,4 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "MyAwesomeApp";
   }
-
-//   @Override
-//   public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//       super.onActivityResult(requestCode, resultCode, data);
-//       LocationSwitch.getInstance().onActivityResult(requestCode, resultCode);
-//   }
 }

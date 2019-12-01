@@ -1,6 +1,4 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
  *
  * @format
  * @flow
@@ -10,7 +8,8 @@ import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import MapView, {Marker, Heatmap, PROVIDER_GOOGLE} from 'react-native-maps';
 import geolocation from './geolocation/geolocation';
-import util from './utils/util';
+import log from './utils/logs';
+import constants from './utils/constants';
 
 export default class App extends Component {
   constructor(props) {
@@ -24,10 +23,6 @@ export default class App extends Component {
       coords: {},
       heatMapsCoordinates: [],
     };
-    this.LOGS_ENDPOINT =
-      'https://us-central1-test-947g5.cloudfunctions.net/logs/log';
-    this.HEATMAPS_COORDINATES_ENDPOINT =
-      'https://us-central1-test-947g5.cloudfunctions.net/heatMapsCoordinates/heatmaps-coordinates';
   }
 
   /**
@@ -37,15 +32,20 @@ export default class App extends Component {
   onGeolocationSuccess = async geoCoords => {
     console.log('1');
     // Log this response when the Geolocation has been retrieved
-    util.sendLog(
-      this.LOGS_ENDPOINT,
+    log.sendLog(
+      constants.LOGS_ENDPOINT,
       'onRequestGeolocationSuccess',
       geoCoords.coords,
     );
 
+    this.setState({
+      coords: geoCoords.coords,
+      heatMapsCoordinates: [],
+    });
+
     geolocation.getHeatMapsCoordinates(
-      this.HEATMAPS_COORDINATES_ENDPOINT,
-      geoCoords,
+      constants.HEATMAPS_ENDPOINT,
+      geoCoords.coords,
       newState => {
         this.setState(newState);
       },
@@ -58,8 +58,8 @@ export default class App extends Component {
    */
   onGeolocationError = async error => {
     // Log this response when the Geolocation has been retrieved in error
-    util.sendLog(
-      this.LOGS_ENDPOINT,
+    log.sendLog(
+      constants.LOGS_ENDPOINT,
       'onRequestGeolocationFailure',
       error.message,
     );
@@ -93,11 +93,13 @@ export default class App extends Component {
                   longitude: this.state.coords.longitude,
                 }}
               />
-              <Heatmap
-                points={this.state.heatMapsCoordinates}
-                opacity={1}
-                radius={20}
-              />
+              {this.state.heatMapsCoordinates.length > 0 ? (
+                <Heatmap
+                  points={this.state.heatMapsCoordinates}
+                  opacity={1}
+                  radius={20}
+                />
+              ) : null}
             </MapView>
           ) : null}
         </View>

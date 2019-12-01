@@ -206,15 +206,6 @@ jobs:
     - bundle install
     - bundle exec fastlane install_plugins
     - bundle exec fastlane android release
-addons:
-  sonarcloud:
-    organization: "georgeracu"
-    token:
-      secure: "**************************" # encrypted value of your token
-script:
-  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-  - sonar-scanner
 env:
   global:
   - secure: lfaUcHTRvRGVo33D0xk2t8HYUo4KGVhhY5Xz7QAqD861HoDDB5UzeNAOGbCVJAilmiq95OpYp2wiXk1ppWVuW/PorOAgxDIk/AfE3qYm2WgvxBItmjo/MtZd/fdzOLAc73ZBu3y6WL/7eiPpWXuYIh5Fnb26QH2HVvaMrxVDHPLn+Wv3Gi5vl/yEZTFQrS8f1552phOUcm828EvgaTVEIq3RPrWLi27sAVcePr1X80Aji/7I1B6AY5BfMv6NAP9svO8MR+a1/tURBJupN58QLks44sMK84+5dpDRmz+3kf9El2RZUL7Wi/tz0sX1YWkpCoSQZMcGkQq7P5jFMBteEmy1Xs/OYe+hCg75kb831OzgbCaPQr+ocEZFw69OrCMDPVg1U/XSI2XS2H0Bim9br1JXQWUEtFJ8ccMIVKjQ/3W1R7el3nZrCis5d5X7CnongwCYpuqr2rY1nNreK6hQ4DSGwOkjzjzC0fneRcz3IgnyE0gaQMQpf0swIKIO6tZFN2qtuoqTWBhAWywjnJCminYZKMcdf0FxaY4l4b0eFdLyKeAeheCkOFsZ/Vk+JuXB8g7U/TMdIgYhkBVOaQppgQNj3sIgCfdCwb0zyO8HsI8OsoqJ/gDV+5joZxhTLQO8tRJWbrdXc44ThRS0ab+sCT8I6KfWx9z/+GVy/x+uKms=
-  - secure: Oeeyn1sgR5WrhoiDUxNQzTtnSwVlpHqOZCHCurA52NCxFkhb9ITvd3pJG12U44ZbCtjQXavMo0/ILg31BBAcC0aegU1cvGL9QV4D7udqAlurDq/Ueur+PaKG1tO9MvtB0UzfDLnj9sXS5xeoMtlpGyZPEnXEMSzIQnojfpj13YDaGgejuKeasehGRkzKMpW70CTY6X8ixaUc7Ouyy7KYWjZNdddH6atMJPw2b60uuJlu4xejzO+0RgQzWp6U9GvjkXJUI38Ik/Uf4nCCcV8fYxNk7h9S83WKtkT9cQa5rIcsmIHRIg0ijdSVQ8UxhDl3IYnGtIbMUbTXG5OauTXvgvY/OWCDngf+6u/jsK/IrBRdnAjiQZpnOy1d534+BKQ6Jd4deulyqeKrWXsinR5X7808SQl5M8MKzo5HpeefGeez0SMYa26oAjGQx92MkVM0NEFJifGZ/y50yDlHZez+U7NA3QAHgR7G/WipsPKANgtkbZRecyaTZ0adPPIRG38h2iPmTCvgttAY+I6Lks2RXrcGBbvK7FHL6HhdmNiGReN+CPIvQ7hIVMMXWKrwDBlPlVZq8hr7pWtbZKuNkHDp5p1QvDhYDrCYGJuMbgRqy8xRw+Sr1wZs922sgCC/OD7gGqIieJSmM3x8IBzEWKeV6w2jYQV1MDQKnWLdo9rQo1s=

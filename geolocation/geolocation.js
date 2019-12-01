@@ -1,6 +1,8 @@
 import Geolocation from 'react-native-geolocation-service';
 import {Alert, PermissionsAndroid, Platform} from 'react-native';
 import LocationSwitch from 'react-native-location-switch';
+import log from '../utils/logs';
+import constants from '../utils/constants';
 
 /**
  * This function checks for Geolocation permission on Android devices from API 21 and above and requests it in case it
@@ -55,19 +57,41 @@ async function getGeolocation(handleSuccess, handleFailure) {
 /**
  * This function retrieves coordinates to used in displaying in HeatMaps
  * @param endpoint
- * @param geoCoords
- * @param handleStateUpdate
+ * @param coords
+ * @param handleState
  * @returns {Promise<void>}
  */
-async function getHeatMapsCoordinates(endpoint, geoCoords, handleStateUpdate) {
-  fetch(endpoint).then(response => {
-    const newState = {};
-    newState.coords = geoCoords.coords;
-    response.json().then(heatMapsCoordinates => {
-      newState.heatMapsCoordinates = heatMapsCoordinates;
-      handleStateUpdate(newState);
+async function getHeatMapsCoordinates(endpoint, coords, handleState) {
+  console.log('2');
+  fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      longitude: coords.longitude,
+      latitude: coords.latitude,
+    }),
+  })
+    .then(response => {
+      const newState = {};
+      newState.coords = coords;
+      response.json().then(heatMapsCoordinates => {
+        console.log('HeatMaps returned');
+        newState.heatMapsCoordinates = heatMapsCoordinates;
+        handleState(newState);
+      });
+    })
+    .catch(error => {
+      Alert.alert('HeatMap', 'Unable to load HeatMaps');
+      // Log this response when the heatmaps can't be retrieved
+      log.sendLog(
+        constants.LOGS_ENDPOINT,
+        'onLoadHeatMapsFailure',
+        error.message,
+      );
     });
-  });
 }
 
 /**

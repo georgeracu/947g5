@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -ev
+
+echo "Patching version $(jq -r '.version' package.json)"
+git checkout $TRAVIS_PULL_REQUEST_BRANCH
+git remote set-url origin https://${GITHUB_TOKEN}@github.com/georgeracu/947g5.git
+npm version patch --no-git-tag-version --allow-same-version
+git add package.json
+git add package-lock.json
+GIT_TAG_VERSION=$(jq -r '.version' package.json)
+git commit -m "Setting version to $GIT_TAG_VERSION via Travis CI"
+git push origin $TRAVIS_PULL_REQUEST_BRANCH 2>&1
+echo "Finished patching release version"

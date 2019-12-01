@@ -7,9 +7,6 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "test:update": "jest --verbose --coverage --updateSnapshot",
-    "test:watch": "jest --verbose --watch",
-    "coverage": "jest --verbose --coverage && open ./coverage/lcov-report/index.html",
     "clean": "rm -rf node_modules",
     "lint": "eslint '**/*.js'",
     "lint-fix": "eslint '**/*.js' --fix"

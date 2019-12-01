@@ -15,22 +15,22 @@ Install _fastlane_ using
 or alternatively using `brew cask install fastlane`
 
 # Available Actions
-## Android
-### android tests
+## iOS
+### ios screenshots
 ```
-fastlane android tests
+fastlane ios screenshots
 ```
-Runs all the tests
-### android beta
+Generate new localized screenshots
+### ios tests
 ```
-fastlane android beta
+fastlane ios tests
 ```
-Publish a Beta Release
-### android release
+Run all tests
+### ios beta
 ```
-fastlane android release
+fastlane ios beta
 ```
-Publish a Master Release
+Do Beta deployment to Firebase App Distribution
 
 ----
 

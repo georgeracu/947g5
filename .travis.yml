@@ -1,11 +1,13 @@
 version: "~> 1.0"
+
 jobs:
   include:
-  - stage: Test Node
+  - stage: Tests
     if: type = pull_request
+    name: NodeJS tests
+    language: node_js
     os: linux
     dist: xenial
-    language: node_js
     node_js: 10.13.0
     env:
     - JOB_NAME=TEST_NODEJS
@@ -13,8 +15,9 @@ jobs:
     - npm install
     script:
     - npm test
-  - stage: Test Android
+  - stage: Tests
     if: type = pull_request
+    name: Android tests
     language: android
     dist: xenial
     jdk: oraclejdk8
@@ -65,8 +68,9 @@ jobs:
     - bundle install
     - bundle exec fastlane install_plugins
     - bundle exec fastlane android tests
-  - stage: Test iOS
+  - stage: Tests
     if: type = pull_request
+    name: iOS tests
     language: objective-c
     os: osx
     osx_image: xcode11
@@ -91,8 +95,9 @@ jobs:
     - cd ios
     - bundle install
     - bundle exec fastlane ios tests
-  - stage: Beta Release version patch
+  - stage: Beta release
     if: (branch = master) AND (type = merge)
+    name: Version patch
     language: node_js
     os: linux
     dist: xenial
@@ -104,8 +109,9 @@ jobs:
     script:
     - npm test
     - "./infra/ci/beta_patch"
-  - stage: Beta Release Android
+  - stage: Beta release
     if: (branch = master) AND (type = merge)
+    name: Android Beta release
     language: android
     jdk: oraclejdk8
     env:
@@ -155,8 +161,9 @@ jobs:
     - bundle install
     - bundle exec fastlane install_plugins
     - bundle exec fastlane android beta
-  - stage: Master Release Android
+  - stage: Master release
     if: (branch = master) AND (type != merge) AND (env(RELEASE_MASTER) = true)
+    name: Android release
     language: android
     env:
     - JOB_NAME=MASTER_RELEASE_ANDROID

@@ -282,6 +282,8 @@ PODS:
     - React-cxxreact (= 0.61.2)
     - React-jsi (= 0.61.2)
   - React-jsinspector (0.61.2)
+  - react-native-config (0.12.0):
+    - React
   - react-native-geolocation (1.4.2):
     - React
   - react-native-google-maps (0.26.1):
@@ -357,6 +359,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - react-native-config (from `../node_modules/react-native-config`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
@@ -422,6 +425,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-config:
+    :path: "../node_modules/react-native-config"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-google-maps:
@@ -486,6 +491,7 @@ SPEC CHECKSUMS:
   React-jsi: 32285a21b1b24c36060493ed3057a34677d58d09
   React-jsiexecutor: 8909917ff7d8f21a57e443a866fd8d4560e50c65
   React-jsinspector: 111d7d342b07a904c400592e02a2b958f1098b60
+  react-native-config: f2c2ae45625a068c35681a16b9bfb1ca58b0adc7
   react-native-geolocation: 79c743ad7a2e86617811ef23f49308824e92520c
   react-native-google-maps: 2e2e697dab576abd5809d78cd74e775865b62bf7
   react-native-maps: 6e499eee4eabf422ba8b6f94e993cc768bf35153

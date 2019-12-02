@@ -2,10 +2,15 @@
 
 [![Build Status](https://travis-ci.com/georgeracu/947g5.svg?branch=master)](https://travis-ci.com/georgeracu/947g5)
 
+"Regardless of what we discover, we understand and truly believe that everyone did the best job they could, given what they knew at the time, their skills and abilities, the resources available, and the situation at hand."
+__Norm Kerth, Project Retrospectives: A Handbook for Team Review__
+
 Table of Contents
 
 * [Team Composition](#team-composition)
 * [We are Agile](#the-agile-manifesto)
+  * [Prime Directive](#prime-directive)
+  * [Agile values](#agile-values)
 * [Learning Resources](#a-curated-list-of-learning-resources)
   * [Java for small teams](https://ncrcoe.gitbooks.io/java-for-small-teams/content/)
   * [Create and use GPG key to sign your commits](https://georgeracu.github.io/2019/09/10/setup-gpg-and-git-sign-on-mac.html)
@@ -42,7 +47,11 @@ Labaran Iben | Java, C#, HTML | NA | Basically I am here to learn. I am willing 
 
 ## The Agile manifesto
 
-### Values
+### Prime Directive
+
+We use the Prime Directive as the base for an empathic and respectful conversation in our communication inside the team. More details can be found in this [blog post](https://www.thoughtworks.com/insights/blog/applying-prime-directive-beyond-retrospective)
+
+### Agile Values
 
 * Individuals and interactions over processes and tools
 * Working software over comprehensive documentation

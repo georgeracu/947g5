@@ -1,6 +1,5 @@
 import Geolocation from 'react-native-geolocation-service';
 import {Alert, PermissionsAndroid, Platform} from 'react-native';
-import LocationSwitch from 'react-native-location-switch';
 import log from '../utils/logs';
 import constants from '../utils/constants';
 
@@ -101,14 +100,7 @@ async function getGeolocationServices(handleSuccess, handleFailure) {
   if (Platform.OS === 'android') {
     const isLocationGranted = await requestGeolocationPermissionAndroid();
     if (isLocationGranted) {
-      LocationSwitch.isLocationEnabled(
-        () => {
-          getGeolocation(handleSuccess, handleFailure);
-        },
-        () => {
-          handleGeolocationOperation(handleSuccess, handleFailure);
-        },
-      );
+      handleGeolocationOperation(handleSuccess, handleFailure);
     } else {
       getGeolocationServices(handleSuccess, handleFailure);
     }

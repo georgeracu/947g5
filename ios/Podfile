@@ -34,8 +34,10 @@ target 'MyAwesomeApp' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
   pod 'react-native-google-maps', :path => '../node_modules/react-native-maps'
-  pod 'GoogleMaps'
-  pod 'Google-Maps-iOS-Utils'
+  pod 'GoogleMaps', '3.2.0'
+  pod 'Google-Maps-iOS-Utils', '2.1.0'
+  pod 'GoogleUtilities', '6.3.1'
+  pod 'GoogleAppMeasurement', '6.1.1'
   pod 'react-native-geolocation', path: '../node_modules/@react-native-community/geolocation'
 
 

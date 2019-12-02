@@ -5,7 +5,7 @@
 Table of Contents
 
 * [Team Composition](#team-composition)
-* [We are Agile](#agile-manifesto)
+* [We are Agile](#the-agile-manifesto)
 * [Learning Resources](#a-curated-list-of-learning-resources)
   * [Java for small teams](https://ncrcoe.gitbooks.io/java-for-small-teams/content/)
   * [Create and use GPG key to sign your commits](https://georgeracu.github.io/2019/09/10/setup-gpg-and-git-sign-on-mac.html)
@@ -16,7 +16,14 @@ Table of Contents
   * [Windows version](#windows-version)
   * [Running the app locally](#running-locally)
     * [Run the iOS Simulator](#run-the-ios-simulator)
+* [Android commands](#android-commands)
 * [Testing](#testing)
+  * [Fastlane](#fastlane)
+* [Continuous Integration and Delivery](#continuous-integration-and-delivery)
+  * [Secrets per environment](#secrets-per-environment)
+* [Vulnerabilities automatic scanning](#security-and-vulnerability-scanning)
+* [Slack integrations](#slack-integrations)
+* [Code Quality](#code-quality)
 
 ## Team composition
 
@@ -258,15 +265,14 @@ npm install
 
 ### Git config
 
-We have our git hooks versioned with our code in `infra/.githooks`. To enable them, you need to git >v2.9.0 and you need to run this command to tell git where to find its hooks:
+Git hooks will run when a git command will match it. We have our git hooks versioned with our code in `infra/.githooks`. 
+To enable them, you need to git >v2.9.0 and you need to run this command to tell git where to find its hooks:
 
 ```bash
 git config core.hooksPath infra/.githooks
 ```
 
 #### Git hooks
-
-Git hooks will run when a git command will match it.
 
 * __pre-push__ will run test and lint before push.
 
@@ -327,19 +333,114 @@ How to start the app for iOS:
 
 ## Testing
 
-### Frameworks
-
-#### [Jest v24.1.0](https://jestjs.io/)
+### [Jest v24.1.0](https://jestjs.io/)
 
 * With preset `react-native`
 * Mocked data in directory `__mocks__`
 * Running tests with `npm test`
 * Recreating the snapshots when the UI changes with `npm test -- -u`
+* Android tests from npm: `npm run android-test`
+* iOS tests from npm: `npm run ios-test`
+
+### Fastlane
+
+#### Why [fastlane](https://fastlane.tools/)
+
+Fastlane provides a common API for building, testing, packaging and deploying native applications for both Android and iOS.
+Having a common API that is also extensible with plugins is makes it easier to abstract the differences in tooling between
+these two platforms. We have to use only one tool (fastlane) to achieve the same goal on two different platform.
+
+Because the same tool is used for both platforms, in order to differentiate which lane ran, lanes have a prefix of `ios_`
+or `android_`. This way, when fastlane reports back to Slack, we know which lane ran.
+
+#### Installation
+
+Fastlane is installed as a Ruby gem and is working based on a `Fastfile`, which is a specification file where we define
+`lanes` and we can invoke them in the build-test pipeline.
+First of of ll you need to make sure that you are in `/android` or `/ios` directory. Then you need to install the gem bundle.
+
+```shell script
+bundle install
+bundle exec fastlane install_plugins
+```
+
+#### Usage
+
+Fastlane can run for us `lanes` that are defined in the `Fastfile`. Make sure to wrap all fastlane commands in `bundle exec`
+such that they are running faster.
+
+```shell script
+bundle exec fastlane ios_tests
+```
+
+#### Slack integration
+
+Fastlane is using a Slack incoming hook to post a message with the status of the lane run. This helps us have faster 
+feedback on the status of each lane, without having to check the CI servere.
+
+### Android
+
+To run Android only tests, we use Gradle wrapper and JUnit as the test runner and the testing framework.
+
+```shell script
+cd android
+./gradlew test
+```
+
+Gradle is smart enough to detect if there are no changes in tests and it will not run the tests, so it needs a push.
+
+```shell script
+cd android
+./gradlew cleanTest test
+```
+
+Gradle test tasks are defined in app level `app/build.gradle` file.
+
+### iOS
+
+iOS has a two test schemes: `MyAwesomeApp` and `MyAwesomeAppUITests`. The UI version is used for screenshots by `screengrabber`.
+
+```shell script
+cd ios
+xcodebuild \
+  -workspace MyAwesomeApp.xcworkspace \
+  -scheme "MyAwesomeApp" \
+  -sdk iphonesimulator \
+  -destination 'platform=iOS Simulator,OS=11.0,name=iPhone 8' \
+  test
+```
+
+Based on which `scheme` you try to run, you can switch it in the command above.
 
 ## Continuous Integration and Delivery
 
+We chose to do Continuous Delivery and leave the automated deployment to be triggered manually once we are happy with our 
+testing results. 
+
 * CI Server is [Travis CI](https://travis-ci.com)
 * Deployment using [fastlane](https://fastlane.tools/)
+
+![CI CD diagram](docs/img/CI_CD%20pipeline.drawio.png "CI CD diagram")
+
+### CI stages
+
+In Travis CI stages run sequential.
+
+#### Tests run when build `type = pull_request`
+
+This stage is running three jobs: Node.js tests, Android tests and iOS tests. All the jobs in a stage run in parallel to speedup the feedback cycle.
+
+#### Version patch runs when `(branch = master) AND (type = push) AND (env(BETA_RELEASE) = true)`
+
+We do automatic version patch with each merge to `master`. This process is handled by Travis CI for us.
+
+#### Beta release runs when `(branch = master) AND (type = push) AND (env(BETA_RELEASE) = true)`
+
+Fastlane takes care of creating an APK for us and distributing to Firebase for beta testing. Firebase will notify via email all our users from the beta testing group about the new version available.
+
+#### Release runs when `(branch = master) AND (type != push) AND (env(MASTER_RELEASE) = true)`
+
+This is an automatic process that gets triggered when we toggle the flag `RELEASE_MASTER`. This allows us to release certain build versions.
 
 ### Secrets per environment
 
@@ -391,3 +492,26 @@ tar zxvf secrets.tar
 cp infra/secrets/beta/google-services.json android/app
 cp infra/secrets/beta/newagent.json android
 ```
+
+## Security and Vulnerability scanning
+
+We continuously scan our repository for vulnerabilities using [Snyk](https://snyk.io/). When automatic upgrades are possible, 
+Snyk will raise PRs with the changes. At the same time it will inform us via a Slack web hook.
+We also use GitHub's internal scanner that will allow dependabot to raise PRs with fixes.
+Last but not least we use npm's `npm audit` command to generate reports of vulnerabilities and `npm audit fix` to fix them.
+
+## Slack integrations
+
+* GitHub for new PRs, updates on PRs and merges to master
+* Fastlane for successful or erroneous lane run
+* Travis CI for the build status
+* Trello for creating and updating cards
+* Snyk for vulnerability reporting
+* SonarCloud for quality report after each run
+
+## Code Quality
+
+We use [SonarCloud](https://sonarcloud.io) to keep our code quality to a high standard. Each pull request is analyzed and
+a report is generated. If the code quality falls bellow the setup threshold then the PR doesn't pass the CI stage.
+
+SonarCloud is a source of tech debt related tasks. Using the report generated from each quality gate we have a continuous source of improvements suggestions.

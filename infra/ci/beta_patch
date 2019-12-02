@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -ev
+
+BETA_RELEASE=false  # disable this flag until after commit so Travis will not pickup this push
+CURRENT_WORKGING_BRANCH=$TRAVIS_BRANCH
+
+git checkout $CURRENT_WORKGING_BRANCH
+git remote set-url origin https://${GITHUB_TOKEN}@github.com/georgeracu/947g5.git
+npm version patch --no-git-tag-version --allow-same-version
+git add package.json
+git add package-lock.json
+GIT_TAG_VERSION=$(jq -r '.version' package.json)
+git commit -m "Setting version to $GIT_TAG_VERSION via Travis CI"
+git push origin $CURRENT_WORKGING_BRANCH 2>&1
+echo "Finished patching release version"
+
+BETA_RELEASE=false  # re-enable this flag to be available for future pushes to master

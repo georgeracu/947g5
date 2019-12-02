@@ -1,0 +1,34 @@
+{
+    "paths": [
+        {
+            "name": "/items",
+            "lambdaFunction": "myapi2",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "myapi",
+    "apiName": "myapi",
+    "functionArns": [
+        {
+            "lambdaFunction": "myapi2"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-ase-reactnat-214138-authRole",
+        "unAuthRoleName": "amplify-ase-reactnat-214138-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "myapi2",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}

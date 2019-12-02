@@ -1,0 +1,7 @@
+{
+    "tableName": "AddressBase",
+    "partitionKeyName": "LONGITUDE",
+    "partitionKeyType": "N",
+    "sortKeyName": "LATITUDE",
+    "sortKeyType": "N"
+}

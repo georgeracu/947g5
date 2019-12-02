@@ -1,0 +1,17 @@
+{
+    "projectName": "ase",
+    "version": "2.0",
+    "frontend": "javascript",
+    "javascript": {
+        "framework": "react-native",
+        "config": {
+            "SourceDir": "C:\\Users\\assaad\\Documents\\Sussex files\\Advanced software engineering course\\Project\\947g5",
+            "DistributionDir": "C:\\Users\\assaad\\Documents\\Sussex files\\Advanced software engineering course\\Project\\947g5",
+            "BuildCommand": "react-native run-android",
+            "StartCommand": "react-native run-android"
+        }
+    },
+    "providers": [
+        "awscloudformation"
+    ]
+}

@@ -1,0 +1,14 @@
+{
+    "reactnat": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-ase-reactnat-214138-authRole",
+            "UnauthRoleArn": "arn:aws:iam::572215810424:role/amplify-ase-reactnat-214138-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::572215810424:role/amplify-ase-reactnat-214138-authRole",
+            "Region": "eu-west-2",
+            "DeploymentBucketName": "amplify-ase-reactnat-214138-deployment",
+            "UnauthRoleName": "amplify-ase-reactnat-214138-unauthRole",
+            "StackName": "amplify-ase-reactnat-214138",
+            "StackId": "arn:aws:cloudformation:eu-west-2:572215810424:stack/amplify-ase-reactnat-214138/874ca4a0-1095-11ea-a911-06452e71541c"
+        }
+    }
+}

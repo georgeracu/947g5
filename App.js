@@ -1,9 +1,3 @@
-/**
- *
- * @format
- * @flow
- */
-
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import MapView, {Marker, Heatmap, PROVIDER_GOOGLE} from 'react-native-maps';
@@ -35,7 +29,6 @@ export default class App extends Component {
    * @param geoCoords
    */
   onGeolocationSuccess = async geoCoords => {
-    console.log('1');
     // Log this response when the Geolocation has been retrieved
     log.sendLog(
       constants.LOGS_ENDPOINT,

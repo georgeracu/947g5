@@ -420,6 +420,28 @@ testing results.
 * CI Server is [Travis CI](https://travis-ci.com)
 * Deployment using [fastlane](https://fastlane.tools/)
 
+![CI CD diagram](docs/img/CI_CD%20pipeline.drawio.png "CI CD diagram")
+
+### CI stages
+
+In Travis CI stages run sequential.
+
+#### Tests run when build `type = pull_request`
+
+This stage is running three jobs: Node.js tests, Android tests and iOS tests. All the jobs in a stage run in parallel to speedup the feedback cycle.
+
+#### Version patch runs when `(branch = master) AND (type = push) AND (env(BETA_RELEASE) = true)`
+
+We do automatic version patch with each merge to `master`. This process is handled by Travis CI for us.
+
+#### Beta release runs when `(branch = master) AND (type = push) AND (env(BETA_RELEASE) = true)`
+
+Fastlane takes care of creating an APK for us and distributing to Firebase for beta testing. Firebase will notify via email all our users from the beta testing group about the new version available.
+
+#### Release runs when `(branch = master) AND (type != push) AND (env(MASTER_RELEASE) = true)`
+
+This is an automatic process that gets triggered when we toggle the flag `RELEASE_MASTER`. This allows us to release certain build versions.
+
 ### Secrets per environment
 
 Secrets are encrypted locally before being uploaded to Travis CI. Travis is able to decrypt them when needed in the
@@ -491,3 +513,5 @@ Last but not least we use npm's `npm audit` command to generate reports of vulne
 
 We use [SonarCloud](https://sonarcloud.io) to keep our code quality to a high standard. Each pull request is analyzed and
 a report is generated. If the code quality falls bellow the setup threshold then the PR doesn't pass the CI stage.
+
+SonarCloud is a source of tech debt related tasks. Using the report generated from each quality gate we have a continuous source of improvements suggestions.

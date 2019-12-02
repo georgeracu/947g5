@@ -4,7 +4,7 @@ const functions = require('firebase-functions');
 // Set up Firebase Admin for Firestore
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
-let db = admin.firestore();
+const db = admin.firestore();
 
 // Set up Express
 const express = require('express');

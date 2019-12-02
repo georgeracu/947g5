@@ -1,0 +1,63 @@
+#!/bin/bash
+
+set -eu -o pipefail
+
+PROJECT_ROOT=$(pwd)
+PROGRAM_NAME=$0
+
+function android-tests {
+  npm install
+  npx jetify
+  cd android
+  bundle install
+  bundle exec fastlane install_plugins
+  bundle exec fastlane android tests
+  cd $PROJECT_ROOT
+}
+
+function ios-tests {
+  npm install
+  cd ios
+  pod install
+  cd $PROJECT_ROOT
+  react-native link
+  cd ios
+  bundle install
+  bundle exec fastlane ios tests
+  cd $PROJECT_ROOT
+}
+
+function usage {
+    echo ""
+    echo "Example usage: $PROGRAM_NAME [command]"
+    echo ""
+    echo "Available commands"
+    echo "  android-tests           runs all Android tests using fastlane"
+    echo "  ios-tests               runs all iOS tests using fastlane"
+    echo "  help | --help | -h      all available commands"
+    echo ""
+    exit 1
+}
+
+function help {
+  usage
+}
+
+function --help {
+  usage
+}
+
+function -h {
+  usage
+}
+
+CMD=${1:-}
+shift || true
+case ${CMD} in
+  android-tests) android-tests;;
+  ios-tests) ios-tests;;
+  help) help;;
+  --help) help;;
+  --h) help;;
+  *) usage ;;
+esac

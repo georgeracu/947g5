@@ -24,7 +24,7 @@ platform :android do
   end
 
   desc "Runs all the tests"
-  lane :test do
+  lane :tests do
     gradle(task: "test")
   end
 
@@ -49,12 +49,12 @@ platform :android do
   after_all do |lane|
     # This block is called, only if the executed lane was successful
 
-    slack(message: "Lane #{lane} ran successfully")
+    slack(message: "Lane Android #{lane} ran successfully")
   end
 
   error do |lane, exception|
     slack(
-      message: "There was an exception on lane #{lane} with message #{exception.message}",
+      message: "There was an exception on lane Android #{lane} with message #{exception.message}",
       success: false
     )
   end

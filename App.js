@@ -23,6 +23,11 @@ export default class App extends Component {
       coords: {},
       heatMapsCoordinates: [],
     };
+
+    this.region = {
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    };
   }
 
   /**
@@ -83,9 +88,10 @@ export default class App extends Component {
               region={{
                 latitude: this.state.coords.latitude,
                 longitude: this.state.coords.longitude,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
+                latitudeDelta: this.region.latitudeDelta,
+                longitudeDelta: this.region.longitudeDelta,
               }}
+              onRegionChangeComplete={region => (this.region = region)}
               loadingEnabled={true}>
               <Marker
                 coordinate={{

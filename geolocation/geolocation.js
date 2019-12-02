@@ -40,7 +40,6 @@ async function getGeolocation(handleSuccess, handleFailure) {
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
     );
     if (isLocationGranted) {
-      console.log('0');
       Geolocation.watchPosition(handleSuccess, handleFailure, {
         enableHighAccuracy: true,
       });
@@ -62,7 +61,6 @@ async function getGeolocation(handleSuccess, handleFailure) {
  * @returns {Promise<void>}
  */
 async function getHeatMapsCoordinates(endpoint, coords, handleState) {
-  console.log('2');
   fetch(endpoint, {
     method: 'POST',
     headers: {
@@ -78,7 +76,6 @@ async function getHeatMapsCoordinates(endpoint, coords, handleState) {
       const newState = {};
       newState.coords = coords;
       response.json().then(heatMapsCoordinates => {
-        console.log('HeatMaps returned');
         newState.heatMapsCoordinates = heatMapsCoordinates;
         handleState(newState);
       });

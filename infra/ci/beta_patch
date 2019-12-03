@@ -2,10 +2,9 @@
 
 set -ev
 
-#export BETA_RELEASE=false  # disable this flag until after commit so Travis will not pickup this push
-CURRENT_WORKGING_BRANCH=$BETA_RELEASE_BRANCH
+CURRENT_WORKING_BRANCH=$BETA_RELEASE_BRANCH
 
-git checkout $CURRENT_WORKGING_BRANCH
+git checkout $CURRENT_WORKING_BRANCH
 git remote set-url origin https://${GITHUB_TOKEN}@github.com/georgeracu/947g5.git
 git merge master
 npm version patch --no-git-tag-version --allow-same-version
@@ -13,7 +12,5 @@ git add package.json
 git add package-lock.json
 GIT_TAG_VERSION=$(jq -r '.version' package.json)
 git commit -m "Setting version to $GIT_TAG_VERSION via Travis CI"
-git push origin $CURRENT_WORKGING_BRANCH 2>&1
+git push origin $CURRENT_WORKING_BRANCH 2>&1
 echo "Finished patching release version"
-
-export BETA_RELEASE=false  # re-enable this flag to be available for future pushes to master

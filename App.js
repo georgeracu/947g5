@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Platform} from 'react-native';
-import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import {StyleSheet, View} from 'react-native';
+import MapView, {Marker, Heatmap, PROVIDER_GOOGLE} from 'react-native-maps';
 import geolocation from './geolocation/geolocation';
-import util from './utils/util';
+import log from './utils/logs';
+import constants from './utils/constants';
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -13,9 +15,13 @@ export default class App extends Component {
      */
     this.state = {
       coords: {},
+      heatMapsCoordinates: [],
     };
-    this.LOGS_ENDPOINT =
-      'https://us-central1-test-947g5.cloudfunctions.net/logs/log';
+
+    this.region = {
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    };
   }
 
   /**
@@ -23,14 +29,24 @@ export default class App extends Component {
    * @param geoCoords
    */
   onGeolocationSuccess = async geoCoords => {
-    this.setState({
-      coords: geoCoords.coords,
-    });
     // Log this response when the Geolocation has been retrieved
-    util.sendLog(
-      this.LOGS_ENDPOINT,
+    log.sendLog(
+      constants.LOGS_ENDPOINT,
       'onRequestGeolocationSuccess',
       geoCoords.coords,
+    );
+
+    this.setState({
+      coords: geoCoords.coords,
+      heatMapsCoordinates: [],
+    });
+
+    geolocation.getHeatMapsCoordinates(
+      constants.HEATMAPS_ENDPOINT,
+      geoCoords.coords,
+      newState => {
+        this.setState(newState);
+      },
     );
   };
 
@@ -40,23 +56,15 @@ export default class App extends Component {
    */
   onGeolocationError = async error => {
     // Log this response when the Geolocation has been retrieved in error
-    util.sendLog(
-      this.LOGS_ENDPOINT,
+    log.sendLog(
+      constants.LOGS_ENDPOINT,
       'onRequestGeolocationFailure',
       error.message,
     );
   };
 
   async componentDidMount(): void {
-    if (Platform.OS === 'android') {
-      try {
-        geolocation.checkGeolocationPermissionGoogle();
-      } catch (e) {
-        console.error('Unable to grant Geolocation permission');
-        return;
-      }
-    }
-    geolocation.getCurrentGeolocation(
+    geolocation.getGeolocationServices(
       this.onGeolocationSuccess,
       this.onGeolocationError,
     );
@@ -73,9 +81,10 @@ export default class App extends Component {
               region={{
                 latitude: this.state.coords.latitude,
                 longitude: this.state.coords.longitude,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
+                latitudeDelta: this.region.latitudeDelta,
+                longitudeDelta: this.region.longitudeDelta,
               }}
+              onRegionChangeComplete={region => (this.region = region)}
               loadingEnabled={true}>
               <Marker
                 coordinate={{
@@ -83,6 +92,13 @@ export default class App extends Component {
                   longitude: this.state.coords.longitude,
                 }}
               />
+              {this.state.heatMapsCoordinates.length > 0 ? (
+                <Heatmap
+                  points={this.state.heatMapsCoordinates}
+                  opacity={1}
+                  radius={20}
+                />
+              ) : null}
             </MapView>
           ) : null}
         </View>

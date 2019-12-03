@@ -33,6 +33,13 @@
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = MyAwesomeApp;
 		};
+		F3909B8D238977CA0095AE88 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F3909B89238977C90095AE88 /* RNReactNativeLocationSwitch.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNReactNativeLocationSwitch;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +71,7 @@
 		C558DB1700668A0006CD6358 /* Pods-MyAwesomeAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyAwesomeAppTests.debug.xcconfig"; path = "Target Support Files/Pods-MyAwesomeAppTests/Pods-MyAwesomeAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		F3909B89238977C90095AE88 /* RNReactNativeLocationSwitch.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNReactNativeLocationSwitch.xcodeproj; path = "../node_modules/react-native-location-switch/ios/RNReactNativeLocationSwitch.xcodeproj"; sourceTree = "<group>"; };
 		F8ECAD7D029C3AEA4295C9BA /* libPods-MyAwesomeAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MyAwesomeAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -156,6 +164,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				F3909B89238977C90095AE88 /* RNReactNativeLocationSwitch.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -182,6 +191,14 @@
 				13B07F961A680F5B00A75B9A /* MyAwesomeApp.app */,
 				00E356EE1AD99517003FC87E /* MyAwesomeAppTests.xctest */,
 				9AE149612381A58E003DF176 /* MyAwesomeAppUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F3909B8A238977C90095AE88 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F3909B8E238977CA0095AE88 /* libRNReactNativeLocationSwitch.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -290,6 +307,12 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = F3909B8A238977C90095AE88 /* Products */;
+					ProjectRef = F3909B89238977C90095AE88 /* RNReactNativeLocationSwitch.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* MyAwesomeApp */,
@@ -298,6 +321,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		F3909B8E238977CA0095AE88 /* libRNReactNativeLocationSwitch.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNReactNativeLocationSwitch.a;
+			remoteRef = F3909B8D238977CA0095AE88 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		00E356EC1AD99517003FC87E /* Resources */ = {

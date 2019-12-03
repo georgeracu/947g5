@@ -109,8 +109,9 @@ jobs:
     script:
     - npm test
     - git remote set-url origin https://${GITHUB_TOKEN}@github.com/georgeracu/947g5.git
+    - git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+    - git fetch --all
     - git checkout $BETA_RELEASE_BRANCH
-    - git merge master
     - npm version patch --no-git-tag-version --allow-same-version
     - git add package.json
     - git add package-lock.json

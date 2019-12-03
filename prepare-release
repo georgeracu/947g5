@@ -1,0 +1,47 @@
+#!/bin/bash
+
+set -eu -o pipefail
+
+PROGRAM_NAME=$0
+
+function checkout-beta() {
+  git remote set-url origin https://${GITHUB_TOKEN}@github.com/georgeracu/947g5.git
+  git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+  git fetch --all
+  git checkout $BETA_RELEASE_BRANCH
+  git merge master --commit
+}
+
+function version-patch() {
+  npm version patch --no-git-tag-version --allow-same-version
+  git add package.json
+  git add package-lock.json
+  git commit -m "Setting version to $(jq -r '.version' package.json) via Travis CI"
+}
+
+function push-to-origin() {
+  git push origin $BETA_RELEASE_BRANCH 2>&1
+}
+
+function beta-patch-version() {
+  checkout-beta;
+  version-patch;
+  push-to-origin;
+}
+
+function usage {
+    echo ""
+    echo "Example usage: $PROGRAM_NAME [command]"
+    echo ""
+    echo "Available commands"
+    echo "  beta-patch-version      Will version bump patch on beta release"
+    echo ""
+    exit 1
+}
+
+CMD=${1:-}
+shift || true
+case ${CMD} in
+  beta-patch-version) beta-patch-version;;
+  *) usage ;;
+esac

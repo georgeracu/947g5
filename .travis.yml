@@ -96,7 +96,7 @@ jobs:
     - bundle install
     - bundle exec fastlane ios tests
   - stage: Version patch
-    if: (branch = master) AND (type = push) AND (env(BETA_RELEASE) = true)
+    if: (branch = master) AND (type = push)
     name: Version patch
     language: node_js
     os: linux
@@ -110,7 +110,7 @@ jobs:
     - npm test
     - "./infra/ci/beta_patch"
   - stage: Beta release
-    if: (branch = master) AND (type = push) AND (env(BETA_RELEASE) = true)
+    if: (branch = beta_release) AND (env(BETA_RELEASE) = true)
     name: Android Beta release
     language: android
     jdk: oraclejdk8

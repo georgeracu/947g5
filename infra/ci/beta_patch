@@ -2,11 +2,12 @@
 
 set -ev
 
-export BETA_RELEASE=false  # disable this flag until after commit so Travis will not pickup this push
-CURRENT_WORKGING_BRANCH=$TRAVIS_BRANCH
+#export BETA_RELEASE=false  # disable this flag until after commit so Travis will not pickup this push
+CURRENT_WORKGING_BRANCH=$BETA_RELEASE_BRANCH
 
 git checkout $CURRENT_WORKGING_BRANCH
 git remote set-url origin https://${GITHUB_TOKEN}@github.com/georgeracu/947g5.git
+git merge master
 npm version patch --no-git-tag-version --allow-same-version
 git add package.json
 git add package-lock.json

@@ -112,13 +112,14 @@ jobs:
     - git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
     - git fetch --all
     - git checkout $BETA_RELEASE_BRANCH
+    - git merge master --commit
     - npm version patch --no-git-tag-version --allow-same-version
     - git add package.json
     - git add package-lock.json
     - git commit -m "Setting version to $(jq -r '.version' package.json) via Travis CI"
     - git push origin $BETA_RELEASE_BRANCH 2>&1
   - stage: Beta release
-    if: (branch = env(BETA_RELEASE_BRANCH)) AND (env(BETA_RELEASE) = true)
+    if: (branch = env(BETA_RELEASE_BRANCH)) AND (env(BETA_RELEASE) = true) AND (type=push)
     name: Android Beta release
     language: android
     jdk: oraclejdk8

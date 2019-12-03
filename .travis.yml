@@ -110,7 +110,7 @@ jobs:
     - npm test
     - "./infra/ci/beta_patch"
   - stage: Beta release
-    if: (branch = beta_release) AND (env(BETA_RELEASE) = true)
+    if: (branch = env(BETA_RELEASE_BRANCH)) AND (env(BETA_RELEASE) = true)
     name: Android Beta release
     language: android
     jdk: oraclejdk8

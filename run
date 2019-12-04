@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu -o pipefail
+set -eu -o -x pipefail
 
 PROJECT_ROOT=$(pwd)
 PROGRAM_NAME=$0

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu -o -x pipefail
+set -eu -o pipefail
 
 PROGRAM_NAME=$0
 

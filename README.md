@@ -1,6 +1,8 @@
 # Advanced Software Engineering 947G5 project
 
-[![Build Status](https://travis-ci.com/georgeracu/947g5.svg?branch=master)](https://travis-ci.com/georgeracu/947g5)
+[![Build Status](https://travis-ci.com/georgeracu/947g5.svg?branch=master)](https://travis-ci.com/georgeracu/947g5) 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=georgeracu_947g5&metric=alert_status)](https://sonarcloud.io/dashboard?id=georgeracu_947g5)
+[![Known Vulnerabilities](https://snyk.io/test/github/georgeracu/947g5/badge.svg)](https://snyk.io/test/github/georgeracu/947g5) 
 
 "Regardless of what we discover, we understand and truly believe that everyone did the best job they could, given what they knew at the time, their skills and abilities, the resources available, and the situation at hand."
 __Norm Kerth, Project Retrospectives: A Handbook for Team Review__

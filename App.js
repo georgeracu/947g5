@@ -44,7 +44,6 @@ export default class App extends Component {
     geolocation.getHeatMapsCoordinates(
         constants.HEATMAPS_ENDPOINT,
         geoCoords.coords,
-        1,
         newState => {
           this.setState(newState);
         },
@@ -54,7 +53,7 @@ export default class App extends Component {
 
   async showMarkers(region) {
     let zoom = Math.round(Math.log(360 / region.longitudeDelta) / Math.LN2);
-    await geolocation.getHeatMapsCoordinates(
+    await geolocation.getHeatMapsCoordinates2(
         constants.HEATMAPS_ENDPOINT,
         region.coords,
         zoom,

@@ -19,29 +19,29 @@ app.post('/heatmaps', (req, res) => {
       const coordinatesQuery = {
         location: {
           $geoWithin: {
-            $centerSphere: [[longLats.longitude, longLats.latitude], 5 / 6371],
+            $centerSphere: [[longLats.longitude, longLats.latitude], longLats.zoomdata /6371],
           },
         },
       };
       client
-        .db(DB)
-        .collection(COLLECTION)
-        .find(coordinatesQuery)
-        .toArray((err1, coordinates) => {
-          if (err1) {
-            console.log('Error occurred while querying DB');
-            console.log(`Error Message: ${err1.message}`);
-          } else {
-            const modifiedResults = coordinates.map(coordinate => {
-              return {
-                latitude: coordinate.location.coordinates[1],
-                longitude: coordinate.location.coordinates[0],
-                weight: 1,
-              };
-            });
-            res.send(JSON.stringify(modifiedResults));
-          }
-        });
+          .db(DB)
+          .collection(COLLECTION)
+          .find(coordinatesQuery)
+          .toArray((err1, coordinates) => {
+            if (err1) {
+              console.log('Error occurred while querying DB');
+              console.log(`Error Message: ${err1.message}`);
+            } else {
+              const modifiedResults = coordinates.map(coordinate => {
+                return {
+                  latitude: coordinate.location.coordinates[1],
+                  longitude: coordinate.location.coordinates[0],
+                  weight: 1,
+                };
+              });
+              res.send(JSON.stringify(modifiedResults));
+            }
+          });
     }
   });
   client.close();

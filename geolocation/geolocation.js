@@ -11,19 +11,19 @@ import constants from '../utils/constants';
 async function requestGeolocationPermissionAndroid() {
   try {
     return await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      {
-        title: 'Location Permission',
-        message: 'App needs permission to access your location',
-        buttonNeutral: 'Ask me later',
-        buttonNegative: 'Deny',
-        buttonPositive: 'Ok',
-      },
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Location Permission',
+          message: 'App needs permission to access your location',
+          buttonNeutral: 'Ask me later',
+          buttonNegative: 'Deny',
+          buttonPositive: 'Ok',
+        },
     );
   } catch (ex) {
     Alert.alert(
-      'Geolocation Permission',
-      'Unable to get Geolocation Permission',
+        'Geolocation Permission',
+        'Unable to get Geolocation Permission',
     );
   }
 }
@@ -36,7 +36,7 @@ async function requestGeolocationPermissionAndroid() {
 async function getGeolocation(handleSuccess, handleFailure) {
   if (Platform.OS === 'android') {
     const isLocationGranted = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
     );
     if (isLocationGranted) {
       Geolocation.watchPosition(handleSuccess, handleFailure, {
@@ -56,10 +56,11 @@ async function getGeolocation(handleSuccess, handleFailure) {
  * This function retrieves coordinates to used in displaying in HeatMaps
  * @param endpoint
  * @param coords
+ * @param zoom
  * @param handleState
  * @returns {Promise<void>}
  */
-async function getHeatMapsCoordinates(endpoint, coords, handleState) {
+async function getHeatMapsCoordinates(endpoint, coords, zoom, handleState) {
   fetch(endpoint, {
     method: 'POST',
     headers: {
@@ -69,25 +70,26 @@ async function getHeatMapsCoordinates(endpoint, coords, handleState) {
     body: JSON.stringify({
       longitude: coords.longitude,
       latitude: coords.latitude,
+      zoomdata: zoom,
     }),
   })
-    .then(response => {
-      const newState = {};
-      newState.coords = coords;
-      response.json().then(heatMapsCoordinates => {
-        newState.heatMapsCoordinates = heatMapsCoordinates;
-        handleState(newState);
+      .then(response => {
+        const newState = {};
+        newState.coords = coords;
+        response.json().then(heatMapsCoordinates => {
+          newState.heatMapsCoordinates = heatMapsCoordinates;
+          handleState(newState);
+        });
+      })
+      .catch(error => {
+        Alert.alert('HeatMap', 'Unable to load HeatMaps');
+        // Log this response when the heatmaps can't be retrieved
+        log.sendLog(
+            constants.LOGS_ENDPOINT,
+            'onLoadHeatMapsFailure',
+            error.message,
+        );
       });
-    })
-    .catch(error => {
-      Alert.alert('HeatMap', 'Unable to load HeatMaps');
-      // Log this response when the heatmaps can't be retrieved
-      log.sendLog(
-        constants.LOGS_ENDPOINT,
-        'onLoadHeatMapsFailure',
-        error.message,
-      );
-    });
 }
 
 /**
@@ -116,20 +118,20 @@ async function getGeolocationServices(handleSuccess, handleFailure) {
  */
 function handleGeolocationOperation(handleSuccess, handleFailure) {
   Geolocation.getCurrentPosition(
-    () => getGeolocation(handleSuccess, handleFailure),
-    () =>
-      Alert.alert('Location', 'Please allow location access to display Map', [
-        {
-          text: 'Allow',
-          onPress: () => getGeolocationServices(handleSuccess, handleFailure),
-        },
-        {
-          text: 'Deny',
-          onPress: () => console.log('Do nothing'),
-          style: 'cancel',
-        },
-      ]),
-    {enableHighAccuracy: true, timeout: 1000, maximumAge: 100},
+      () => getGeolocation(handleSuccess, handleFailure),
+      () =>
+          Alert.alert('Location', 'Please allow location access to display Map', [
+            {
+              text: 'Allow',
+              onPress: () => getGeolocationServices(handleSuccess, handleFailure),
+            },
+            {
+              text: 'Deny',
+              onPress: () => console.log('Do nothing'),
+              style: 'cancel',
+            },
+          ]),
+      {enableHighAccuracy: true, timeout: 1000, maximumAge: 100},
   );
 }
 

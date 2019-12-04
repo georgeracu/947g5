@@ -31,9 +31,9 @@ export default class App extends Component {
   onGeolocationSuccess = async geoCoords => {
     // Log this response when the Geolocation has been retrieved
     log.sendLog(
-      constants.LOGS_ENDPOINT,
-      'onRequestGeolocationSuccess',
-      geoCoords.coords,
+        constants.LOGS_ENDPOINT,
+        'onRequestGeolocationSuccess',
+        geoCoords.coords,
     );
 
     this.setState({
@@ -42,13 +42,27 @@ export default class App extends Component {
     });
 
     geolocation.getHeatMapsCoordinates(
-      constants.HEATMAPS_ENDPOINT,
-      geoCoords.coords,
-      newState => {
-        this.setState(newState);
-      },
+        constants.HEATMAPS_ENDPOINT,
+        geoCoords.coords,
+        1,
+        newState => {
+          this.setState(newState);
+        },
     );
   };
+
+
+  async showMarkers(region) {
+    let zoom = Math.round(Math.log(360 / region.longitudeDelta) / Math.LN2);
+    await geolocation.getHeatMapsCoordinates(
+        constants.HEATMAPS_ENDPOINT,
+        region.coords,
+        zoom,
+        newState => {
+          this.setState(newState);
+        },
+    );
+  }
 
   /**
    * This method updates the state with the Geolocation error message
@@ -57,52 +71,53 @@ export default class App extends Component {
   onGeolocationError = async error => {
     // Log this response when the Geolocation has been retrieved in error
     log.sendLog(
-      constants.LOGS_ENDPOINT,
-      'onRequestGeolocationFailure',
-      error.message,
+        constants.LOGS_ENDPOINT,
+        'onRequestGeolocationFailure',
+        error.message,
     );
   };
 
   async componentDidMount(): void {
     geolocation.getGeolocationServices(
-      this.onGeolocationSuccess,
-      this.onGeolocationError,
+        this.onGeolocationSuccess,
+        this.onGeolocationError,
     );
   }
 
   render() {
     return (
-      <View style={styles.root}>
-        <View style={styles.mapContainer}>
-          {this.state.coords.latitude ? (
-            <MapView
-              provider={PROVIDER_GOOGLE}
-              style={styles.map}
-              region={{
-                latitude: this.state.coords.latitude,
-                longitude: this.state.coords.longitude,
-                latitudeDelta: this.region.latitudeDelta,
-                longitudeDelta: this.region.longitudeDelta,
-              }}
-              onRegionChangeComplete={region => (this.region = region)}
-              loadingEnabled={true}>
-              <Marker
-                coordinate={{
-                  latitude: this.state.coords.latitude,
-                  longitude: this.state.coords.longitude,
-                }}
-              />
-              {this.state.heatMapsCoordinates.length > 0 ? (
-                <Heatmap
-                  points={this.state.heatMapsCoordinates}
-                  opacity={1}
-                  radius={20}
-                />
-              ) : null}
-            </MapView>
-          ) : null}
+        <View style={styles.root}>
+          <View style={styles.mapContainer}>
+            {this.state.coords.latitude ? (
+                <MapView
+                    provider={PROVIDER_GOOGLE}
+                    style={styles.map}
+                    region={{
+                      latitude: this.state.coords.latitude,
+                      longitude: this.state.coords.longitude,
+                      latitudeDelta: this.region.latitudeDelta,
+                      longitudeDelta: this.region.longitudeDelta,
+                    }}
+                    onRegionChangeComplete={region => {this.region = region;
+                    this.showMarkers(region);}}
+                    loadingEnabled={true}>
+                  <Marker
+                      coordinate={{
+                        latitude: this.state.coords.latitude,
+                        longitude: this.state.coords.longitude,
+                      }}
+                  />
+                  {this.state.heatMapsCoordinates.length > 0 ? (
+                      <Heatmap
+                          points={this.state.heatMapsCoordinates}
+                          opacity={1}
+                          radius={20}
+                      />
+                  ) : null}
+                </MapView>
+            ) : null}
+          </View>
         </View>
-      </View>
     );
   }
 }

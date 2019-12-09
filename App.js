@@ -4,6 +4,7 @@ import MapView, {Marker, Heatmap, PROVIDER_GOOGLE} from 'react-native-maps';
 import geolocation from './geolocation/geolocation';
 import log from './utils/logs';
 import constants from './utils/constants';
+import DynamicHeatmap from './geolocation/DynamicHeatmap';
 
 export default class App extends Component {
   constructor(props) {
@@ -31,9 +32,9 @@ export default class App extends Component {
   onGeolocationSuccess = async geoCoords => {
     // Log this response when the Geolocation has been retrieved
     log.sendLog(
-        constants.LOGS_ENDPOINT,
-        'onRequestGeolocationSuccess',
-        geoCoords.coords,
+      constants.LOGS_ENDPOINT,
+      'onRequestGeolocationSuccess',
+      geoCoords.coords,
     );
 
     this.setState({
@@ -41,25 +42,29 @@ export default class App extends Component {
       heatMapsCoordinates: [],
     });
 
-    geolocation.getHeatMapsCoordinates(
+    /*geolocation.getHeatMapsCoordinates(
         constants.HEATMAPS_ENDPOINT,
         geoCoords.coords,
         newState => {
           this.setState(newState);
         },
+    );*/
+
+    await DynamicHeatmap.dynamicheatmap(
+      geoCoords.coords.longitude,
+      geoCoords.coords.latitude,
     );
   };
-
 
   async showMarkers(region) {
     let zoom = Math.round(Math.log(360 / region.longitudeDelta) / Math.LN2);
     await geolocation.getHeatMapsCoordinates2(
-        constants.HEATMAPS_ENDPOINT,
-        region.coords,
-        zoom,
-        newState => {
-          this.setState(newState);
-        },
+      constants.HEATMAPS_ENDPOINT,
+      region.coords,
+      zoom,
+      newState => {
+        this.setState(newState);
+      },
     );
   }
 
@@ -70,53 +75,55 @@ export default class App extends Component {
   onGeolocationError = async error => {
     // Log this response when the Geolocation has been retrieved in error
     log.sendLog(
-        constants.LOGS_ENDPOINT,
-        'onRequestGeolocationFailure',
-        error.message,
+      constants.LOGS_ENDPOINT,
+      'onRequestGeolocationFailure',
+      error.message,
     );
   };
 
   async componentDidMount(): void {
     geolocation.getGeolocationServices(
-        this.onGeolocationSuccess,
-        this.onGeolocationError,
+      this.onGeolocationSuccess,
+      this.onGeolocationError,
     );
   }
 
   render() {
     return (
-        <View style={styles.root}>
-          <View style={styles.mapContainer}>
-            {this.state.coords.latitude ? (
-                <MapView
-                    provider={PROVIDER_GOOGLE}
-                    style={styles.map}
-                    region={{
-                      latitude: this.state.coords.latitude,
-                      longitude: this.state.coords.longitude,
-                      latitudeDelta: this.region.latitudeDelta,
-                      longitudeDelta: this.region.longitudeDelta,
-                    }}
-                    onRegionChangeComplete={region => {this.region = region;
-                    this.showMarkers(region);}}
-                    loadingEnabled={true}>
-                  <Marker
-                      coordinate={{
-                        latitude: this.state.coords.latitude,
-                        longitude: this.state.coords.longitude,
-                      }}
-                  />
-                  {this.state.heatMapsCoordinates.length > 0 ? (
-                      <Heatmap
-                          points={this.state.heatMapsCoordinates}
-                          opacity={1}
-                          radius={20}
-                      />
-                  ) : null}
-                </MapView>
-            ) : null}
-          </View>
+      <View style={styles.root}>
+        <View style={styles.mapContainer}>
+          {this.state.coords.latitude ? (
+            <MapView
+              provider={PROVIDER_GOOGLE}
+              style={styles.map}
+              region={{
+                latitude: this.state.coords.latitude,
+                longitude: this.state.coords.longitude,
+                latitudeDelta: this.region.latitudeDelta,
+                longitudeDelta: this.region.longitudeDelta,
+              }}
+              onRegionChangeComplete={region => {
+                this.region = region;
+                this.showMarkers(region);
+              }}
+              loadingEnabled={true}>
+              <Marker
+                coordinate={{
+                  latitude: this.state.coords.latitude,
+                  longitude: this.state.coords.longitude,
+                }}
+              />
+              {this.state.heatMapsCoordinates.length > 0 ? (
+                <Heatmap
+                  points={this.state.heatMapsCoordinates}
+                  opacity={1}
+                  radius={20}
+                />
+              ) : null}
+            </MapView>
+          ) : null}
         </View>
+      </View>
     );
   }
 }

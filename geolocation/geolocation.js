@@ -92,6 +92,30 @@ async function getHeatMapsCoordinates(endpoint, coords, handleState) {
 }
 
 /**
+ * This functions handles the geolocation operation
+ * @param handleSuccess
+ * @param handleFailure
+ */
+function handleGeolocationOperation(handleSuccess, handleFailure) {
+    Geolocation.getCurrentPosition(
+        () => getGeolocation(handleSuccess, handleFailure),
+        () =>
+            Alert.alert('Location', 'Please allow location access to display Map', [
+                {
+                    text: 'Allow',
+                    onPress: () => getGeolocationServices(handleSuccess, handleFailure),
+                },
+                {
+                    text: 'Deny',
+                    onPress: () => console.log('Do nothing'),
+                    style: 'cancel',
+                },
+            ]),
+        {enableHighAccuracy: true, timeout: 1000, maximumAge: 100},
+    );
+}
+
+/**
  * This function checks geolocation permission and request it if granted or displays a rationale if not.
  * @param handleSuccess
  * @param handleFailure
@@ -110,29 +134,7 @@ async function getGeolocationServices(handleSuccess, handleFailure) {
   }
 }
 
-/**
- * This functions handles the geolocation operation
- * @param handleSuccess
- * @param handleFailure
- */
-function handleGeolocationOperation(handleSuccess, handleFailure) {
-  Geolocation.getCurrentPosition(
-      () => getGeolocation(handleSuccess, handleFailure),
-      () =>
-          Alert.alert('Location', 'Please allow location access to display Map', [
-            {
-              text: 'Allow',
-              onPress: () => getGeolocationServices(handleSuccess, handleFailure),
-            },
-            {
-              text: 'Deny',
-              onPress: () => console.log('Do nothing'),
-              style: 'cancel',
-            },
-          ]),
-      {enableHighAccuracy: true, timeout: 1000, maximumAge: 100},
-  );
-}
+
 
 async function getHeatMapsCoordinates2(endpoint, coords, zoom, handleState) {
     fetch(endpoint, {
@@ -166,48 +168,6 @@ async function getHeatMapsCoordinates2(endpoint, coords, zoom, handleState) {
         });
 }
 
-/**
- * This function checks geolocation permission and request it if granted or displays a rationale if not.
- * @param handleSuccess
- * @param handleFailure
- * @returns {Promise<void>}
- */
-async function getGeolocationServices(handleSuccess, handleFailure) {
-    if (Platform.OS === 'android') {
-        const isLocationGranted = await requestGeolocationPermissionAndroid();
-        if (isLocationGranted) {
-            handleGeolocationOperation(handleSuccess, handleFailure);
-        } else {
-            getGeolocationServices(handleSuccess, handleFailure);
-        }
-    } else {
-        handleGeolocationOperation(handleSuccess, handleFailure);
-    }
-}
-
-/**
- * This functions handles the geolocation operation
- * @param handleSuccess
- * @param handleFailure
- */
-function handleGeolocationOperation(handleSuccess, handleFailure) {
-    Geolocation.getCurrentPosition(
-        () => getGeolocation(handleSuccess, handleFailure),
-        () =>
-            Alert.alert('Location', 'Please allow location access to display Map', [
-                {
-                    text: 'Allow',
-                    onPress: () => getGeolocationServices(handleSuccess, handleFailure),
-                },
-                {
-                    text: 'Deny',
-                    onPress: () => console.log('Do nothing'),
-                    style: 'cancel',
-                },
-            ]),
-        {enableHighAccuracy: true, timeout: 1000, maximumAge: 100},
-    );
-}
 
 
 module.exports = {

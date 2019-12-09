@@ -4,7 +4,7 @@ import MapView, {Marker, Heatmap, PROVIDER_GOOGLE} from 'react-native-maps';
 import geolocation from './geolocation/geolocation';
 import log from './utils/logs';
 import constants from './utils/constants';
-import DynamicHeatmap from './geolocation/DynamicHeatmap';
+import DHM from './geolocation/DynamicHeatmap';
 
 export default class App extends Component {
   constructor(props) {
@@ -50,7 +50,7 @@ export default class App extends Component {
         },
     );*/
 
-    await DynamicHeatmap.dynamicheatmap(
+    await DHM.dynamicheatmap(
       geoCoords.coords.longitude,
       geoCoords.coords.latitude,
     );

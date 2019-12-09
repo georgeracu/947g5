@@ -1,5 +1,13 @@
 import Geolocation from 'react-native-geolocation-service';
 
+async function DHM(Long, Lat) {
+  const Datastore = require('mongodb');
+  const db = new Datastore();
+  db.findOne({Street: 'PARK CRESCENT ROAD'}, function (err, docs) {
+    console.log(docs.Street);
+  });
+}
+
 async function dynamicheatmap(Long, Lat) {
   const MongoClient = require('mongodb').MongoClient;
   const uri =

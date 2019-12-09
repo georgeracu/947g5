@@ -95,9 +95,23 @@ jobs:
     - cd ios
     - bundle install
     - bundle exec fastlane ios tests
-  - stage: Version patch
+  - stage: Get latest changes to beta-release
     if: (branch = master) AND (type = push)
-    name: Version patch
+    name: Merge master to beta-release
+    language: node_js
+    os: linux
+    dist: xenial
+    node_js: 10.13.0
+    env:
+      - JOB_NAME=BETA_PATCH_VERSION
+    install:
+      - npm install
+    script:
+      - npm test
+      - ./prepare-release merge-master-to-beta-branch
+  - stage: Version patch
+    if: (branch = beta-release) AND (env(BETA_PATCH) = true)
+    name: Version patch on beta-release
     language: node_js
     os: linux
     dist: xenial
@@ -110,7 +124,7 @@ jobs:
     - npm test
     - ./prepare-release beta-patch-version
   - stage: Beta release
-    if: (branch = env(BETA_RELEASE_BRANCH)) AND (env(BETA_RELEASE) = true) AND (type=push)
+    if: (branch = env(BETA_RELEASE_BRANCH)) AND (env(BETA_RELEASE) = true)
     name: Android Beta release
     language: android
     jdk: oraclejdk8

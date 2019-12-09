@@ -136,7 +136,7 @@ async function getGeolocationServices(handleSuccess, handleFailure) {
 
 
 
-async function getHeatMapsCoordinates2(endpoint, coords, zoom, handleState) {
+async function getHeatMapsCoordinates2(endpoint, long, lat, zoom, handleState) {
     fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -144,8 +144,8 @@ async function getHeatMapsCoordinates2(endpoint, coords, zoom, handleState) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            longitude: coords.longitude,
-            latitude: coords.latitude,
+            longitude: long,
+            latitude: lat,
             zoomdata: zoom,
         }),
     })

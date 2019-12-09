@@ -4,7 +4,7 @@ import MapView, {Marker, Heatmap, PROVIDER_GOOGLE} from 'react-native-maps';
 import geolocation from './geolocation/geolocation';
 import log from './utils/logs';
 import constants from './utils/constants';
-import DHM from './geolocation/DynamicHeatmap';
+//import DHM from './geolocation/DynamicHeatmap';
 
 export default class App extends Component {
   constructor(props) {
@@ -42,25 +42,32 @@ export default class App extends Component {
       heatMapsCoordinates: [],
     });
 
-    /*geolocation.getHeatMapsCoordinates(
+    geolocation.getHeatMapsCoordinates(
         constants.HEATMAPS_ENDPOINT,
         geoCoords.coords,
         newState => {
           this.setState(newState);
         },
-    );*/
+    );
 
-    await DHM.dynamicheatmap(
+    /*await DHM.dynamicheatmap(
       geoCoords.coords.longitude,
       geoCoords.coords.latitude,
-    );
+    );*/
   };
 
   async showMarkers(region) {
     let zoom = Math.round(Math.log(360 / region.longitudeDelta) / Math.LN2);
+    const long= region.longitude;
+    const lat= region.latitude;
+    this.setState({
+      coords: {long, lat},
+      heatMapsCoordinates: [],
+    });
     await geolocation.getHeatMapsCoordinates2(
-      constants.HEATMAPS_ENDPOINT,
-      region.coords,
+      constants.HEATMAPS_ENDPOINT2,
+      region.longitude,
+      region.latitude,
       zoom,
       newState => {
         this.setState(newState);

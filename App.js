@@ -9,7 +9,7 @@ import constants from './utils/constants';
 export default class App extends Component {
   constructor(props) {
     super(props);
-
+    //let currentzoom= 3;
     /**
      * This state object holds the response from the Geolocation API
      * @type {{timeStamp: string, altitude: number, latitude: number, errorMessage: string, accuracy: number, speed: number, longitude: number}}
@@ -17,6 +17,7 @@ export default class App extends Component {
     this.state = {
       coords: {},
       heatMapsCoordinates: [],
+      zoom: 3,
     };
 
     this.region = {
@@ -40,15 +41,16 @@ export default class App extends Component {
     this.setState({
       coords: geoCoords.coords,
       heatMapsCoordinates: [],
+      zoom: 3,
     });
 
-    geolocation.getHeatMapsCoordinates(
+    /*geolocation.getHeatMapsCoordinates(
         constants.HEATMAPS_ENDPOINT,
         geoCoords.coords,
         newState => {
           this.setState(newState);
         },
-    );
+    );*/
 
     /*await DHM.dynamicheatmap(
       geoCoords.coords.longitude,
@@ -56,23 +58,36 @@ export default class App extends Component {
     );*/
   };
 
-  async showMarkers(region) {
+  async showMarkers(region, coords) {
     let zoom = Math.round(Math.log(360 / region.longitudeDelta) / Math.LN2);
-    const long= region.longitude;
-    const lat= region.latitude;
-    this.setState({
-      coords: {long, lat},
-      heatMapsCoordinates: [],
-    });
-    await geolocation.getHeatMapsCoordinates2(
-      constants.HEATMAPS_ENDPOINT2,
-      region.longitude,
-      region.latitude,
-      zoom,
-      newState => {
-        this.setState(newState);
-      },
-    );
+    if (this.state.zoom !== zoom) {
+      const long = coords.longitude;
+      const lat = coords.latitude;
+
+      // Log this response when the Geolocation has been retrieved
+      /*log.sendLog(
+          constants.LOGS_ENDPOINT,
+          'onRequestGeolocationSuccess',
+          long,
+          lat,
+      );*/
+
+      this.setState({
+        coords: coords,
+        heatMapsCoordinates: [],
+        zoom: zoom,
+      });
+      const ratio = 156543.03392 * Math.cos(coords.latitude * Math.PI / 180) / Math.pow(2, zoom);
+      await geolocation.getHeatMapsCoordinates2(
+        constants.HEATMAPS_ENDPOINT2,
+        coords.longitude,
+        coords.latitude,
+        ratio,
+        newState => {
+          this.setState(newState);
+        },
+      );
+    }
   }
 
   /**
@@ -111,13 +126,16 @@ export default class App extends Component {
               }}
               onRegionChangeComplete={region => {
                 this.region = region;
-                this.showMarkers(region);
+                this.showMarkers(region, this.state.coords);
               }}
               loadingEnabled={true}>
               <Marker
                 coordinate={{
                   latitude: this.state.coords.latitude,
                   longitude: this.state.coords.longitude,
+                }}
+                onDragEnd={region => {
+                  this.region = region;
                 }}
               />
               {this.state.heatMapsCoordinates.length > 0 ? (

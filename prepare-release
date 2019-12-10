@@ -4,16 +4,22 @@ set -eu -o pipefail
 
 PROGRAM_NAME=$0
 
-function merge-master-to-beta-branch() {
+function checkout-branch() {
   git remote set-url origin https://${GITHUB_TOKEN}@github.com/georgeracu/947g5.git
   git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
   git fetch --all
   git checkout $BETA_RELEASE_BRANCH
+ 
+}
+
+function merge-master-to-beta-branch() {
+  checkout-branch
   git merge master --strategy-option theirs --commit
   git push origin $BETA_RELEASE_BRANCH 2>&1
 }
 
 function beta-patch-version() {
+  checkout-branch
   npm version patch --no-git-tag-version --allow-same-version
   git add package.json
   git add package-lock.json

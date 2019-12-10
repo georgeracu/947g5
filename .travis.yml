@@ -227,6 +227,3 @@ jobs:
     - bundle install
     - bundle exec fastlane install_plugins
     - bundle exec fastlane android release
-env:
-  global:
-  - secure: lfaUcHTRvRGVo33D0xk2t8HYUo4KGVhhY5Xz7QAqD861HoDDB5UzeNAOGbCVJAilmiq95OpYp2wiXk1ppWVuW/PorOAgxDIk/AfE3qYm2WgvxBItmjo/MtZd/fdzOLAc73ZBu3y6WL/7eiPpWXuYIh5Fnb26QH2HVvaMrxVDHPLn+Wv3Gi5vl/yEZTFQrS8f1552phOUcm828EvgaTVEIq3RPrWLi27sAVcePr1X80Aji/7I1B6AY5BfMv6NAP9svO8MR+a1/tURBJupN58QLks44sMK84+5dpDRmz+3kf9El2RZUL7Wi/tz0sX1YWkpCoSQZMcGkQq7P5jFMBteEmy1Xs/OYe+hCg75kb831OzgbCaPQr+ocEZFw69OrCMDPVg1U/XSI2XS2H0Bim9br1JXQWUEtFJ8ccMIVKjQ/3W1R7el3nZrCis5d5X7CnongwCYpuqr2rY1nNreK6hQ4DSGwOkjzjzC0fneRcz3IgnyE0gaQMQpf0swIKIO6tZFN2qtuoqTWBhAWywjnJCminYZKMcdf0FxaY4l4b0eFdLyKeAeheCkOFsZ/Vk+JuXB8g7U/TMdIgYhkBVOaQppgQNj3sIgCfdCwb0zyO8HsI8OsoqJ/gDV+5joZxhTLQO8tRJWbrdXc44ThRS0ab+sCT8I6KfWx9z/+GVy/x+uKms=

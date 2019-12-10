@@ -44,6 +44,15 @@ platform :android do
     )
   end
 
+  desc "Publish AAB to Google Play Store"
+  lane :playstore do
+    gradle(
+        task: 'assemble',
+        build_type: 'Release'
+    )
+    upload_to_play_store # Uploads the APK built in the gradle step above and releases it to all production users
+  end
+
   # You can define as many lanes as you want
 
   after_all do |lane|

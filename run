@@ -27,13 +27,27 @@ function ios-tests {
   cd $PROJECT_ROOT
 }
 
+function copy-google-service-account() {
+  cp infra/secrets/dev/google-services.json android/app
+  cp infra/secrets/dev/newagent-55cc5-063ad922bb70.json android
+}
+
+function checkout-branch-beta-release() {
+  git remote set-url origin https://${GITHUB_TOKEN}@github.com/georgeracu/947g5.git
+  git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+  git fetch --all
+  git checkout $BETA_RELEASE_BRANCH
+}
+
 function usage {
     echo ""
     echo "Example usage: $PROGRAM_NAME [command]"
     echo ""
     echo "Available commands"
-    echo "  android-tests           runs all Android tests using fastlane"
-    echo "  ios-tests               runs all iOS tests using fastlane"
+    echo "  android-tests                runs all Android tests using fastlane"
+    echo "  ios-tests                    runs all iOS tests using fastlane"
+    echo "  copy-google-service-account  Copy files from secrets into the android app based on the environment"
+    echo "  checkout-branch-beta-release Checkout branch beta-release"
     echo "  help | --help | -h      all available commands"
     echo ""
     exit 1
@@ -56,6 +70,8 @@ shift || true
 case ${CMD} in
   android-tests) android-tests;;
   ios-tests) ios-tests;;
+  copy-google-service-account) copy-google-service-account;;
+  checkout-branch-beta-release) checkout-branch-beta-release;;
   help) help;;
   --help) help;;
   --h) help;;

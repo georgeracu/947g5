@@ -154,6 +154,7 @@ jobs:
       - android-sdk-license-.+
       - google-gdk-license-.+
     before_install:
+    - ./prepare-release checkout-branch
     - openssl aes-256-cbc -K $encrypted_b5811d19e6fa_key -iv $encrypted_b5811d19e6fa_iv
       -in secrets.tar.enc -out secrets.tar -d
     - tar xvf secrets.tar

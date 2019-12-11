@@ -69,6 +69,7 @@ async function getHeatMapsCoordinates(endpoint, coords, handleState) {
     body: JSON.stringify({
       longitude: coords.longitude,
       latitude: coords.latitude,
+      radius: 5,
     }),
   })
     .then(response => {

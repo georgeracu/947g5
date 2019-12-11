@@ -10,8 +10,8 @@
     "android-test": "./run android-tests",
     "ios-test": "./run ios-tests",
     "clean": "rm -rf node_modules",
-    "lint": "eslint '**/*.js'",
-    "lint-fix": "eslint '**/*.js' --fix"
+    "lint": "eslint \"**/*.js\"",
+    "lint-fix": "eslint \"**/*.js\" --fix"
   },
   "dependencies": {
     "@react-native-community/cli-platform-android": "^2.9.0",

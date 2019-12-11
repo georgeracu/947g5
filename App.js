@@ -90,8 +90,11 @@ export default class App extends Component {
                 coordinate={{
                   latitude: this.state.coords.latitude,
                   longitude: this.state.coords.longitude,
-                }}
-              />
+                }}>
+                <View style={styles.radius}>
+                  <View style={styles.marker} />
+                </View>
+              </Marker>
               {this.state.heatMapsCoordinates.length > 0 ? (
                 <Heatmap
                   points={this.state.heatMapsCoordinates}
@@ -118,5 +121,25 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+  },
+  radius: {
+    height: 30,
+    width: 30,
+    borderRadius: 30 / 2,
+    overflow: 'hidden',
+    backgroundColor: 'rgba(0, 122, 255, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 112, 255, 0.3)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  marker: {
+    height: 20,
+    width: 20,
+    borderWidth: 3,
+    borderColor: 'white',
+    borderRadius: 20 / 2,
+    overflow: 'hidden',
+    backgroundColor: '#007AFF',
   },
 });

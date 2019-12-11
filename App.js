@@ -44,7 +44,6 @@ export default class App extends Component {
     geolocation.getHeatMapsCoordinates(
       constants.HEATMAPS_ENDPOINT,
       geoCoords.coords,
-      5,
       newState => {
         this.setState(newState);
       },

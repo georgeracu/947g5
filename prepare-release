@@ -9,7 +9,6 @@ function checkout-branch() {
   git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
   git fetch --all
   git checkout $BETA_RELEASE_BRANCH
- 
 }
 
 function merge-master-to-beta-branch() {

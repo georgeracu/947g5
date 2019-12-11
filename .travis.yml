@@ -109,8 +109,8 @@ jobs:
     script:
       - npm test
       - ./prepare-release merge-master-to-beta-branch
-  - stage: Version patch
-    if: (branch = beta-release) AND (env(BETA_PATCH) = true)
+  - stage: Version patch on beta-release
+    if: (branch = master) AND (type = push) AND (env(BETA_PATCH) = true)
     name: Version patch on beta-release
     language: node_js
     os: linux
@@ -124,7 +124,7 @@ jobs:
     - npm test
     - ./prepare-release beta-patch-version
   - stage: Beta release
-    if: (branch = env(BETA_RELEASE_BRANCH)) AND (env(BETA_RELEASE) = true)
+    if: (branch = master) AND (type = push) AND (env(BETA_RELEASE) = true)
     name: Android Beta release
     language: android
     jdk: oraclejdk8

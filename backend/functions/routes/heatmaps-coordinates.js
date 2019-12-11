@@ -12,13 +12,13 @@ app.post('/heatmaps', (req, res) => {
 
   /**
    * Average prices on the whole dataset
+   * Max price: 71400000;
+   * Min price = 498;
+   * Avg price: 272745.7789;
+   * std dev = 394919.9604536758;
    */
-  const max = 71400000;
-  const min = 498;
-  const avg = 272745.7789;
-  const std = 394919.9604536758;
 
-  function getWeight() {}
+  const avg = 272745.7789;
 
   client.connect(err => {
     if (err) {
@@ -27,9 +27,6 @@ app.post('/heatmaps', (req, res) => {
     } else {
       console.log('Successfully connected to the DB');
       const parameters = req.body;
-      console.log(
-        'Attempting to load dynamic radius, value:  ' + parameters.radius,
-      );
 
       const coordinatesQuery = {
         location: {
@@ -57,7 +54,7 @@ app.post('/heatmaps', (req, res) => {
               return {
                 latitude: coordinate.location.coordinates[1],
                 longitude: coordinate.location.coordinates[0],
-                weight: coordinate.price.valueOf() / avg,
+                weight: coordinate.Price / avg,
               };
             });
             res.send(JSON.stringify(modifiedResults));

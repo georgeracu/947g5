@@ -2,6 +2,7 @@ secrets.tar
 infra/secrets
 ios/fastlane/test_output
 android/fastlane/test_output
+coverage/
 # OSX
 #
 .DS_Store

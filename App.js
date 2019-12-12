@@ -1,9 +1,39 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import MapView, {Marker, Heatmap, PROVIDER_GOOGLE} from 'react-native-maps';
 import geolocation from './geolocation/geolocation';
 import log from './utils/logs';
 import constants from './utils/constants';
+
+import {FloatingAction} from 'react-native-floating-action';
+
+const actions = [
+  {
+    text: '5km',
+    name: '5',
+    position: 1,
+  },
+  {
+    text: '4km',
+    name: '4',
+    position: 2,
+  },
+  {
+    text: '3km',
+    name: '3',
+    position: 3,
+  },
+  {
+    text: '2km',
+    name: '2',
+    position: 4,
+  },
+  {
+    text: '1km',
+    name: '1',
+    position: 5,
+  },
+];
 
 export default class App extends Component {
   constructor(props) {
@@ -16,6 +46,8 @@ export default class App extends Component {
     this.state = {
       coords: {},
       heatMapsCoordinates: [],
+      loading: true,
+      setRadius: 0.1,
     };
 
     this.region = {
@@ -41,14 +73,32 @@ export default class App extends Component {
       heatMapsCoordinates: [],
     });
 
-    geolocation.getHeatMapsCoordinates(
+    this.heatMapWrapper(geoCoords.coords);
+  };
+
+  // Wrap the geolocation in a function so it can be called on map updates.
+  heatMapWrapper = async coordinates => {
+    this.setState({coords: coordinates, loading: true});
+    await geolocation.getHeatMapsCoordinates(
       constants.HEATMAPS_ENDPOINT,
-      geoCoords.coords,
+      coordinates,
+      this.state.setRadius,
       newState => {
         this.setState(newState);
       },
     );
   };
+
+  // Returns a loading circle to display during await functions.
+  showLoading() {
+    return (
+      this.state.loading && (
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )
+    );
+  }
 
   /**
    * This method updates the state with the Geolocation error message
@@ -64,7 +114,7 @@ export default class App extends Component {
   };
 
   async componentDidMount(): void {
-    geolocation.getGeolocationServices(
+    await geolocation.getGeolocationServices(
       this.onGeolocationSuccess,
       this.onGeolocationError,
     );
@@ -72,7 +122,9 @@ export default class App extends Component {
 
   render() {
     return (
-      <View style={styles.root}>
+      <View
+        style={styles.root}
+        pointerEvents={this.state.loading ? 'none' : 'auto'}>
         <View style={styles.mapContainer}>
           {this.state.coords.latitude ? (
             <MapView
@@ -85,7 +137,8 @@ export default class App extends Component {
                 longitudeDelta: this.region.longitudeDelta,
               }}
               onRegionChangeComplete={region => (this.region = region)}
-              loadingEnabled={true}>
+              loadingEnabled={true}
+              onPress={e => this.heatMapWrapper(e.nativeEvent.coordinate)}>
               <Marker
                 coordinate={{
                   latitude: this.state.coords.latitude,
@@ -105,6 +158,14 @@ export default class App extends Component {
             </MapView>
           ) : null}
         </View>
+        {this.showLoading()}
+        <FloatingAction
+          actions={actions}
+          onPressItem={name => {
+            this.setState({setRadius: Number(name)});
+            this.heatMapWrapper(this.state.coords);
+          }}
+        />
       </View>
     );
   }
@@ -141,5 +202,11 @@ const styles = StyleSheet.create({
     borderRadius: 20 / 2,
     overflow: 'hidden',
     backgroundColor: '#007AFF',
+  },
+  loading: {
+    position: 'absolute',
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
   },
 });

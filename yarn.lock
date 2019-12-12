@@ -967,6 +967,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/geolocation/-/geolocation-1.4.2.tgz#7228c6d37c2f55017af9c49c2b9ad586d9bcb9f8"
   integrity sha512-9x9dHDeUXnh2larA4zTT3y/tXPmRnysh5o9fsNbGcnUKPj1BUCIHnGGPxEIDnwP1DNIMP2DN9DmuMHImtTbX6A==
 
+"@react-native-community/slider@^2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-2.0.7.tgz#5c2d474d6f5210193dd64d802254f45a8528a9a7"
+  integrity sha512-MepSA4XOQbMAE/vc47XsFPPUtWVB//l9ea+x9Bp7lKwaBbtwRUMC1miDFO045ud4YEQ7a0PrviczyxkoiSUFwQ==
+
 "@react-native-firebase/analytics@^6.0.3":
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-6.2.0.tgz#33da0c698f62be3d6ac57a859de04d3c150c0a61"
@@ -5626,6 +5631,11 @@ react-native-device-info@^5.2.1:
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-5.3.1.tgz#d764732c4841b6b6c2f42516e8840075717ea88a"
   integrity sha512-e/fRDoah+HxItscOJTGJY8zyVKmBUdf53VWIDGLGV4VVZ0mfzIQ2uo0ULGri0vjGUYqgyqgnW3jybPSznMxKcA==
+
+react-native-floating-action@^1.19.1:
+  version "1.19.1"
+  resolved "https://registry.yarnpkg.com/react-native-floating-action/-/react-native-floating-action-1.19.1.tgz#fc3dcd0441ecbaf2d870b71f6db27f2db0f811b3"
+  integrity sha512-6zgiCJyV63TOxpDKK+OxzhghMcBSn1Qhjb8p8TrfrUGAkzh7gQcmNN4ahq1CVbrN0ZpKhWET68WeifisYnQWyg==
 
 react-native-geolocation-service@^3.1.0:
   version "3.1.0"

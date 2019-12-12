@@ -1,16 +1,25 @@
 import React, {Component} from 'react';
-import {
-  View,
-  Text,
-  ListView,
-  StyleSheet,
-  TouchableHighlight,
-  ActivityIndicator,
-} from 'react-native';
+import {View, StyleSheet, ActivityIndicator, Button, Alert} from 'react-native';
 import MapView, {Marker, Heatmap, PROVIDER_GOOGLE} from 'react-native-maps';
 import geolocation from './geolocation/geolocation';
 import log from './utils/logs';
 import constants from './utils/constants';
+
+import Slider from '@react-native-community/slider';
+import {FloatingAction} from 'react-native-floating-action';
+
+const actions = [
+  {
+    text: 'Radius',
+    name: 'bt_radius',
+    position: 1,
+  },
+  {
+    text: 'Custom position',
+    name: 'bt_cust_pos',
+    position: 2,
+  },
+];
 
 export default class App extends Component {
   constructor(props) {
@@ -57,6 +66,7 @@ export default class App extends Component {
     await geolocation.getHeatMapsCoordinates(
       constants.HEATMAPS_ENDPOINT,
       coordinates,
+      0.1,
       newState => {
         this.setState(newState);
       },
@@ -67,7 +77,7 @@ export default class App extends Component {
     return (
       this.state.loading && (
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="#0000ff"/>
+          <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )
     );
@@ -131,7 +141,22 @@ export default class App extends Component {
             </MapView>
           ) : null}
         </View>
+        {/*<Slider*/}
+        {/*  style={styles.slider}*/}
+        {/*  minimumValue={1}*/}
+        {/*  maximumValue={5}*/}
+        {/*  step={1}*/}
+        {/*  value={1}*/}
+        {/*  minimumTrackTintColor="#FFFFFF"*/}
+        {/*  maximumTrackTintColor="#000000"*/}
+        {/*/>*/}
         {this.showLoading()}
+        <FloatingAction
+          actions={actions}
+          onPressItem={name => {
+            console.log(`selected button: ${name}`);
+          }}
+        />
       </View>
     );
   }
@@ -171,12 +196,21 @@ const styles = StyleSheet.create({
   },
   loading: {
     position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
   },
+  button: {
+    position: 'absolute',
+    height: 50,
+  },
+  // slider: {
+  //   position: 'absolute',
+  //   alignItems: 'center',
+  //   flex: 1,
+  //   justifyContent: 'center',
+  //   width: 250,
+  //   height: 20,
+  //   bottom: 30,
+  // },
 });

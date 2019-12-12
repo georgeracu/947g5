@@ -59,7 +59,12 @@ async function getGeolocation(handleSuccess, handleFailure) {
  * @param handleState
  * @returns {Promise<void>}
  */
-async function getHeatMapsCoordinates(endpoint, coords, handleState) {
+async function getHeatMapsCoordinates(
+  endpoint,
+  coords,
+  queryRadius,
+  handleState,
+) {
   fetch(endpoint, {
     method: 'POST',
     headers: {
@@ -69,7 +74,7 @@ async function getHeatMapsCoordinates(endpoint, coords, handleState) {
     body: JSON.stringify({
       longitude: coords.longitude,
       latitude: coords.latitude,
-      radius: 5,
+      radius: queryRadius,
     }),
   })
     .then(response => {

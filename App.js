@@ -53,7 +53,7 @@ export default class App extends Component {
   };
 
   heatMapWrapper = async coordinates => {
-    this.setState({loading: true});
+    this.setState({coords: coordinates, loading: true});
     await geolocation.getHeatMapsCoordinates(
       constants.HEATMAPS_ENDPOINT,
       coordinates,

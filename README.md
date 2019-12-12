@@ -350,9 +350,10 @@ How to start the app for iOS:
 * With preset `react-native`
 * Mocked data in directory `__mocks__`
 * Running tests with `npm test`
-* Recreating the snapshots when the UI changes with `npm test -- -u`
+* Recreating the snapshots when the UI changes with `npm run test-update-snapshot`
 * Android tests from npm: `npm run android-test`
 * iOS tests from npm: `npm run ios-test`
+* Test coverage with `npm run test-coverage` will generate a report with test coverage
 
 ### Fastlane
 

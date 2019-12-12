@@ -53,7 +53,7 @@ export default class App extends Component {
   };
 
   heatMapWrapper = async coordinates => {
-    this.setState({loading: true})
+    this.setState({loading: true});
     await geolocation.getHeatMapsCoordinates(
       constants.HEATMAPS_ENDPOINT,
       coordinates,
@@ -67,7 +67,7 @@ export default class App extends Component {
   showLoading() {
     return (
       this.state.loading && (
-        <View style={styles.loading}>
+        <View pointerEvents={'none'} style={styles.loading}>
           <ActivityIndicator />
         </View>
       )
@@ -96,7 +96,9 @@ export default class App extends Component {
 
   render() {
     return (
-      <View style={styles.root}>
+      <View
+        style={styles.root}
+        pointerEvents={this.state.loading ? 'none' : 'auto'}>
         <View style={styles.mapContainer}>
           {this.state.coords.latitude ? (
             <MapView
@@ -175,6 +177,7 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     alignItems: 'center',
+    flex: 1,
     justifyContent: 'center',
   },
 });

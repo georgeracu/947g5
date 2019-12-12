@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, ActivityIndicator, Button, Alert} from 'react-native';
+import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import MapView, {Marker, Heatmap, PROVIDER_GOOGLE} from 'react-native-maps';
 import geolocation from './geolocation/geolocation';
 import log from './utils/logs';
 import constants from './utils/constants';
 
-import Slider from '@react-native-community/slider';
 import {FloatingAction} from 'react-native-floating-action';
 
 const actions = [
@@ -61,6 +60,7 @@ export default class App extends Component {
     this.heatMapWrapper(geoCoords.coords);
   };
 
+  // Wrap the geolocation in a function so it can be called on map updates.
   heatMapWrapper = async coordinates => {
     this.setState({coords: coordinates, loading: true});
     await geolocation.getHeatMapsCoordinates(
@@ -73,6 +73,7 @@ export default class App extends Component {
     );
   };
 
+  // Returns a loading circle to display during await functions.
   showLoading() {
     return (
       this.state.loading && (
@@ -141,20 +142,11 @@ export default class App extends Component {
             </MapView>
           ) : null}
         </View>
-        {/*<Slider*/}
-        {/*  style={styles.slider}*/}
-        {/*  minimumValue={1}*/}
-        {/*  maximumValue={5}*/}
-        {/*  step={1}*/}
-        {/*  value={1}*/}
-        {/*  minimumTrackTintColor="#FFFFFF"*/}
-        {/*  maximumTrackTintColor="#000000"*/}
-        {/*/>*/}
         {this.showLoading()}
         <FloatingAction
           actions={actions}
           onPressItem={name => {
-            console.log(`selected button: ${name}`);
+            alert('Custom radius not yet implemented');
           }}
         />
       </View>
@@ -200,17 +192,4 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  button: {
-    position: 'absolute',
-    height: 50,
-  },
-  // slider: {
-  //   position: 'absolute',
-  //   alignItems: 'center',
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   width: 250,
-  //   height: 20,
-  //   bottom: 30,
-  // },
 });

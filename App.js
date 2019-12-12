@@ -59,7 +59,6 @@ export default class App extends Component {
       coordinates,
       newState => {
         this.setState(newState);
-        console.log('loading: ' + this.state.loading);
       },
     );
   };
@@ -67,8 +66,8 @@ export default class App extends Component {
   showLoading() {
     return (
       this.state.loading && (
-        <View pointerEvents={'none'} style={styles.loading}>
-          <ActivityIndicator />
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#0000ff"/>
         </View>
       )
     );

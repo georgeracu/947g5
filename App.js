@@ -9,14 +9,29 @@ import {FloatingAction} from 'react-native-floating-action';
 
 const actions = [
   {
-    text: 'Radius',
-    name: 'bt_radius',
+    text: '5km',
+    name: '5',
     position: 1,
   },
   {
-    text: 'Custom position',
-    name: 'bt_cust_pos',
+    text: '4km',
+    name: '4',
     position: 2,
+  },
+  {
+    text: '3km',
+    name: '3',
+    position: 3,
+  },
+  {
+    text: '2km',
+    name: '2',
+    position: 4,
+  },
+  {
+    text: '1km',
+    name: '1',
+    position: 5,
   },
 ];
 
@@ -32,6 +47,7 @@ export default class App extends Component {
       coords: {},
       heatMapsCoordinates: [],
       loading: true,
+      setRadius: 0.1,
     };
 
     this.region = {
@@ -66,7 +82,7 @@ export default class App extends Component {
     await geolocation.getHeatMapsCoordinates(
       constants.HEATMAPS_ENDPOINT,
       coordinates,
-      0.1,
+      this.state.setRadius,
       newState => {
         this.setState(newState);
       },
@@ -146,7 +162,8 @@ export default class App extends Component {
         <FloatingAction
           actions={actions}
           onPressItem={name => {
-            alert('Custom radius not yet implemented');
+            this.setState({setRadius: Number(name)});
+            this.heatMapWrapper(this.state.coords);
           }}
         />
       </View>

@@ -31,6 +31,11 @@ Publish a Beta Release
 fastlane android release
 ```
 Publish a Master Release
+### android playstore
+```
+fastlane android playstore
+```
+Publish AAB to Google Play Store
 
 ----
 

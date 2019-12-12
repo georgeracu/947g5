@@ -46,11 +46,15 @@ platform :android do
 
   desc "Publish AAB to Google Play Store"
   lane :playstore do
-    gradle(
-        task: 'assemble',
-        build_type: 'Release'
+    #gradle(
+    #    task: 'assemble',
+    #    build_type: 'Release'
+    #)
+    upload_to_play_store(
+        aab: 'app/release/app-release.aab',
+        track: 'alpha',
+        json_key: '../infra/infra/secrets/play-store/api-6629088848083922600-672348-bc32b38a70b1.json'
     )
-    upload_to_play_store # Uploads the APK built in the gradle step above and releases it to all production users
   end
 
   # You can define as many lanes as you want
@@ -63,8 +67,8 @@ platform :android do
 
   error do |lane, exception|
     slack(
-      message: "There was an exception on lane Android #{lane} with message #{exception.message}",
-      success: false
+        message: "There was an exception on lane Android #{lane} with message #{exception.message}",
+        success: false
     )
   end
 end

@@ -1,0 +1,14 @@
+# Release 0.5.0
+
+## Product release notes
+
+* Added zoom-in and zoom-out functionality
+* Allows user to choose zoom level
+* Calculates heatmap based on national average price
+* Allows user to pick a point on the map to calculate the heatmap around that point
+
+## Technical release notes
+
+* Added issue trigger when app start time is more than 2 seconds
+* Separated Firebase environments into dev and beta
+* Enhanced the CI/CD pipeline to allow merges from master to beta-release

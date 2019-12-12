@@ -77,6 +77,7 @@ async function getHeatMapsCoordinates(endpoint, coords, handleState) {
       newState.coords = coords;
       response.json().then(heatMapsCoordinates => {
         newState.heatMapsCoordinates = heatMapsCoordinates;
+        newState.loading = false;
         handleState(newState);
       });
     })

@@ -19,6 +19,7 @@ app.post('/heatmaps', (req, res) => {
    */
 
   const avg = 272745.7789;
+  const earthC = 6371;
 
   client.connect(err => {
     if (err) {
@@ -33,7 +34,7 @@ app.post('/heatmaps', (req, res) => {
           $geoWithin: {
             $centerSphere: [
               [parameters.longitude, parameters.latitude],
-              parameters.radius / 6371,
+              parameters.radius / earthC,
             ],
           },
         },
@@ -54,7 +55,7 @@ app.post('/heatmaps', (req, res) => {
               return {
                 latitude: coordinate.location.coordinates[1],
                 longitude: coordinate.location.coordinates[0],
-                weight: coordinate.Price / avg,
+                weight: (coordinate.Price / avg) * 1.5,
               };
             });
             res.send(JSON.stringify(modifiedResults));

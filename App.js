@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {
+  View,
+  Text,
+  ListView,
+  StyleSheet,
+  TouchableHighlight,
+  ActivityIndicator,
+} from 'react-native';
 import MapView, {Marker, Heatmap, PROVIDER_GOOGLE} from 'react-native-maps';
 import geolocation from './geolocation/geolocation';
 import log from './utils/logs';
@@ -16,6 +23,7 @@ export default class App extends Component {
     this.state = {
       coords: {},
       heatMapsCoordinates: [],
+      loading: true,
     };
 
     this.region = {
@@ -41,14 +49,30 @@ export default class App extends Component {
       heatMapsCoordinates: [],
     });
 
-    geolocation.getHeatMapsCoordinates(
+    this.heatMapWrapper(geoCoords.coords);
+  };
+
+  heatMapWrapper = async coordinates => {
+    this.setState({loading: true})
+    await geolocation.getHeatMapsCoordinates(
       constants.HEATMAPS_ENDPOINT,
-      geoCoords.coords,
+      coordinates,
       newState => {
         this.setState(newState);
+        console.log('loading: ' + this.state.loading);
       },
     );
   };
+
+  showLoading() {
+    return (
+      this.state.loading && (
+        <View style={styles.loading}>
+          <ActivityIndicator />
+        </View>
+      )
+    );
+  }
 
   /**
    * This method updates the state with the Geolocation error message
@@ -64,7 +88,7 @@ export default class App extends Component {
   };
 
   async componentDidMount(): void {
-    geolocation.getGeolocationServices(
+    await geolocation.getGeolocationServices(
       this.onGeolocationSuccess,
       this.onGeolocationError,
     );
@@ -85,7 +109,8 @@ export default class App extends Component {
                 longitudeDelta: this.region.longitudeDelta,
               }}
               onRegionChangeComplete={region => (this.region = region)}
-              loadingEnabled={true}>
+              loadingEnabled={true}
+              onPress={e => this.heatMapWrapper(e.nativeEvent.coordinate)}>
               <Marker
                 coordinate={{
                   latitude: this.state.coords.latitude,
@@ -105,6 +130,7 @@ export default class App extends Component {
             </MapView>
           ) : null}
         </View>
+        {this.showLoading()}
       </View>
     );
   }
@@ -141,5 +167,14 @@ const styles = StyleSheet.create({
     borderRadius: 20 / 2,
     overflow: 'hidden',
     backgroundColor: '#007AFF',
+  },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

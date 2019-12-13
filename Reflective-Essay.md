@@ -1,11 +1,13 @@
 # Reflective Essay Group 4
 
-###Project Context
-The final outcome of the project was to produce a cross platform application that displayed house price data in the form
-of a heatmap within a radius based on the current location of the user.The project was undertaken by seven students and 
-was bound by the university's semester timetable. The client presented the group with an initial set of requirements which was 
-implemented in order to initiate the project. As the project progressed the client outlined further functionality the
-application required within various sets of requirements, with each set of requirements increasing in complexity. 
+###Project Context 
+The final outcome of our Advanced Software Engineering project was to produce a cross platform application that displayed 
+house price data in the form of a heatMap within a radius relative to the current location of a user.The project was undertaken 
+by six (6) students within a period of four (4) months. The nature of this project as with every other software product 
+started off with a high-level overview of the software's expectation, and also with the accommodation for feature modifications 
+as hinted by the client. As the project progressed the client, regular meetings in form of of the various iterations of 
+the software being developed was demoed to the user and feedback for modification were collected and and improved on, with
+ each set of requirements increasing in complexity.
 
 
 ###Positive Outcomes

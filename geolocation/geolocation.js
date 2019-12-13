@@ -52,6 +52,51 @@ async function getGeolocation(handleSuccess, handleFailure) {
   }
 }
 
+async function getNearestHouseInfo(endpoint, coords, handleState) {
+  fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      longitude: coords.longitude,
+      latitude: coords.latitude,
+    }),
+  })
+    .then(response => {
+      const newState = {};
+      //newState.coords = coords;
+      response.json().then(findNearestHouse => {
+        newState.closestHouse = findNearestHouse;
+        //newState.loading = false;
+        if (findNearestHouse == null) {
+          Alert.alert('Error', 'No house price available');
+        } else {
+          const formattedOutput =
+            findNearestHouse.PAON.toString() +
+            ' ' +
+            findNearestHouse.Street +
+            '\n' +
+            findNearestHouse.TOWN_NAME +
+            '\nPrice: ' +
+            findNearestHouse.Price.toString();
+          Alert.alert('Property info:', formattedOutput);
+        }
+        handleState(newState);
+      });
+    })
+    .catch(error => {
+      Alert.alert('HeatMap', 'Unable to find nearest house');
+      // Log this response when the nearest house can't be retrieved
+      log.sendLog(
+        constants.LOGS_ENDPOINT,
+        'onFindNearestHouseFailure',
+        error.message,
+      );
+    });
+}
+
 /**
  * This function retrieves coordinates to used in displaying in HeatMaps
  * @param endpoint
@@ -143,4 +188,5 @@ function handleGeolocationOperation(handleSuccess, handleFailure) {
 module.exports = {
   getGeolocationServices,
   getHeatMapsCoordinates,
+  getNearestHouseInfo,
 };

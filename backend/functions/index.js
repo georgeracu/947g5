@@ -10,3 +10,7 @@ const heatMapsCoordinates = require('./routes/heatmaps-coordinates.js');
 exports.heatMapsCoordinates = functions.https.onRequest(
   heatMapsCoordinates.app,
 );
+
+// Export findNearestHouse as a cloud function
+const findNearestHouse = require('./routes/find-nearest-house.js');
+exports.findNearestHouse = functions.https.onRequest(findNearestHouse.app);

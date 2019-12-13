@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, ActivityIndicator} from 'react-native';
+import {View, StyleSheet, ActivityIndicator, Alert} from 'react-native';
 import MapView, {Marker, Heatmap, PROVIDER_GOOGLE} from 'react-native-maps';
 import geolocation from './geolocation/geolocation';
 import log from './utils/logs';
@@ -48,6 +48,7 @@ export default class App extends Component {
       heatMapsCoordinates: [],
       loading: true,
       setRadius: 0.1,
+      closestHouse: [],
     };
 
     this.region = {
@@ -83,6 +84,16 @@ export default class App extends Component {
       constants.HEATMAPS_ENDPOINT,
       coordinates,
       this.state.setRadius,
+      newState => {
+        this.setState(newState);
+      },
+    );
+  };
+
+  getNearestWrapper = async coordinates => {
+    await geolocation.getNearestHouseInfo(
+      constants.NEAREST_HOUSE_ENDPOINT,
+      coordinates,
       newState => {
         this.setState(newState);
       },
@@ -138,7 +149,8 @@ export default class App extends Component {
               }}
               onRegionChangeComplete={region => (this.region = region)}
               loadingEnabled={true}
-              onPress={e => this.heatMapWrapper(e.nativeEvent.coordinate)}>
+              onPress={e => this.getNearestWrapper(e.nativeEvent.coordinate)}
+              onLongPress={e => this.heatMapWrapper(e.nativeEvent.coordinate)}>
               <Marker
                 coordinate={{
                   latitude: this.state.coords.latitude,
@@ -162,7 +174,7 @@ export default class App extends Component {
         <FloatingAction
           actions={actions}
           onPressItem={name => {
-            this.setState({setRadius: Number(name)});
+            this.setState({setRadius: Number(name), heatMapsCoordinates: []});
             this.heatMapWrapper(this.state.coords);
           }}
         />

@@ -13,7 +13,9 @@
     "ios-test": "./run ios-tests",
     "clean": "rm -rf node_modules",
     "lint": "eslint \"**/*.js\"",
-    "lint-fix": "eslint \"**/*.js\" --fix"
+    "lint-fix": "eslint \"**/*.js\" --fix",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "@react-native-community/cli-platform-android": "^2.9.0",
@@ -30,7 +32,8 @@
     "react-native-floating-action": "^1.19.1",
     "react-native-geolocation-service": "^3.1.0",
     "react-native-maps": "0.26.1",
-    "react-native-push-notification-popup": "^1.4.0"
+    "react-native-push-notification-popup": "^1.4.0",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "@babel/core": "^7.5.0",
@@ -57,5 +60,6 @@
       "pre-push": "npm run lint && npm run test",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
-  }
+  },
+  "snyk": true
 }

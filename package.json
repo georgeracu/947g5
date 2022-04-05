@@ -22,7 +22,7 @@
     "@react-native-firebase/app": "^6.0.3",
     "jetifier": "^1.6.4",
     "milliseconds": "^1.0.3",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "react": "16.9.0",
     "react-native": "0.61.2",
     "react-native-config": "^0.12.0",

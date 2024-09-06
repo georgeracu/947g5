@@ -16,7 +16,7 @@
     "lint-fix": "eslint \"**/*.js\" --fix"
   },
   "dependencies": {
-    "@react-native-community/cli-platform-android": "^2.9.0",
+    "@react-native-community/cli-platform-android": "^14.0.0",
     "@react-native-community/slider": "^2.0.7",
     "@react-native-firebase/analytics": "^6.0.3",
     "@react-native-firebase/app": "^6.0.3",

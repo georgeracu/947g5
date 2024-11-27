@@ -19,7 +19,7 @@
     "@react-native-community/cli-platform-android": "^2.9.0",
     "@react-native-community/slider": "^2.0.7",
     "@react-native-firebase/analytics": "^6.0.3",
-    "@react-native-firebase/app": "^6.0.3",
+    "@react-native-firebase/app": "^21.6.0",
     "jetifier": "^1.6.4",
     "milliseconds": "^1.0.3",
     "moment": "^2.24.0",
